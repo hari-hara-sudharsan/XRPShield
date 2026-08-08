@@ -14,7 +14,8 @@
 
 ### `POST /api/v1/wallet/nonce`
 - **Description:** Generates Web3 authentication nonce for wallet address.
-- **Request Body:** `{ "walletAddress": "0x1111111111111111111111111111111111111111" }`
+- **Request Body:** `{ "walletAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3" }`
+
 - **Response (200):** `{ "success": true, "data": { "nonce": "XRPShield Auth Nonce: uuid" } }`
 
 ---

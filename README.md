@@ -43,10 +43,11 @@ graph TD
 
 | Contract Name | Deployed Address | Network / Explorer Link |
 |---|---|---|
-| `VaultManager.sol` | `0x1111111111111111111111111111111111111111` | Flare Coston2 Testnet (Chain ID 114) |
-| `AccessManager.sol` | `0x2222222222222222222222222222222222222222` | Flare Coston2 Testnet (Chain ID 114) |
-| `TreasuryStorage.sol` | `0x3333333333333333333333333333333333333333` | Flare Coston2 Testnet (Chain ID 114) |
-| `XRPShieldHealth.sol` | `0x4444444444444444444444444444444444444444` | Flare Coston2 Testnet (Chain ID 114) |
+| `VaultManager.sol` | `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0) |
+| `AccessManager.sol` | `0xCf7Ed3AccA5a467e9e754572157c480d02f71887` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0xCf7Ed3AccA5a467e9e754572157c480d02f71887) |
+| `TreasuryStorage.sol` | `0xDc64a140Aa3E981100a9becA4E685f962f0cf6C9` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0xDc64a140Aa3E981100a9becA4E685f962f0cf6C9) |
+| `XRPShieldHealth.sol` | `0x5FbDB2315678afecb367f032d93F642f64180aa3` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0x5FbDB2315678afecb367f032d93F642f64180aa3) |
+
 
 ---
 
