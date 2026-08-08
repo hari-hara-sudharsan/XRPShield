@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: xrpshield-backend
+    env: docker
+    dockerContext: backend
+    dockerfilePath: backend/Dockerfile
+    region: singapore
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8081
+      - key: FLARE_RPC_URL
+        value: https://coston2-api.flare.network/ext/C/rpc
+      - key: CHAIN_ID
+        value: 114
