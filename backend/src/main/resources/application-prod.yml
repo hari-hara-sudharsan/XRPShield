@@ -3,8 +3,12 @@ spring:
     activate:
       on-profile: prod
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
 logging:
@@ -12,3 +16,4 @@ logging:
     root: WARN
     com.xrpshield: INFO
     org.springframework.web: WARN
+
