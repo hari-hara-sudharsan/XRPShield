@@ -1,6 +1,5 @@
 package com.xrpshield.dto;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public class ExplainDecisionRequestDto {

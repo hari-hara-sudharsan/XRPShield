@@ -2,7 +2,6 @@ package com.xrpshield.service;
 
 import com.xrpshield.dto.*;
 import com.xrpshield.entity.*;
-import com.xrpshield.exception.ResourceNotFoundException;
 import com.xrpshield.prompt.AIResponseParser;
 
 import com.xrpshield.prompt.PromptBuilder;
