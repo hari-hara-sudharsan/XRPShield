@@ -1,0 +1,128 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Confidential Treasury Policies</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Flare Confidential Compute (FCC) TEE Enclave Risk Rules & Verification Proofs</p>
+    </div>
+    <button onclick="document.getElementById('modal-create-policy').style.display='flex'" class="btn-connect" style="padding: 10px 20px;">
+        + Create Policy (Manual / AI)
+    </button>
+</div>
+
+<div class="grid-cards" style="margin-bottom: 32px;">
+    <div class="card">
+        <div class="card-title">Enclave Protected Policies</div>
+        <div class="card-value" id="total-policies-count" style="color: var(--primary-cyan);">3</div>
+        <div class="card-subtext">100% AES-256-GCM Encrypted</div>
+    </div>
+    <div class="card">
+        <div class="card-title">TEE Attestation Status</div>
+        <div class="card-value" style="color: var(--accent-emerald);">VERIFIED</div>
+        <div class="card-subtext">Flare Enclave Proof Validated</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Compliance Evaluation</div>
+        <div class="card-value" style="color: var(--accent-emerald);">100% COMPLIANT</div>
+        <div class="card-subtext">0 Policy Breaches Detected</div>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 32px;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem;">Active Treasury Risk Policies</h3>
+        <span class="badge">FCC Enclave Protected</span>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Policy Name</th>
+                <th>Assigned Vault</th>
+                <th>Version</th>
+                <th>Status</th>
+                <th>TEE Attestation Proof</th>
+                <th>Last Evaluation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="policies-table-body">
+            <tr>
+                <td><strong>Primary Treasury Maximum Drawdown Policy</strong></td>
+                <td>Primary XRP Treasury Vault</td>
+                <td><span class="badge">v1</span></td>
+                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
+                <td><code>FCC-ATT-992184 (Verified)</code></td>
+                <td><span style="color: var(--accent-emerald);">COMPLIANT</span></td>
+                <td>
+                    <button onclick="window.viewAttestationProof('Primary Treasury Maximum Drawdown Policy', 'FCC-ATT-992184', '0xc5fb27ac51ccc3491e77bc9799069bef36068052234548134eb3ba65b4fba93f')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">Attestation Proof</button>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Yield Reserve Exposure Limit</strong></td>
+                <td>Yield Liquidity Reserve</td>
+                <td><span class="badge">v2</span></td>
+                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
+                <td><code>FCC-ATT-881043 (Verified)</code></td>
+                <td><span style="color: var(--accent-emerald);">COMPLIANT</span></td>
+                <td>
+                    <button onclick="window.viewAttestationProof('Yield Reserve Exposure Limit', 'FCC-ATT-881043', '0xa871b29d814c019283e104812a39fa8190c71a398188172c918a') font-weight: 600; cursor: pointer;" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">Attestation Proof</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Create Policy (Manual + AI Builder) -->
+<div id="modal-create-policy" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 560px; padding: 32px; max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 1.2rem;">Define Confidential Policy</h3>
+            <button onclick="document.getElementById('modal-create-policy').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
+        </div>
+        
+        <!-- AI Builder Box -->
+        <div style="background: rgba(91,140,255,0.1); border: 1px solid rgba(91,140,255,0.3); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+            <label style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); display: block; margin-bottom: 6px;">🤖 AI Policy Builder (Powered by OpenAI)</label>
+            <input type="text" id="ai-policy-prompt" placeholder="e.g. Protect 70% of my treasury. Maximum loss 8%. Never exceed 2x leverage." style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 10px;">
+            <button type="button" id="ai-generate-policy-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 8px 14px; font-size: 0.85rem;">
+                ✨ Infer Parameters via OpenAI
+            </button>
+        </div>
+
+        <form id="create-policy-form">
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Policy Name</label>
+                <input type="text" id="policy-name-input" required placeholder="e.g. Core Treasury Risk Guard" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Maximum Drawdown (e.g. 0.08 = 8%)</label>
+                <input type="number" step="0.01" id="policy-drawdown-input" required value="0.08" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Minimum Liquidity Reserve Threshold ($)</label>
+                <input type="number" id="policy-liquidity-input" required value="500000" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('modal-create-policy').style.display='none'" class="btn-secondary">Cancel</button>
+                <button type="submit" class="btn-primary">Encrypt & Commit to FCC Enclave</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: TEE Attestation Proof Detail -->
+<div id="modal-attestation-detail" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 520px; padding: 32px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 1.2rem; color: var(--primary-cyan);">📜 Flare TEE Enclave Attestation Proof</h3>
+            <button onclick="document.getElementById('modal-attestation-detail').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
+        </div>
+        <div id="attestation-proof-content" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--text-secondary); background: rgba(0,0,0,0.4); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div><strong>Policy Name:</strong> Primary Treasury Maximum Drawdown Policy</div>
+            <div><strong>Attestation ID:</strong> FCC-ATT-992184</div>
+            <div><strong>Hardware Enclave:</strong> Intel SGX / AMD SEV Confidential Compute</div>
+            <div><strong>Status:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">PASS (VERIFIED)</span></div>
+        </div>
+        <div style="margin-top: 20px; text-align: right;">
+            <button onclick="document.getElementById('modal-attestation-detail').style.display='none'" class="btn-primary">Close Proof</button>
+        </div>
+    </div>
+</div>

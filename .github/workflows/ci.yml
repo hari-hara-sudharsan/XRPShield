@@ -1,0 +1,56 @@
+name: XRPShield Production Integration & CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  smart-contracts:
+    name: Compile & Test Smart Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: 'contracts/package-lock.json'
+
+      - name: Install Hardhat Dependencies
+        run: |
+          cd contracts
+          npm ci
+
+      - name: Compile Solidity Contracts
+        run: |
+          cd contracts
+          npm run compile
+
+      - name: Run Hardhat Test Suite
+        run: |
+          cd contracts
+          npm test
+
+  backend-build:
+    name: Compile & Test Java 21 Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21 LTS
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compile Backend & Run JUnit 5 Tests
+        run: |
+          cd backend
+          mvn clean test

@@ -1,0 +1,60 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Platform Settings & Profile Security</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Manage platform preferences, notifications, wallet authentication, and security configurations</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+    <!-- Left: Profile & Preferences -->
+    <div class="card" style="padding: 28px;">
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">User Profile & Preferences</h3>
+        <form onsubmit="event.preventDefault(); window.saveSettingsPreferences();">
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Email Address</label>
+                <input id="settings-user-email" type="email" value="owner@xrpshield.io" disabled style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Display Language</label>
+                <select style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="en">English (US)</option>
+                    <option value="ja">Japanese (日本語)</option>
+                    <option value="de">German (Deutsch)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Default Timezone</label>
+                <select style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="UTC">UTC (Universal Coordinated Time)</option>
+                    <option value="EST">EST (Eastern Standard Time)</option>
+                    <option value="JST">JST (Japan Standard Time)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">Save Preferences</button>
+        </form>
+    </div>
+
+    <!-- Right: Wallet & Security Settings -->
+    <div class="card" style="padding: 28px;">
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">Web3 Security & Wallet Settings</h3>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">Connected Web3 Wallet</div>
+                <code id="settings-wallet-addr" style="color: var(--primary-cyan); font-size: 0.95rem; word-break: break-all;">Not Connected</code>
+                <div style="font-size: 0.8rem; color: var(--accent-emerald); margin-top: 6px;">EIP-191 Personal Signature Active</div>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">Flare Confidential Compute (FCC) State</div>
+                <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-emerald);">TEE Enclave Quote Verified</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Hardware Enclave Quote: 0xc5fb27ac51...</div>
+            </div>
+            <button onclick="window.refreshSessionTokens()" class="btn-secondary">Refresh Session Security Tokens</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initSettings } from './js/components/settings.js';
+    initSettings();
+</script>
+

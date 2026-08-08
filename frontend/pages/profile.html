@@ -1,0 +1,38 @@
+<div style="margin-bottom: 24px;">
+    <h2 style="font-size: 1.8rem; font-weight: 700;">Account Profile & Security</h2>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">Identity settings, role authorizations, and connected wallets</p>
+</div>
+
+<div class="grid-cards">
+    <div class="card" style="grid-column: span 2;">
+        <h3 style="margin-bottom: 16px;">User Details</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">User ID</span>
+                <code id="prof-id" style="font-size: 0.9rem;">-</code>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">Email</span>
+                <strong id="prof-email" style="font-size: 1rem;">-</strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">Role</span>
+                <span class="badge" id="prof-role">ROLE_USER</span>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">Linked Wallet</span>
+                <code id="prof-wallet" style="font-size: 0.85rem; color: var(--primary-cyan);">-</code>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <h3 style="margin-bottom: 12px;">Active Session</h3>
+        <div style="margin-bottom: 12px;">
+            <span style="color: var(--text-secondary); font-size: 0.85rem;">Token Status</span>
+            <div style="font-weight: 600; color: var(--accent-emerald);">JWT Authenticated</div>
+        </div>
+        <button onclick="window.AuthManager.logout()" style="background: rgba(255, 94, 98, 0.1); color: var(--accent-flare); border: 1px solid rgba(255, 94, 98, 0.3); padding: 8px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">
+            Log Out Session
+        </button>
+    </div>
+</div>

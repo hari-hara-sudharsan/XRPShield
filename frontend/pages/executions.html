@@ -1,0 +1,106 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Protected Treasury Execution Pipeline</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">On-chain transaction execution, queue monitoring, and Flare confirmation receipt verification</p>
+    </div>
+    <button onclick="document.getElementById('modal-start-execution').style.display='flex'" class="btn-connect" style="padding: 10px 20px;">
+        + Execute Approved Decision
+    </button>
+</div>
+
+<div class="grid-cards" style="margin-bottom: 32px;">
+    <div class="card">
+        <div class="card-title">Completed Executions</div>
+        <div class="card-value" id="completed-executions-count" style="color: var(--primary-cyan);">5</div>
+        <div class="card-subtext">Verified on Flare Network</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Execution Success Rate</div>
+        <div class="card-value" style="color: var(--accent-emerald);">100.0%</div>
+        <div class="card-subtext">0 Execution Failures</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Avg Confirmation Time</div>
+        <div class="card-value" style="color: var(--accent-emerald);">1.2 s</div>
+        <div class="card-subtext">Flare Coston2 Block Finality</div>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 32px;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem;">On-Chain Execution History</h3>
+        <span class="badge">Protected Treasury Pipeline</span>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Vault</th>
+                <th>Decision Action</th>
+                <th>Execution State</th>
+                <th>Transaction Hash</th>
+                <th>Block Number</th>
+                <th>Completed At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="executions-table-body">
+            <tr>
+                <td><strong>Primary XRP Treasury Vault</strong></td>
+                <td>PROTECT_POSITION</td>
+                <td><span style="color: var(--accent-emerald);">COMPLETED</span></td>
+                <td><code>0x7f82ab19...39fa</code></td>
+                <td>1,489,201</td>
+                <td>Just now</td>
+                <td>
+                    <button onclick="window.viewTxReceipt('0x7f82ab198734c019283e104812a39fa', '1,489,201')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">Explorer Receipt</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Start Execution -->
+<div id="modal-start-execution" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 480px; padding: 32px;">
+        <h3 style="margin-bottom: 16px;">Execute Approved Treasury Decision</h3>
+        <form id="start-execution-form">
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Approved Decision</label>
+                <select id="exec-decision-select" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="4957d3dd-918e-43c9-aeef-7c86f5c3e131">Primary XRP Vault — PROTECT_POSITION (v1)</option>
+                    <option value="e062e742-1e9a-4c2d-9860-f1c5058728ba">Yield Reserve — REDUCE_EXPOSURE (v1)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Execution Notes</label>
+                <input id="exec-notes-input" type="text" placeholder="e.g. Scheduled quarterly protection execution" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button type="submit" class="btn-connect" style="flex:1; padding: 10px;">Start On-Chain Execution</button>
+                <button type="button" onclick="document.getElementById('modal-start-execution').style.display='none'" style="flex:1; background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Explorer Receipt -->
+<div id="modal-tx-viewer" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 520px; padding: 32px;">
+        <h3 style="margin-bottom: 16px;">Flare Network On-Chain Receipt</h3>
+        <div id="tx-receipt-content" style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 16px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; line-height: 1.6; margin-bottom: 24px;">
+            <div><strong>Tx Hash:</strong> 0x7f82ab198734c019283e104812a...39fa</div>
+            <div><strong>Block Number:</strong> 1,489,201</div>
+            <div><strong>Status:</strong> <span style="color: var(--accent-emerald);">SUCCESS (CONFIRMED)</span></div>
+            <div><strong>Gas Used:</strong> 65,000</div>
+            <div><strong>Network:</strong> Flare Coston2 Testnet</div>
+            <div><strong>Payload:</strong> Execution verified and recorded on Flare Coston2 Testnet</div>
+        </div>
+        <button onclick="document.getElementById('modal-tx-viewer').style.display='none'" class="btn-connect" style="width: 100%; padding: 10px;">Close Explorer Receipt</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initExecutions } from './js/components/executions.js';
+    initExecutions();
+</script>
+

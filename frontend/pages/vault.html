@@ -1,0 +1,122 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Confidential XRP Treasury Vaults</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Manage FXRP reserves, execute deposits, and track on-chain vault balances</p>
+    </div>
+    <button onclick="document.getElementById('modal-create-vault').style.display='flex'" class="btn-connect" style="padding: 10px 20px;">
+        + Create Vault
+    </button>
+</div>
+
+<div class="grid-cards" style="margin-bottom: 32px;">
+    <div class="card">
+        <div class="card-title">Total Treasury Reserves</div>
+        <div class="card-value" id="total-treasury-balance" style="color: var(--primary-cyan);">250,000 FXRP</div>
+        <div class="card-subtext">Protected on Flare Network</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Active Vaults</div>
+        <div class="card-value" id="active-vault-count">3</div>
+        <div class="card-subtext">All Active & Health Check Passed</div>
+    </div>
+    <div class="card">
+        <div class="card-title">24h Net Deposit Flow</div>
+        <div class="card-value" style="color: var(--accent-emerald);">+45,000 FXRP</div>
+        <div class="card-subtext">100% On-Chain Verified</div>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 32px;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem;">Active Treasury Vaults</h3>
+        <span class="badge">EVM Smart Contract Vaults</span>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Vault Name</th>
+                <th>Asset Type</th>
+                <th>Current Balance</th>
+                <th>Drawdown Limit</th>
+                <th>TEE Attestation Proof</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="vaults-table-body">
+            <tr>
+                <td><strong>Primary XRP Treasury Vault</strong></td>
+                <td><span class="badge">FXRP</span></td>
+                <td><strong>150,000 FXRP</strong></td>
+                <td><span style="color: #FF495C; font-weight: 600;">10%</span></td>
+                <td><code>FCC-ATT-VERIFIED</code></td>
+                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
+                <td>
+                    <button onclick="window.openFundVaultModal('Primary XRP Treasury Vault')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Create Vault Wizard -->
+<div id="modal-create-vault" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 480px; padding: 32px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 1.2rem;">Create Confidential Vault</h3>
+            <button onclick="document.getElementById('modal-create-vault').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
+        </div>
+        <form id="create-vault-form">
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Vault Name</label>
+                <input id="vault-name-input" type="text" required placeholder="e.g. Core FXRP Treasury" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Asset Type</label>
+                <select id="vault-asset-select" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="FXRP">FXRP (Flare Wrapped XRP)</option>
+                    <option value="XRP">XRP (Native Ledger)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Drawdown Limit (%)</label>
+                <input id="vault-drawdown-input" type="number" required value="10" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Initial Reserve Balance (FXRP)</label>
+                <input id="vault-balance-input" type="number" placeholder="100000" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button type="submit" class="btn-primary" style="flex:1;">Deploy Vault Contract</button>
+                <button type="button" onclick="document.getElementById('modal-create-vault').style.display='none'" class="btn-secondary" style="flex:1;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Fund Vault (Deposit / Withdraw via Web3) -->
+<div id="modal-fund-vault" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 480px; padding: 32px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 1.2rem; color: var(--primary-cyan);">⚡ Fund Vault: <span id="fund-vault-name">Treasury Vault</span></h3>
+            <button onclick="document.getElementById('modal-fund-vault').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
+        </div>
+        <form id="fund-vault-form">
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Action</label>
+                <select id="fund-action-select" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="DEPOSIT">Deposit FXRP Reserve</option>
+                    <option value="WITHDRAW">Withdraw Reserve</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Amount (FXRP)</label>
+                <input id="fund-amount-input" type="number" required value="5000" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button type="submit" class="btn-primary" style="flex:1;">Sign & Execute on Flare Coston2</button>
+                <button type="button" onclick="document.getElementById('modal-fund-vault').style.display='none'" class="btn-secondary" style="flex:1;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

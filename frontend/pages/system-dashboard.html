@@ -1,0 +1,102 @@
+<div style="margin-bottom: 24px;">
+    <h2 style="font-size: 1.8rem; font-weight: 700;">System Integration & Operational Dashboard</h2>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">Live subsystem monitoring, cross-module status, latency metrics, and feature flag management</p>
+</div>
+
+<div class="grid-cards">
+    <div class="card">
+        <div class="card-title">Overall Application Status</div>
+        <div class="card-value" style="color: var(--accent-emerald);">OPERATIONAL</div>
+        <div class="card-subtext">All Gateways Responding</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Supabase Database Sync</div>
+        <div class="card-value">PostgreSQL 15+</div>
+        <div class="card-subtext" style="color: var(--accent-emerald);">Status: CONNECTED</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Flare Web3j RPC Sync</div>
+        <div class="card-value">15s Auto-Sync</div>
+        <div class="card-subtext" style="color: var(--primary-cyan);">RPC Latency: &lt; 25ms</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Web3 Wallet Auth Engine</div>
+        <div class="card-value">EIP-191 / EIP-4361</div>
+        <div class="card-subtext" style="color: var(--accent-emerald);">MetaMask Signature Ready</div>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 32px;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem;">Registered Subsystem Modules</h3>
+        <span class="badge">Enterprise Integration Facade</span>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Subsystem Module</th>
+                <th>Layer Responsibility</th>
+                <th>Integration Gateway</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Database Module</strong></td>
+                <td>Supabase PostgreSQL Data Persistence & JPA Repositories</td>
+                <td><code>DatabaseGateway</code></td>
+                <td><span style="color: var(--accent-emerald);">ONLINE</span></td>
+            </tr>
+            <tr>
+                <td><strong>Authentication Module</strong></td>
+                <td>BCrypt Hashing, JWT Tokens, Role-Based Access Control</td>
+                <td><code>AuthenticationGateway</code></td>
+                <td><span style="color: var(--accent-emerald);">ONLINE</span></td>
+            </tr>
+            <tr>
+                <td><strong>Wallet Auth Module</strong></td>
+                <td>MetaMask Web3 EIP-191 Signature Verification & Nonces</td>
+                <td><code>WalletGateway</code></td>
+                <td><span style="color: var(--accent-emerald);">ONLINE</span></td>
+            </tr>
+            <tr>
+                <td><strong>Blockchain RPC Module</strong></td>
+                <td>Flare Coston2 Web3j RPC Client & Event Listener</td>
+                <td><code>BlockchainGateway</code></td>
+                <td><span style="color: var(--accent-emerald);">ONLINE</span></td>
+            </tr>
+            <tr>
+                <td><strong>Smart Contract Module</strong></td>
+                <td>VaultManager, AccessManager & TreasuryStorage Contracts</td>
+                <td><code>ContractService</code></td>
+                <td><span style="color: var(--accent-emerald);">ONLINE</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3 style="margin-bottom: 16px;">Active Production Feature Flags</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div style="font-weight: 600;">FEATURE_AUTH_BCRYPT</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">BCrypt Password Auth</div>
+            <span style="color: var(--accent-emerald); font-size: 0.8rem; font-weight: 600;">ENABLED</span>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div style="font-weight: 600;">FEATURE_AUTH_METAMASK</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">MetaMask EIP-191 Verification</div>
+            <span style="color: var(--accent-emerald); font-size: 0.8rem; font-weight: 600;">ENABLED</span>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div style="font-weight: 600;">FEATURE_BLOCKCHAIN_SYNC</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Flare Scheduled Sync</div>
+            <span style="color: var(--accent-emerald); font-size: 0.8rem; font-weight: 600;">ENABLED</span>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div style="font-weight: 600;">FEATURE_AUDIT_LOGGING</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Security Audit Trail</div>
+            <span style="color: var(--accent-emerald); font-size: 0.8rem; font-weight: 600;">ENABLED</span>
+        </div>
+    </div>
+</div>

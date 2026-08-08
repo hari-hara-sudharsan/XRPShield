@@ -1,0 +1,103 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Confidential Decision Center</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Flare Confidential Compute (FCC) TEE Enclave Trigger Evaluation & Decision Logs</p>
+    </div>
+    <button id="run-pipeline-btn" class="btn-primary" style="padding: 12px 24px;">
+        🚀 Run Centerpiece Flow
+    </button>
+</div>
+
+<!-- Centerpiece Timeline Component -->
+<div class="card" style="padding: 28px; margin-bottom: 32px; border: 1px solid rgba(91,140,255,0.3); background: radial-gradient(circle at top right, rgba(91,140,255,0.1), rgba(11,18,32,0.8));">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--secondary);">
+            ⭐ Policy & Execution Timeline (Live FCC Enclave Pipeline)
+        </h3>
+        <span class="badge">Hardware TEE Sealed</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px;">
+        <div id="pipe-step-1" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; transition: all 0.3s ease;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Step 1</div>
+            <div style="font-size: 0.88rem; font-weight: 700; margin-top: 4px; color: var(--secondary);">Vault Selected</div>
+            <div class="step-status" style="font-size: 0.75rem; color: var(--accent-emerald); font-family: var(--font-mono); margin-top: 6px;">Primary Treasury</div>
+        </div>
+        <div id="pipe-step-2" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; transition: all 0.3s ease;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Step 2</div>
+            <div style="font-size: 0.88rem; font-weight: 700; margin-top: 4px; color: var(--primary);">Confidential Policy</div>
+            <div class="step-status" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px;">AES-256 Encrypted</div>
+        </div>
+        <div id="pipe-step-3" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; transition: all 0.3s ease;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Step 3</div>
+            <div style="font-size: 0.88rem; font-weight: 700; margin-top: 4px; color: var(--purple);">Flare FCC Enclave</div>
+            <div class="step-status" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px;">Hardware TEE Idle</div>
+        </div>
+        <div id="pipe-step-4" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; transition: all 0.3s ease;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Step 4</div>
+            <div style="font-size: 0.88rem; font-weight: 700; margin-top: 4px; color: var(--accent-emerald);">Attestation Proof</div>
+            <div class="step-status" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px;">FCC-ATT-992184</div>
+        </div>
+        <div id="pipe-step-5" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; transition: all 0.3s ease;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Step 5</div>
+            <div style="font-size: 0.88rem; font-weight: 700; margin-top: 4px; color: var(--secondary);">Approved Decision</div>
+            <div class="step-status" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px;">Protect Position</div>
+        </div>
+        <div id="pipe-step-6" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; transition: all 0.3s ease;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Step 6</div>
+            <div style="font-size: 0.88rem; font-weight: 700; margin-top: 4px; color: var(--text-primary);">Protected Execution</div>
+            <div class="step-status" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 6px;">Web3 Ready</div>
+        </div>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 32px;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem;">FCC Decision Audit Logs</h3>
+        <span class="badge">Hardware Attested</span>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Vault</th>
+                <th>Decision Action</th>
+                <th>Version</th>
+                <th>Status</th>
+                <th>Attestation ID</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="decisions-table-body">
+            <tr>
+                <td><strong>Primary XRP Treasury Vault</strong></td>
+                <td><span style="color: var(--primary-cyan); font-weight: 700;">HEDGE_DRAWDOWN_RISK</span></td>
+                <td><span class="badge">v1</span></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">APPROVED</span></td>
+                <td><code>FCC-ATT-992184</code></td>
+                <td>Just now</td>
+                <td>
+                    <button onclick="window.viewDecisionDetail('HEDGE_DRAWDOWN_RISK', 'APPROVED', 'FCC-ATT-992184', 'Evaluated inside Flare TEE Enclave without strategy leakage.')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">View Decision</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal: Decision Detail -->
+<div id="modal-decision-detail" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="width: 520px; padding: 32px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 1.2rem; color: var(--primary-cyan);">🛡️ FCC Decision Details</h3>
+            <button onclick="document.getElementById('modal-decision-detail').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
+        </div>
+        <div id="decision-detail-content" style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--text-secondary); background: rgba(0,0,0,0.4); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+            <div><strong>Decision Type:</strong> HEDGE_DRAWDOWN_RISK</div>
+            <div><strong>Status:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">APPROVED</span></div>
+            <div><strong>Attestation ID:</strong> FCC-ATT-992184</div>
+        </div>
+        <div style="margin-top: 20px; text-align: right;">
+            <button onclick="document.getElementById('modal-decision-detail').style.display='none'" class="btn-primary">Close</button>
+        </div>
+    </div>
+</div>

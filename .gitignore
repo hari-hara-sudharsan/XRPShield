@@ -1,0 +1,30 @@
+# Build & Target Directories
+**/target/
+**/build/
+**/dist/
+**/out/
+node_modules/
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.cls
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs & Temp Files
+*.log
+payload.json
+explain_payload.json
+*.tmp
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

@@ -1,0 +1,81 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Treasury Portfolio Overview</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Real-time confidential FXRP reserve tracking, risk metrics, and Flare TEE attestation status</p>
+    </div>
+    <div style="display: flex; gap: 12px;">
+        <button onclick="window.location.hash='#vaults'" class="btn-primary">
+            + New FXRP Vault
+        </button>
+        <button onclick="window.location.hash='#ai-assistant'" class="btn-secondary">
+            🤖 AI Policy Builder
+        </button>
+    </div>
+</div>
+
+<!-- Portfolio Metrics Cards Grid -->
+<div class="grid-cards" style="margin-bottom: 32px;">
+    <div class="card">
+        <div class="card-title">Connected Web3 Wallet</div>
+        <div class="card-value" id="dash-connected-address" style="color: var(--secondary); font-size: 1.5rem;">Not Connected</div>
+        <div class="card-subtext">Flare Coston2 Testnet (Chain ID 114)</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Active Protected Vaults</div>
+        <div class="card-value" id="dash-active-vaults" style="color: var(--primary);">3</div>
+        <div class="card-subtext">100% Verified in TEE Enclaves</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Active Risk Policies</div>
+        <div class="card-value" id="dash-active-policies" style="color: var(--purple);">3</div>
+        <div class="card-subtext">AES-256 Encrypted Rules</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Total Treasury Reserves</div>
+        <div class="card-value" id="dash-protected-volume" style="color: var(--success);">500,000 FXRP</div>
+        <div class="card-subtext">Verified On-Chain</div>
+    </div>
+</div>
+
+<!-- Grid: Active Vaults & Live Activity Logs -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px;">
+    <!-- Left: Recent Activity Feed from Database & TEE -->
+    <div class="table-container">
+        <div style="padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1.1rem;">Live FCC Decision Activity</h3>
+            <span class="badge success" id="dash-fcc-status">SEALED & ATTESTED</span>
+        </div>
+        <div id="dash-recent-activity" style="padding: 8px;">
+            <div style="padding: 16px; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+                Fetching live enclave decision logs...
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Subsystem Health & Quick Actions -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="card" style="padding: 20px;">
+            <h3 style="margin-bottom: 12px; font-size: 1rem;">Platform Infrastructure</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Flare Network RPC:</span>
+                    <span style="color: var(--success); font-weight: 600;">UP (45ms)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>FCC TEE Enclave:</span>
+                    <span style="color: var(--success); font-weight: 600;">UP (85ms)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>H2 / Postgres DB Pool:</span>
+                    <span style="color: var(--success); font-weight: 600;">UP (8ms)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 20px; background: rgba(91,140,255,0.08); border-color: rgba(91,140,255,0.3);">
+            <h3 style="margin-bottom: 8px; font-size: 1rem; color: var(--secondary);">AI Treasury Assistant</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">Ask the AI Policy Assistant to draft policies or explain decision evaluations.</p>
+            <button onclick="window.location.hash='#ai-assistant'" class="btn-primary" style="width: 100%; justify-content: center;">Open AI Assistant</button>
+        </div>
+    </div>
+</div>

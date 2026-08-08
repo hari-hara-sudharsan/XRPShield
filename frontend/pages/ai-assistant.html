@@ -1,0 +1,82 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Treasury Intelligence & AI Assistant</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Natural language policy builder, plain-language decision explanations, and executive report generator</p>
+    </div>
+    <span class="badge" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 8px 16px; font-size: 0.9rem;">
+        Powered by OpenAI GPT-4o
+    </span>
+</div>
+
+<div class="grid-cards" style="margin-bottom: 32px;">
+    <div class="card">
+        <div class="card-title">AI Policy Builder</div>
+        <div class="card-value" style="color: var(--primary-cyan);">Active</div>
+        <div class="card-subtext">Drafts policies from intent</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Privacy Filter Guard</div>
+        <div class="card-value" style="color: var(--accent-emerald);">100% Enforced</div>
+        <div class="card-subtext">Zero FCC TEE Data Transmitted</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Generated Reports</div>
+        <div class="card-value" id="generated-reports-count">8 Reports</div>
+        <div class="card-subtext">Available for Download</div>
+    </div>
+</div>
+
+<!-- Grid Layout: Left AI Assistant Chat, Right Prompt Generators -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+    <!-- Left: Natural Language AI Policy Assistant -->
+    <div class="card" style="display: flex; flex-direction: column; height: 500px; padding: 24px;">
+        <div style="padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1.1rem;">AI Policy Assistant Chat</h3>
+            <span style="font-size: 0.8rem; color: var(--text-secondary);">Session: Policy Builder</span>
+        </div>
+        <div id="ai-chat-messages" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 8px; margin-bottom: 16px;">
+            <div style="background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.2); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.5; color: var(--text-primary);">
+                <strong>XRPShield AI Assistant:</strong> Welcome! Describe your treasury risk preferences in plain language, and I will generate a draft confidential policy for your vault.
+            </div>
+        </div>
+        <form id="ai-chat-form" style="display: flex; gap: 10px;">
+            <input id="ai-input" type="text" placeholder="e.g. Protect vault from drawdown > 12% and liquidity < 75,000 FXRP..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.9rem;">
+            <button type="submit" class="btn-connect" style="padding: 10px 20px;">Send</button>
+        </form>
+    </div>
+
+    <!-- Right: Quick Generator Utilities -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div class="card" style="padding: 24px;">
+            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Explain Decision</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Generate human-readable breakdown of decision evaluation rationale</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                <select id="explain-select" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="4957d3dd-918e-43c9-aeef-7c86f5c3e131">Primary FXRP Vault — PROTECT_POSITION (Approved)</option>
+                    <option value="e062e742-1e9a-4c2d-9860-f1c5058728ba">Yield Reserve Vault — REDUCE_EXPOSURE (Pending)</option>
+                </select>
+                <button onclick="window.explainDecisionAI()" class="btn-connect" style="padding: 10px 16px;">Explain</button>
+            </div>
+            <div id="explain-result-box" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-size: 0.85rem;"></div>
+        </div>
+
+        <div class="card" style="padding: 24px;">
+            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Generate Executive Report</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Export comprehensive operational and risk summary</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                <select id="report-type" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                    <option value="EXECUTIVE">Executive Risk Summary</option>
+                    <option value="EXECUTION_AUDIT">Execution Audit Log</option>
+                </select>
+                <button onclick="window.generateExecutiveReportAI()" class="btn-connect" style="padding: 10px 16px;">Generate</button>
+            </div>
+            <div id="report-result-box" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-size: 0.85rem;"></div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initAIAssistant } from './js/components/ai-assistant.js';
+    initAIAssistant();
+</script>
+

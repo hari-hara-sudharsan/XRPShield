@@ -1,0 +1,43 @@
+<div style="max-width: 480px; margin: 40px auto;">
+    <div class="card" style="padding: 40px;">
+        <div class="brand-icon" style="width: 56px; height: 56px; font-size: 1.8rem; margin: 0 auto 20px auto;">X</div>
+        <h2 style="font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 8px;">Welcome Back</h2>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; margin-bottom: 32px;">
+            Authenticate with Web3 MetaMask Wallet or Email
+        </p>
+
+        <button id="btn-login-metamask" onclick="import('../js/utils/wallet.js').then(m => m.WalletManager.connect())" class="btn-connect" style="width: 100%; padding: 14px; font-size: 1rem; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            🦊 Connect & Sign with Web3 Wallet
+        </button>
+
+
+        <div style="display: flex; align-items: center; margin-bottom: 24px;">
+            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+            <span style="padding: 0 12px; font-size: 0.8rem; color: var(--text-muted);">OR EMAIL SIGN IN</span>
+            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+        </div>
+
+        <form id="login-form" onsubmit="event.preventDefault(); window.handleLoginSubmit();">
+            <div style="margin-bottom: 16px; text-align: left;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">Email Address</label>
+                <input type="email" id="login-email" required placeholder="name@company.com" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; border-radius: 10px;">
+            </div>
+
+            <div style="margin-bottom: 20px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <label style="font-size: 0.85rem; color: var(--text-secondary);">Password</label>
+                    <a href="#forgot-password" style="font-size: 0.8rem; color: var(--primary-cyan); text-decoration: none;">Forgot?</a>
+                </div>
+                <input type="password" id="login-password" required placeholder="••••••••" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; border-radius: 10px;">
+            </div>
+
+            <button type="submit" style="width: 100%; background: rgba(255,255,255,0.08); color: var(--text-primary); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                Sign In with Password
+            </button>
+        </form>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 24px;">
+            Don't have an account? <a href="#register" style="color: var(--primary-cyan); text-decoration: none;">Create One</a>
+        </div>
+    </div>
+</div>

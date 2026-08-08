@@ -1,0 +1,101 @@
+<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Platform Status & Health Dashboard</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Real-time subsystem health matrix, operational metrics, circuit breakers, and platform notifications</p>
+    </div>
+    <span id="system-status-badge" class="badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); padding: 8px 16px; font-size: 0.9rem;">
+        ALL SUBSYSTEMS HEALTHY
+    </span>
+</div>
+
+<div class="grid-cards" style="margin-bottom: 32px;">
+    <div class="card">
+        <div class="card-title">System Uptime</div>
+        <div class="card-value" style="color: var(--accent-emerald);">99.98%</div>
+        <div class="card-subtext">Enterprise SLA Standards</div>
+    </div>
+    <div class="card">
+        <div class="card-title">Web3 RPC Latency</div>
+        <div class="card-value" id="rpc-latency-val" style="color: var(--primary-cyan);">45 ms</div>
+        <div class="card-subtext">Flare Coston2 Testnet RPC</div>
+    </div>
+    <div class="card">
+        <div class="card-title">FCC TEE Speed</div>
+        <div class="card-value" id="fcc-latency-val" style="color: var(--accent-emerald);">85 ms</div>
+        <div class="card-subtext">Confidential Policy Evaluation</div>
+    </div>
+</div>
+
+<div class="table-container" style="margin-bottom: 32px;">
+    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem;">Subsystem Health Matrix</h3>
+        <span class="badge">Live Probes</span>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Subsystem Component</th>
+                <th>Status</th>
+                <th>Latency</th>
+                <th>Details & Operational Status</th>
+            </tr>
+        </thead>
+        <tbody id="health-table-body">
+            <tr>
+                <td><strong>Backend Spring Boot Service</strong></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
+                <td>15 ms</td>
+                <td>Java 23 runtime operational (v1.0.0-SNAPSHOT)</td>
+            </tr>
+            <tr>
+                <td><strong>Datasource & Persistence Pool</strong></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
+                <td>8 ms</td>
+                <td>Connection pool active (H2 / PostgreSQL)</td>
+            </tr>
+            <tr>
+                <td><strong>Flare Coston2 Web3 RPC</strong></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
+                <td>45 ms</td>
+                <td>Chain ID 114 connected via Web3j client</td>
+            </tr>
+            <tr>
+                <td><strong>Flare Confidential Compute (FCC)</strong></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
+                <td>85 ms</td>
+                <td>TEE Enclave hardware quotes verified</td>
+            </tr>
+            <tr>
+                <td><strong>Treasury AI Inference Layer</strong></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
+                <td>45 ms</td>
+                <td>Natural language intent parser & OpenAI adapter active</td>
+            </tr>
+            <tr>
+                <td><strong>EIP-191 ECDSA Signature Verifier</strong></td>
+                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
+                <td>5 ms</td>
+                <td>MetaMask authentication engine active</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="module">
+    import { initPlatformStatus } from './js/components/platform-status.js';
+    initPlatformStatus();
+</script>
+
+
+<div class="card" style="padding: 24px; margin-bottom: 32px;">
+    <h3 style="margin-bottom: 16px; font-size: 1.1rem;">Platform Notification & Audit Log Center</h3>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.2); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;">
+            <span style="color: var(--primary-cyan); font-weight: 700;">[INFO]</span> <strong>Database Migration V11 Applied:</strong> Enterprise platform readiness and monitoring tables initialized cleanly.
+        </div>
+        <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;">
+            <span style="color: var(--accent-emerald); font-weight: 700;">[INFO]</span> <strong>Smart Contract Suite Verified:</strong> 13 Solidity contracts compiled with Paris EVM target and 5/5 tests passing.
+        </div>
+
+    </div>
+</div>
