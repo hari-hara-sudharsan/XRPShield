@@ -1,87 +1,982 @@
-# XRPShield — Privacy-Preserving XRP Treasury & Risk Management Platform
 
-![XRPShield Banner](https://img.shields.io/badge/Flare-Confidential%20Compute-00F2FE?style=for-the-badge)
-![Submission Status](https://img.shields.io/badge/Hackathon%20Submission-READY%20FOR%20JUDGING-10B981?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-v1.0.0-10B981?style=for-the-badge)
-![Build Status](https://img.shields.io/badge/Build-Passing-10B981?style=for-the-badge)
-![Java](https://img.shields.io/badge/Java-21%20LTS-007396?style=for-the-badge)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.3-6DB33F?style=for-the-badge)
-![Database](https://img.shields.io/badge/Supabase-PostgreSQL%2015+-3ECF8E?style=for-the-badge)
-![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+# 🛡️ XRPShield
 
-## 📌 Executive Summary & Hackathon Pitch
-**XRPShield** is an enterprise, privacy-preserving XRP Treasury & Risk Management Platform built for the **Flare Summer Signal Hackathon**.
+### Confidential Treasury Infrastructure for XRP
 
-Organizations, DAOs, and merchants holding XRP or FXRP can define confidential treasury protection policies, automated risk triggers, and strategy execution workflows while keeping their core financial strategies private inside **Flare Confidential Compute (FCC)** TEE hardware enclaves.
+> **Protect the strategy. Verify the outcome.**
+
+XRPShield is a privacy-preserving treasury management platform for businesses, merchants, DAOs, and crypto treasuries holding XRP-linked assets.
+
+It enables organizations to define sensitive treasury policies, evaluate those policies using **Flare Confidential Compute**, and maintain verifiable on-chain evidence of resulting decisions without exposing the complete private strategy as public blockchain state.
 
 ---
 
-## 🏗️ High-Level System Architecture
+## ✨ What is XRPShield?
 
-```mermaid
-graph TD
-    User([Treasury Manager / DAO User])
-    WebUI[Frontend Vanilla JS ES6 SPA]
-    SpringBoot[Spring Boot 3.2.3 / Java 21 Backend]
-    SupabaseDB[(Supabase PostgreSQL 15+)]
-    Web3RPC[Flare Coston2 Testnet RPC]
-    FCCTEE[Flare Confidential Compute TEE Enclave]
-    OpenAIAdapter[OpenAI GPT-4o API Adapter]
+Managing a digital-asset treasury often requires decisions that organizations do not want to expose publicly.
 
-    User <-->|HTTPS / Web3| WebUI
-    WebUI <-->|REST API + JWT| SpringBoot
-    SpringBoot <-->|JPA / JDBC| SupabaseDB
-    SpringBoot <-->|Web3j RPC| Web3RPC
-    SpringBoot <-->|TEE Attestation| FCCTEE
-    SpringBoot <-->|Sanitizer Guard| OpenAIAdapter
+For example:
+
+```text
+Protect 70% of our XRP exposure
+when a predefined downside condition occurs.
+
+Limit leverage to 2x.
+
+Stop the policy after its expiry date.
+```
+
+On a transparent blockchain, publishing these rules can reveal:
+
+- Treasury exposure
+- Risk thresholds
+- Protection ratios
+- Execution conditions
+- Timing
+- Internal financial policies
+
+XRPShield solves this by separating **private financial strategy** from **verifiable financial outcomes**.
+
+```text
+                 XRPShield
+
+       ┌─────────────────────────┐
+       │   Treasury Strategy     │
+       │        PRIVATE          │
+       └────────────┬────────────┘
+                    │
+                    ▼
+       ┌─────────────────────────┐
+       │ Flare Confidential      │
+       │ Compute                 │
+       │                         │
+       │ Private Evaluation     │
+       └────────────┬────────────┘
+                    │
+                    ▼
+       ┌─────────────────────────┐
+       │ Attested Decision       │
+       └────────────┬────────────┘
+                    │
+                    ▼
+       ┌─────────────────────────┐
+       │ Verifiable Blockchain   │
+       │ State & Audit Evidence  │
+       └─────────────────────────┘
+```
+
+### Core principle
+
+> **Keep the strategy confidential. Keep the outcome verifiable.**
+
+---
+
+# 🚀 Key Features
+
+| Feature | Description |
+|---|---|
+| 🔐 **Confidential Policies** | Define sensitive treasury policies without exposing the complete strategy publicly |
+| 🏦 **Treasury Vaults** | Create and manage vaults for supported XRP-linked assets |
+| 🧠 **AI-Assisted Policies** | Convert natural-language treasury objectives into structured policy proposals |
+| 🔒 **Confidential Compute** | Evaluate sensitive policies through Flare Confidential Compute |
+| ✅ **Attested Decisions** | Produce verifiable decision results and attestations |
+| ⚡ **Execution Pipeline** | Route approved decisions through controlled execution workflows |
+| 📊 **Treasury Dashboard** | Monitor vaults, assets, policies, decisions, and executions |
+| 🧾 **Audit Trail** | Maintain a traceable lifecycle from wallet interaction to blockchain settlement |
+
+---
+
+# 🎯 Why XRPShield?
+
+Traditional financial infrastructure generally provides privacy through centralized intermediaries.
+
+Public blockchains provide transparency and verifiability, but can expose sensitive financial logic.
+
+AI-based financial automation improves usability, but can introduce an additional trust boundary.
+
+XRPShield combines the strengths of these approaches:
+
+```text
+Traditional Finance
+        │
+        │ Privacy
+        ▼
+    XRPShield
+        ▲
+        │ Verifiability
+        │
+Public Blockchain
+```
+
+The goal is not complete anonymity.
+
+The goal is more specific:
+
+> **Protect sensitive treasury strategy while preserving verifiable financial outcomes.**
+
+---
+
+# 🧠 Core Architecture
+
+XRPShield separates the system into distinct trust boundaries.
+
+```text
+                         USER
+                          │
+                          ▼
+                 ┌────────────────┐
+                 │ XRPShield App  │
+                 └───────┬────────┘
+                         │
+             ┌───────────┼───────────┐
+             │           │           │
+             ▼           ▼           ▼
+          Vault       Policy       AI
+        Management     Engine    Assistant
+             │           │           │
+             └───────────┼───────────┘
+                         │
+                         ▼
+               Confidential Policy
+                       Workflow
+                         │
+                         ▼
+              ┌────────────────────┐
+              │ Flare Confidential │
+              │ Compute            │
+              └─────────┬──────────┘
+                        │
+                        ▼
+                  Attestation
+                        │
+                        ▼
+                Decision Validation
+                        │
+                        ▼
+                Execution Layer
+                        │
+                        ▼
+              Flare Smart Contracts
+                        │
+                        ▼
+             Settlement / Blockchain
+                        │
+                        ▼
+                   Audit Trail
+```
+
+This separation is important because the AI assistant, confidential computation, and blockchain settlement do not need to share the same level of authority.
+
+---
+
+# 🔐 Confidential Treasury Policies
+
+A treasury policy can contain information that should not become public blockchain state.
+
+Examples include:
+
+- Protection percentage
+- Maximum exposure
+- Maximum leverage
+- Maximum drawdown
+- Trigger conditions
+- Expiry conditions
+- Sensitive execution parameters
+
+Instead of publishing the entire policy, XRPShield can maintain a policy commitment and process sensitive information through the confidential-compute workflow.
+
+Conceptually:
+
+```text
+Private Policy
+     │
+     ▼
+Policy Commitment
+     │
+     ▼
+Confidential Evaluation
+     │
+     ▼
+Attested Result
+     │
+     ▼
+Verifiable Decision
 ```
 
 ---
 
-## 📜 Deployed Smart Contract Addresses (Flare Coston2 Testnet)
+# 🏦 Treasury Vaults
 
-| Contract Name | Deployed Address | Network / Explorer Link |
-|---|---|---|
-| `VaultManager.sol` | `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0) |
-| `AccessManager.sol` | `0xCf7Ed3AccA5a467e9e754572157c480d02f71887` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0xCf7Ed3AccA5a467e9e754572157c480d02f71887) |
-| `TreasuryStorage.sol` | `0xDc64a140Aa3E981100a9becA4E685f962f0cf6C9` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0xDc64a140Aa3E981100a9becA4E685f962f0cf6C9) |
-| `XRPShieldHealth.sol` | `0x5FbDB2315678afecb367f032d93F642f64180aa3` | [Flare Coston2 Explorer](https://coston2-explorer.flare.network/address/0x5FbDB2315678afecb367f032d93F642f64180aa3) |
+XRPShield provides treasury vault infrastructure for supported XRP-linked assets.
 
+A typical vault lifecycle is:
+
+```text
+Connect Wallet
+      │
+      ▼
+Create Vault
+      │
+      ▼
+Fund Vault
+      │
+      ▼
+Manage Treasury Policy
+      │
+      ▼
+Monitor Decisions
+      │
+      ▼
+Execute Approved Actions
+```
+
+The blockchain maintains the required ownership and vault state while sensitive policy evaluation can occur separately.
 
 ---
 
-## 📚 Technical Documentation & Submission Assets
+# 🤖 AI-Assisted Policy Creation
 
-* [🏆 Hackathon Submission Package](docs/HACKATHON_SUBMISSION.md)
-* [🎬 Live Demo Script & Judge Q&A Guide](docs/LIVE_DEMO_SCRIPT_AND_JUDGE_QA.md)
-* [📐 System Architecture Diagrams](docs/ARCHITECTURE_DIAGRAMS.md)
-* [🔌 Comprehensive REST API Reference](docs/API_DOCUMENTATION.md)
-* [💻 Developer Setup & Build Guide](docs/DEVELOPER_GUIDE.md)
-* [📖 User Manual & FAQ](docs/USER_MANUAL.md)
-* [🧪 End-to-End Testing & QA Report](docs/TESTING_REPORT.md)
-* [🔒 Security Review & Audit Report](docs/SECURITY_REPORT.md)
-* [⚡ Performance Benchmarks Report](docs/PERFORMANCE_REPORT.md)
-* [📋 Production Readiness Sign-Off Checklist](docs/PRODUCTION_CHECKLIST.md)
-* [🛠️ Operations & Disaster Recovery Guide](docs/OPERATIONS_GUIDE.md)
-* [🎨 SaaS Design System & UX Guide](docs/DESIGN_SYSTEM_AND_UI_GUIDE.md)
+XRPShield can optionally use OpenAI to make treasury policy creation easier.
+
+Users can describe their objective naturally.
+
+For example:
+
+> "Protect most of my XRP treasury while limiting leverage to 2x."
+
+The AI assistant converts the request into a structured proposal:
+
+```text
+Protection Ratio
+        ↓
+Maximum Leverage
+        ↓
+Trigger Condition
+        ↓
+Expiry
+        ↓
+Structured Policy
+```
+
+The user reviews the proposal before confirming it.
+
+### AI is not the financial authority
+
+XRPShield deliberately separates AI assistance from financial execution.
+
+```text
+Natural Language
+       │
+       ▼
+    OpenAI
+       │
+       ▼
+Policy Proposal
+       │
+       ▼
+ User Review
+       │
+       ▼
+User Confirmation
+       │
+       ▼
+Confidential Evaluation
+```
+
+OpenAI does **not** independently authorize treasury transactions.
+
+Its role is to help users express their intent.
 
 ---
 
-## 🚀 Quickstart Instructions
+# 🔒 Flare Confidential Compute
 
-```powershell
-# 1. Run Complete Automated System Build
-.\scripts\build.ps1
+Confidential Compute is a central component of XRPShield.
 
-# 2. Run Smart Contract Tests
-cd contracts && npx hardhat test
+Sensitive policy information can enter the confidential workflow rather than being exposed as ordinary public blockchain data.
 
-# 3. Run Backend JUnit 5 Test Suite
-cd backend && mvn clean test
+```text
+             PRIVATE
+                │
+                ▼
+        Treasury Policy
+                │
+                ▼
+      Flare Confidential
+             Compute
+                │
+                ▼
+       Private Evaluation
+                │
+                ▼
+          Attestation
+                │
+                ▼
+             PUBLIC
+                │
+                ▼
+      Verifiable Decision
+```
+
+This architecture allows XRPShield to maintain a clear boundary between sensitive computation and publicly verifiable state.
+
+---
+
+# ✅ Decision Verification
+
+After confidential evaluation, XRPShield can represent the resulting decision as:
+
+```text
+Decision: APPROVED
+Attestation: VERIFIED
+```
+
+The application can validate the corresponding attestation and, where implemented, reference the result from on-chain state.
+
+Potential decision evidence includes:
+
+- Decision status
+- Policy commitment
+- Attestation reference
+- Timestamp
+- Execution reference
+- Settlement transaction
+
+The important distinction is:
+
+```text
+Private Strategy
+       +
+Verifiable Result
+```
+
+rather than:
+
+```text
+Public Strategy
+       +
+Public Result
 ```
 
 ---
 
-## 📄 License & Standards
-Distributed under the **MIT License**. Built with clean architecture, strict SOLID principles, zero simulations, and zero fake implementations for the Flare Summer Signal Hackathon.
+# ⚡ Execution Pipeline
+
+Approved decisions enter a controlled execution workflow.
+
+```text
+Decision
+   │
+   ▼
+Validation
+   │
+   ▼
+Authorization
+   │
+   ▼
+Execution Queue
+   │
+   ▼
+Execution Adapter
+   │
+   ▼
+Supported Settlement
+   │
+   ▼
+Blockchain Transaction
+   │
+   ▼
+Confirmation
+   │
+   ▼
+Audit Record
+```
+
+Execution is intentionally separated from policy evaluation.
+
+This provides a clear security boundary and avoids treating the AI layer as an autonomous trading authority.
+
+---
+
+# 🛡️ Security Model
+
+XRPShield is designed around multiple authorization and verification boundaries.
+
+```text
+Wallet Authentication
+        │
+        ▼
+Authorization
+        │
+        ▼
+Vault Ownership
+        │
+        ▼
+Policy Integrity
+        │
+        ▼
+Confidential Evaluation
+        │
+        ▼
+Attestation
+        │
+        ▼
+Decision Validation
+        │
+        ▼
+Execution Authorization
+        │
+        ▼
+Blockchain Settlement
+        │
+        ▼
+Audit Trail
+```
+
+The system is designed to require the necessary authorization, validation, and verification conditions before execution.
+
+Where a required condition cannot be validated, the intended behavior is to fail closed rather than execute an unverified action.
+
+---
+
+# 👁️ Privacy Model
+
+XRPShield does not claim complete anonymity.
+
+Instead, it protects the sensitive parts of the treasury workflow within the capabilities of the deployed confidential-compute architecture.
+
+## Public / Verifiable
+
+Depending on the deployed implementation:
+
+- Vault address
+- Ownership/state
+- Transaction hashes
+- Decision status
+- Timestamps
+- Policy commitments
+- Attestation references
+- Settlement references
+- Execution references
+
+## Confidential
+
+The confidential-compute workflow can protect information such as:
+
+- Sensitive policy parameters
+- Private evaluation inputs
+- Confidential decision logic
+- Sensitive execution information
+
+The objective is:
+
+> **Hide sensitive strategy, not hide the existence of verifiable blockchain activity.**
+
+---
+
+# 🧩 Product Components
+
+## Treasury Dashboard
+
+Centralized interface for monitoring:
+
+- Vaults
+- Assets
+- Policies
+- Decisions
+- Executions
+- System status
+
+---
+
+## Vault Management
+
+Provides functionality for:
+
+- Creating vaults
+- Funding vaults
+- Viewing balances
+- Tracking transactions
+- Managing vault state
+
+---
+
+## Policy Engine
+
+Responsible for:
+
+- Creating policies
+- Versioning policies
+- Generating policy commitments
+- Protecting sensitive policy information
+- Initiating confidential evaluation
+
+---
+
+## Decision Center
+
+Provides visibility into:
+
+- Policy evaluation status
+- Decision status
+- Attestation status
+- Historical decisions
+
+---
+
+## Execution Engine
+
+Handles:
+
+- Execution eligibility
+- Execution queues
+- Transaction submission
+- Transaction confirmation
+- Failure recovery
+- Audit logging
+
+---
+
+## AI Assistant
+
+Supports:
+
+- Natural-language policy creation
+- Policy parameter assistance
+- Policy explanations
+- Report generation
+
+The AI assistant remains an assistance layer rather than a financial authority.
+
+---
+
+## Audit System
+
+Tracks the treasury lifecycle:
+
+```text
+Wallet
+  │
+  ▼
+Vault
+  │
+  ▼
+Policy
+  │
+  ▼
+Confidential Compute
+  │
+  ▼
+Decision
+  │
+  ▼
+Execution
+  │
+  ▼
+Blockchain
+```
+
+---
+
+# 🛠️ Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript |
+| Backend | Java, Spring Boot |
+| API | REST |
+| Database | Supabase, PostgreSQL |
+| Blockchain | Flare |
+| Smart Contracts | Solidity |
+| Development Framework | Hardhat |
+| Confidential Computing | Flare Confidential Compute |
+| AI | OpenAI API |
+| Wallet | EVM-compatible wallet |
+| Infrastructure | GitHub, HTTPS, Hosting, Monitoring |
+
+---
+
+# 🔄 End-to-End Workflow
+
+A complete XRPShield workflow looks like this:
+
+```text
+┌─────────────────────┐
+│   1. Connect Wallet │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  2. Create Vault    │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  3. Fund Vault      │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  4. Create Policy   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 5. Optional AI Help │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  6. User Confirms   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 7. Confidential     │
+│    Evaluation       │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 8. Attestation      │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 9. Verify Decision  │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 10. Authorize       │
+│     Execution       │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 11. Settlement      │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 12. Blockchain      │
+│     Confirmation     │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ 13. Audit Trail     │
+└─────────────────────┘
+```
+
+---
+
+# 📋 Example Treasury Policy
+
+A policy can conceptually contain:
+
+```text
+Protection Ratio: 70%
+Maximum Leverage: 2x
+Maximum Exposure: Configured by User
+Maximum Drawdown: Configured by User
+Trigger: Configured Condition
+Expiry: Configured Deadline
+```
+
+The exact policy structure depends on the deployed implementation.
+
+The sensitive values should not be assumed to be public unless the implementation explicitly exposes them.
+
+---
+
+# 🌍 Use Cases
+
+### Businesses
+
+Protect XRP treasury exposure while keeping internal financial policies private.
+
+### Merchants
+
+Manage XRP received through payment operations.
+
+### DAOs
+
+Apply programmable treasury policies to organizational assets.
+
+### Crypto Treasuries
+
+Introduce structured risk controls without publishing the complete treasury strategy.
+
+### Payment Businesses
+
+Support privacy-sensitive digital-asset settlement workflows.
+
+---
+
+# 🔮 Future Possibilities
+
+The architecture can potentially extend beyond XRP treasury protection.
+
+Possible applications include:
+
+- Confidential DAO treasury management
+- Private payroll policies
+- Confidential supplier payments
+- Institutional settlement rules
+- Private grant distribution
+- Confidential revenue sharing
+- Multi-party financial authorization
+
+These represent future opportunities and should not be interpreted as currently deployed features unless implemented.
+
+---
+
+# 📈 Roadmap
+
+## Phase 1 — Confidential Treasury
+
+- Treasury vaults
+- XRP-linked asset support
+- Confidential policies
+- Confidential evaluation
+- Attested decisions
+- Execution workflow
+
+## Phase 2 — Advanced Treasury Management
+
+- Multi-vault support
+- Advanced policy controls
+- Expanded risk configuration
+- Improved execution workflows
+
+## Phase 3 — Enterprise
+
+- Team permissions
+- Enterprise access control
+- Treasury APIs
+- Advanced audit capabilities
+
+## Phase 4 — Financial Infrastructure
+
+Expand the confidential policy architecture into additional privacy-sensitive financial workflows and integrations.
+
+---
+
+# ⚠️ Limitations & Risk Considerations
+
+XRPShield is infrastructure software and does not guarantee financial returns.
+
+Important considerations:
+
+- Testnet assets do not represent production-value assets.
+- Confidentiality depends on the security properties of the deployed Flare Confidential Compute environment.
+- External execution venues introduce additional availability and trust assumptions.
+- Blockchain transactions may be irreversible.
+- Market risk cannot be eliminated.
+- XRPShield does not provide complete anonymity.
+- Undeployed integrations should not be represented as production functionality.
+
+---
+
+# 🔐 Security Best Practices
+
+When deploying or developing XRPShield:
+
+- Never commit private keys to source control.
+- Never commit API keys or secrets.
+- Use environment variables for sensitive configuration.
+- Verify contract addresses before interacting with deployed contracts.
+- Validate attestations before accepting confidential decisions.
+- Validate wallet ownership and authorization.
+- Keep execution permissions separate from AI-generated policy proposals.
+- Treat external settlement integrations as separate trust boundaries.
+- Use HTTPS for deployed applications.
+- Monitor blockchain transactions and execution failures.
+
+---
+
+# 💻 Development
+
+The project contains three major technical areas:
+
+```text
+Frontend
+   │
+   ├── User Interface
+   ├── Wallet Integration
+   ├── Treasury Dashboard
+   └── Policy / Decision Views
+
+Backend
+   │
+   ├── REST APIs
+   ├── Business Logic
+   ├── Database Integration
+   └── Blockchain Integration
+
+Blockchain
+   │
+   ├── Solidity Contracts
+   ├── Flare Integration
+   ├── Vault State
+   └── Decision / Execution State
+```
+
+The exact repository structure and commands should follow the project's actual source tree.
+
+---
+
+# ⚙️ Configuration
+
+XRPShield requires configuration for the services used by the deployed environment.
+
+Typical configuration categories include:
+
+```env
+OPENAI_API_KEY=your_api_key
+DATABASE_URL=your_database_url
+FLARE_RPC_URL=your_flare_rpc_url
+```
+
+Additional variables may be required depending on the actual implementation.
+
+> **Never commit production secrets, private keys, or API credentials to Git.**
+
+---
+
+# 🧪 Testing
+
+Testing should cover the complete treasury lifecycle.
+
+### Smart Contracts
+
+- Vault creation
+- Ownership
+- Authorization
+- Policy commitments
+- State transitions
+- Execution conditions
+
+### Backend
+
+- API validation
+- Policy handling
+- Authentication
+- Database operations
+- Blockchain interaction
+
+### Confidential Workflow
+
+- Policy submission
+- Confidential evaluation
+- Attestation validation
+- Decision handling
+
+### Frontend
+
+- Wallet connection
+- Vault management
+- Policy creation
+- Decision display
+- Transaction tracking
+
+---
+
+# 🏆 Project Highlights
+
+XRPShield combines:
+
+```text
+XRP-linked Assets
+        +
+Treasury Management
+        +
+Confidential Policies
+        +
+Flare Confidential Compute
+        +
+AI Assistance
+        +
+Attestation
+        +
+Blockchain Verification
+        +
+Execution Infrastructure
+```
+
+The key innovation is not simply adding AI to treasury management.
+
+It is the separation of:
+
+```text
+PRIVATE STRATEGY
+       │
+       ▼
+CONFIDENTIAL COMPUTATION
+       │
+       ▼
+VERIFIABLE OUTCOME
+       │
+       ▼
+BLOCKCHAIN STATE
+```
+
+This creates a foundation for privacy-sensitive financial automation.
+
+---
+
+# 🎯 Project Positioning
+
+**XRPShield** is positioned as:
+
+> **Confidential Treasury Infrastructure for XRP**
+
+### Tagline
+
+> **Protect the strategy. Verify the outcome.**
+
+### Core Value Proposition
+
+> XRPShield enables organizations to automate XRP treasury policies while keeping sensitive financial strategy confidential and important outcomes verifiable.
+
+### Primary Technology
+
+**Flare Confidential Compute**
+
+### Blockchain
+
+**Flare**
+
+### AI Assistance
+
+**OpenAI**
+
+---
+
+# 📜 License
+
+Add the project's actual license here once the repository license is finalized.
+
+---
+
+# ⚖️ Disclaimer
+
+XRPShield is software infrastructure for programmable treasury management.
+
+Nothing in this project constitutes financial, investment, legal, or tax advice.
+
+Digital assets, smart contracts, blockchain transactions, confidential-compute systems, and external settlement systems involve technical and financial risks. Users should independently evaluate these risks before using the software with real assets.
+
+---
+
+<div align="center">
+
+### 🛡️ XRPShield
+
+**Protect the strategy. Verify the outcome.**
+
+Confidential treasury infrastructure for XRP.
+
+</div>
+````
