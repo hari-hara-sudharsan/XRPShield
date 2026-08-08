@@ -15,10 +15,12 @@ spring:
     password: ${DATABASE_PASSWORD:}
 
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 2
+      maximum-pool-size: 5
+      minimum-idle: 1
       idle-timeout: 300000
-      connection-timeout: 20000
+      connection-timeout: 30000
+      initialization-fail-timeout: -1
+
 
   jpa:
     open-in-view: false
