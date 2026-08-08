@@ -1,0 +1,8 @@
+[providers]
+providers = ['java']
+
+[build]
+cmds = ['cd backend && mvn clean package -DskipTests']
+
+[start]
+cmd = 'java -jar backend/target/xrpshield-backend-1.0.0-SNAPSHOT.jar'
