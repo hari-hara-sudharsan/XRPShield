@@ -217,27 +217,31 @@
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius, 14px);
-  overflow: hidden;
+  overflow-x: auto;
+  width: 100%;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  min-width: 850px;
 }
 
 .data-table th {
   background: rgba(255, 255, 255, 0.03);
-  padding: 16px 20px;
+  padding: 14px 18px;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
+  white-space: nowrap;
   border-bottom: 1px solid var(--border-color);
 }
 
 .data-table td {
-  padding: 16px 20px;
-  font-size: 0.9rem;
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  white-space: nowrap;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-primary);
 }
