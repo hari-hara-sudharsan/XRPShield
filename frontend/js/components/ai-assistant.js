@@ -49,7 +49,7 @@ export async function initAIAssistant() {
                 console.warn('API policy inference fallback notice:', err);
 
                 // Smart Intent Classifier: General Query vs Policy Directive
-                const isQuery = /^(what|how|why|tell|explain|show|help|where|can|is|does|are|who|status|balance)/i.test(intent) || intent.endsWith('?');
+                const isQuery = /^(what|how|why|tell|explain|expain|explan|show|help|where|can|is|does|are|who|status|balance|about|define|meaning)/i.test(intent) || intent.includes('?') || intent.toLowerCase().includes('xrp') || intent.toLowerCase().includes('xrpshield') || intent.toLowerCase().includes('fassets');
 
                 if (isQuery) {
                     aiResponseHtml = renderNaturalLanguageAnswer(intent);
@@ -91,7 +91,22 @@ function renderNaturalLanguageAnswer(query) {
     const walletAddr = WalletManager.connectedAddress || '0x71C7...39A1';
     const qLower = query.toLowerCase();
 
-    // 1. Specific Query: What is XRPShield / What does XRPShield do?
+    // 1. XRP & FXRP Asset & Utility Query
+    if (qLower.includes('xrp') || qLower.includes('fxrp') || qLower.includes('asset') || qLower.includes('token')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>💎 XRP & FXRP Treasury Protection on Flare Network:</strong><br>
+                <strong>XRP</strong> is the digital asset powering cross-border liquidity. On <strong>Flare Network</strong>, XRP is bridged 1:1 as <strong>FXRP</strong> via FAssets, bringing smart contract capabilities, decentralized finance (DeFi), and trustless yield generation to institutional XRP holders.
+                <br><br>
+                <strong>How XRPShield Safeguards Your XRP / FXRP Reserves:</strong><br>
+                • <strong>Confidential Circuit Breakers:</strong> Automatically monitors FXRP price volatility & vault drawdowns.<br>
+                • <strong>Flare TEE Enclave Isolation:</strong> Evaluates rebalance decisions inside hardware-enclosed Intel SGX TEE enclaves to prevent strategy leakage.<br>
+                • <strong>Real Web3 Settlement:</strong> Settles position rebalances directly on Flare Coston2 Testnet (Chain ID 114) via MetaMask.
+            </div>
+        `;
+    }
+
+    // 2. Specific Query: What is XRPShield / What does XRPShield do?
     if (qLower.includes('xrpshield') || qLower.includes('what is') || qLower.includes('does') || qLower.includes('do')) {
         return `
             <div style="line-height: 1.6;">
