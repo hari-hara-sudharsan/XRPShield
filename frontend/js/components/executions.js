@@ -164,12 +164,12 @@ window.viewTxReceipt = function(txHash, blockNum) {
     const detailBox = document.getElementById('tx-receipt-content');
     if (detailBox) {
         detailBox.innerHTML = `
-            <div><strong>Tx Hash:</strong> <a href="${CONFIG.FLARE_NETWORK.EXPLORER}/tx/${txHash}" target="_blank" style="color: var(--primary-cyan);">${txHash}</a></div>
-            <div><strong>Block Number:</strong> ${blockNum}</div>
-            <div><strong>Status:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">SUCCESS (CONFIRMED ON COSTON2)</span></div>
-            <div><strong>Gas Used:</strong> 65,000</div>
-            <div><strong>Network:</strong> Flare Coston2 Testnet (Chain ID 114)</div>
-            <div><strong>Smart Contract:</strong> 0x5FbDB2315678afecb367f032d93F642f64180aa3</div>
+            <div style="margin-bottom: 8px;"><strong>Tx Hash:</strong><br><a href="${CONFIG.FLARE_NETWORK.EXPLORER}/tx/${txHash}" target="_blank" style="color: var(--primary-cyan); word-break: break-all; overflow-wrap: anywhere; font-weight: 600;">${txHash}</a></div>
+            <div style="margin-bottom: 6px;"><strong>Block Number:</strong> ${blockNum}</div>
+            <div style="margin-bottom: 6px;"><strong>Status:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">SUCCESS (CONFIRMED ON COSTON2)</span></div>
+            <div style="margin-bottom: 6px;"><strong>Gas Used:</strong> 65,000</div>
+            <div style="margin-bottom: 6px;"><strong>Network:</strong> Flare Coston2 Testnet (Chain ID 114)</div>
+            <div><strong>Smart Contract:</strong><br><code style="word-break: break-all; overflow-wrap: anywhere; color: var(--text-secondary);">0x5FbDB2315678afecb367f032d93F642f64180aa3</code></div>
         `;
     }
     document.getElementById('modal-tx-viewer').style.display = 'flex';
