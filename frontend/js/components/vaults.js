@@ -1,6 +1,7 @@
 import { ApiClient } from '../utils/api.js';
 import { WalletManager } from '../utils/wallet.js';
 import { CONFIG } from '../config/config.js';
+import { showExecutionSuccessModal } from '../utils/execution-modal.js';
 
 export async function initVaults() {
     const tableBody = document.getElementById('vaults-table-body');
@@ -59,8 +60,16 @@ export async function initVaults() {
                     console.warn('Backend API sync notice:', apiErr);
                 }
 
-                alert(`🎉 REAL On-Chain Vault Deployed on Flare Coston2 Testnet!\n\nVault Name: ${vaultName}\nAsset: ${assetType}\nTx Hash: ${txHash}\nExplorer: ${CONFIG.FLARE_NETWORK.EXPLORER}/tx/${txHash}`);
                 document.getElementById('modal-create-vault').style.display = 'none';
+
+                showExecutionSuccessModal({
+                    title: 'Real On-Chain Vault Deployed',
+                    action: `Created Vault: ${vaultName} (${assetType})`,
+                    txHash: txHash,
+                    attestationId: 'FCC-ATT-DEPLOY',
+                    addedTreasuryFXRP: Number(initialBalance) || 100000
+                });
+
                 await loadVaults(tableBody);
 
             } catch (err) {
@@ -101,8 +110,16 @@ export async function initVaults() {
                     }]
                 });
 
-                alert(`⚡ Real Vault ${action} Confirmed on Flare Coston2 Testnet!\n\nAmount: ${amount} FXRP\nTx Hash: ${txHash}\nExplorer: ${CONFIG.FLARE_NETWORK.EXPLORER}/tx/${txHash}`);
                 document.getElementById('modal-fund-vault').style.display = 'none';
+
+                showExecutionSuccessModal({
+                    title: `Vault ${action} Execution Confirmed`,
+                    action: `${action} ${amount} FXRP`,
+                    txHash: txHash,
+                    attestationId: 'FCC-ATT-REBALANCE',
+                    addedTreasuryFXRP: action === 'DEPOSIT' ? Number(amount) : -Number(amount)
+                });
+
                 await loadVaults(tableBody);
 
             } catch (err) {

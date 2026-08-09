@@ -1,4 +1,5 @@
 import { WalletManager } from './utils/wallet.js';
+import { updateActiveTreasury } from './utils/execution-modal.js';
 
 /* ===========================================================
    XRPShield — Main Frontend Single Page Application Router
@@ -84,16 +85,35 @@ function dispatchComponentInit(routeKey) {
     }
 }
 
+function initHeaderNotifications() {
+    const notifBtn = document.getElementById('notif-btn');
+    const notifDrawer = document.getElementById('notif-drawer');
+
+    if (notifBtn && notifDrawer && !notifBtn.dataset.initialized) {
+        notifBtn.dataset.initialized = 'true';
+        notifBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifDrawer.classList.toggle('open');
+        });
+        document.addEventListener('click', (e) => {
+            if (!notifDrawer.contains(e.target) && !notifBtn.contains(e.target)) {
+                notifDrawer.classList.remove('open');
+            }
+        });
+    }
+}
+
 function handleHashChange() {
     const hash = window.location.hash.replace('#', '') || 'dashboard';
     navigateTo(hash);
 }
 
-
 window.addEventListener('hashchange', handleHashChange);
 window.addEventListener('DOMContentLoaded', () => {
     handleHashChange();
     WalletManager.init();
+    initHeaderNotifications();
+    updateActiveTreasury(0);
 });
 
 
