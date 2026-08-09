@@ -23,6 +23,7 @@ spring:
 
   jpa:
     open-in-view: false
+    database-platform: ${HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: none
@@ -31,6 +32,8 @@ spring:
         format_sql: true
         temp:
           use_jdbc_metadata_defaults: false
+        boot:
+          allow_jdbc_metadata_access: false
 
 
 
