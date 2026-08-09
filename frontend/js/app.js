@@ -1,5 +1,6 @@
 import { WalletManager } from './utils/wallet.js';
 import { updateActiveTreasury } from './utils/execution-modal.js';
+import { initGlobalSearch } from './components/search.js';
 
 /* ===========================================================
    XRPShield — Main Frontend Single Page Application Router
@@ -113,6 +114,7 @@ window.addEventListener('DOMContentLoaded', () => {
     handleHashChange();
     WalletManager.init();
     initHeaderNotifications();
+    initGlobalSearch();
     updateActiveTreasury(0);
 });
 

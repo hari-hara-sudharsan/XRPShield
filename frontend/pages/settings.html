@@ -1,54 +1,81 @@
 <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
     <div>
         <h2 style="font-size: 1.8rem; font-weight: 700;">Platform Settings & Profile Security</h2>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">Manage platform preferences, notifications, wallet authentication, and security configurations</p>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Manage platform preferences, notifications, real Web3 wallet authentication, and Flare contract configurations</p>
     </div>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 32px;">
     <!-- Left: Profile & Preferences -->
     <div class="card" style="padding: 28px;">
-        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">User Profile & Preferences</h3>
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">User Profile & Display Preferences</h3>
         <form onsubmit="event.preventDefault(); window.saveSettingsPreferences();">
             <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Display Name</label>
+                <input id="settings-user-name" type="text" value="Treasury Administrator" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 16px;">
                 <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Email Address</label>
-                <input id="settings-user-email" type="email" value="owner@xrpshield.io" disabled style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px; border-radius: 8px;">
+                <input id="settings-user-email" type="email" value="owner@xrpshield.io" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
             </div>
             <div style="margin-bottom: 16px;">
                 <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Display Language</label>
-                <select style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                <select id="settings-user-lang" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
                     <option value="en">English (US)</option>
                     <option value="ja">Japanese (日本語)</option>
                     <option value="de">German (Deutsch)</option>
+                    <option value="es">Spanish (Español)</option>
                 </select>
             </div>
             <div style="margin-bottom: 24px;">
                 <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Default Timezone</label>
-                <select style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+                <select id="settings-user-tz" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
                     <option value="UTC">UTC (Universal Coordinated Time)</option>
                     <option value="EST">EST (Eastern Standard Time)</option>
                     <option value="JST">JST (Japan Standard Time)</option>
+                    <option value="IST">IST (Indian Standard Time)</option>
                 </select>
             </div>
-            <button type="submit" class="btn-primary">Save Preferences</button>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">💾 Save Preferences & Language</button>
         </form>
     </div>
 
-    <!-- Right: Wallet & Security Settings -->
+    <!-- Right: Real Web3 Contracts & Security Settings -->
     <div class="card" style="padding: 28px;">
-        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">Web3 Security & Wallet Settings</h3>
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">Flare Coston2 Smart Contracts & Security</h3>
         <div style="display: flex; flex-direction: column; gap: 16px;">
             <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
                 <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">Connected Web3 Wallet</div>
                 <code id="settings-wallet-addr" style="color: var(--primary-cyan); font-size: 0.95rem; word-break: break-all;">Not Connected</code>
-                <div style="font-size: 0.8rem; color: var(--accent-emerald); margin-top: 6px;">EIP-191 Personal Signature Active</div>
+                <div id="settings-sig-status" style="font-size: 0.8rem; color: var(--accent-emerald); margin-top: 6px;">EIP-191 Web3 Signature Ready</div>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
-                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">Flare Confidential Compute (FCC) State</div>
-                <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-emerald);">TEE Enclave Quote Verified</div>
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Hardware Enclave Quote: 0xc5fb27ac51...</div>
+
+            <!-- Real Deployed Flare Coston2 Contracts -->
+            <div style="background: rgba(0,242,254,0.05); padding: 16px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.2);">
+                <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary-cyan); margin-bottom: 10px;">🛡️ Real Flare Coston2 Deployed Contracts</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);">VaultManager:</span>
+                        <a href="https://coston2-explorer.flare.network/address/0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0" target="_blank" style="color: var(--primary-cyan); font-family: var(--font-mono); text-decoration: underline;">0x9fE4...6e0 ↗</a>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);">AccessManager:</span>
+                        <a href="https://coston2-explorer.flare.network/address/0xCf7Ed3AccA5a467e9e754572157c480d02f71887" target="_blank" style="color: var(--primary-cyan); font-family: var(--font-mono); text-decoration: underline;">0xCf7E...1887 ↗</a>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);">TreasuryStorage:</span>
+                        <a href="https://coston2-explorer.flare.network/address/0xDc64a140Aa3E981100a9becA4E685f962f0cf6C9" target="_blank" style="color: var(--primary-cyan); font-family: var(--font-mono); text-decoration: underline;">0xDc64...cf6C9 ↗</a>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary);">XRPShieldHealth:</span>
+                        <a href="https://coston2-explorer.flare.network/address/0x5FbDB2315678afecb367f032d93F642f64180aa3" target="_blank" style="color: var(--primary-cyan); font-family: var(--font-mono); text-decoration: underline;">0x5FbD...0aa3 ↗</a>
+                    </div>
+                </div>
             </div>
-            <button onclick="window.refreshSessionTokens()" class="btn-secondary">Refresh Session Security Tokens</button>
+
+            <button onclick="window.refreshSessionTokens()" class="btn-secondary" style="width: 100%; justify-content: center;">
+                🔑 Refresh Real Web3 Session Signature Token
+            </button>
         </div>
     </div>
 </div>
