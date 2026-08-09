@@ -91,6 +91,23 @@ function renderNaturalLanguageAnswer(query) {
     const walletAddr = WalletManager.connectedAddress || '0x71C7...39A1';
     const qLower = query.toLowerCase();
 
+    // 1. Specific Query: What is XRPShield / What does XRPShield do?
+    if (qLower.includes('xrpshield') || qLower.includes('what is') || qLower.includes('does') || qLower.includes('do')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>🛡️ What XRPShield Does:</strong><br>
+                XRPShield is an <strong>Institutional Confidential Treasury Protection & Risk Automation Platform</strong> built natively for the <strong>Flare Network (Coston2 Testnet)</strong>.
+                <br><br>
+                <strong>Core Features & Capabilities:</strong><br>
+                • <strong>Confidential Policy Evaluation:</strong> Evaluates risk policies (drawdown limits, liquidity reserves) inside hardware-enclosed <strong>Flare Confidential Compute (FCC) TEE Enclaves</strong> so proprietary strategies are never exposed on-chain.<br>
+                • <strong>Automated Circuit Breakers:</strong> Monitors FXRP & XRP treasury vaults in real-time, executing automated rebalancing or exposure reduction when market volatility spikes.<br>
+                • <strong>Verifiable Hardware Attestation:</strong> Issues cryptographically signed SGX quote attestations (e.g. <code>FCC-ATT-992184</code>) verified on-chain via smart contracts.<br>
+                • <strong>Real Web3 Settlement:</strong> Integrates directly with MetaMask for real on-chain vault protection and settlement receipts on BlockScout Explorer.
+            </div>
+        `;
+    }
+
+    // 2. TEE Enclave & Flare Security Query
     if (qLower.includes('tee') || qLower.includes('enclave') || qLower.includes('flare') || qLower.includes('attestation')) {
         return `
             <div style="line-height: 1.6;">
@@ -104,6 +121,7 @@ function renderNaturalLanguageAnswer(query) {
         `;
     }
 
+    // 3. Balance & Treasury Reserves Query
     if (qLower.includes('balance') || qLower.includes('treasury') || qLower.includes('vault') || qLower.includes('reserve')) {
         return `
             <div style="line-height: 1.6;">
@@ -116,12 +134,25 @@ function renderNaturalLanguageAnswer(query) {
         `;
     }
 
+    // 4. Policy & Rules Query
+    if (qLower.includes('policy') || qLower.includes('rule') || qLower.includes('drawdown') || qLower.includes('liquidity')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>📜 Confidential Risk Policies:</strong><br>
+                Risk policies define automated circuit-breaker rules for your FXRP treasury vaults. 
+                <br><br>
+                You can draft custom policies in natural language (e.g. <em>"Set max drawdown to 15% and min liquidity to 100,000 FXRP"</em>), and click <strong>"🔒 Commit Policy to Flare TEE Enclave"</strong> to broadcast a real Web3 transaction on Flare Coston2.
+            </div>
+        `;
+    }
+
+    // 5. General Inquiry Response
     return `
         <div style="line-height: 1.6;">
-            <strong>🤖 XRPShield AI Assistant Analysis:</strong><br>
-            I am your natural language treasury intelligence agent. You can specify custom risk preferences (e.g. <em>"Protect my vault if drawdown exceeds 15% or liquidity falls under 100,000 FXRP"</em>) to generate a confidential policy ready for real Web3 on-chain commit.
+            <strong>🤖 XRPShield AI Assistant Analysis for "${escapeHtml(query)}":</strong><br>
+            XRPShield automatically protects institutional XRP & FXRP treasury reserves using hardware TEE enclaves on Flare Network.
             <br><br>
-            Current active treasury: <strong>${treasuryBalance.toLocaleString()} FXRP</strong> protected under hardware-enclosed TEE attestation.
+            Current active treasury: <strong style="color: var(--accent-emerald);">${treasuryBalance.toLocaleString()} FXRP</strong>. You can ask questions about policies, TEE enclaves, or specify risk directives to build confidential policies.
         </div>
     `;
 }

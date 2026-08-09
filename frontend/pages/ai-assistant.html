@@ -50,12 +50,12 @@
         <div class="card" style="padding: 24px;">
             <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Explain Decision</h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Generate human-readable breakdown of decision evaluation rationale</p>
-            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                <select id="explain-select" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
+                <select id="explain-select" style="flex: 1; min-width: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.85rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                     <option value="4957d3dd-918e-43c9-aeef-7c86f5c3e131">Primary FXRP Vault — PROTECT_POSITION (Approved)</option>
                     <option value="e062e742-1e9a-4c2d-9860-f1c5058728ba">Yield Reserve Vault — REDUCE_EXPOSURE (Pending)</option>
                 </select>
-                <button onclick="window.explainDecisionAI()" class="btn-connect" style="padding: 10px 16px;">Explain</button>
+                <button onclick="window.explainDecisionAI()" class="btn-connect" style="flex-shrink: 0; padding: 10px 18px; white-space: nowrap;">Explain</button>
             </div>
             <div id="explain-result-box" style="display: none; margin-top: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-glow); border-radius: 8px; padding: 14px; font-size: 0.85rem; max-height: 240px; overflow-y: auto; word-break: break-word;"></div>
         </div>
@@ -63,12 +63,12 @@
         <div class="card" style="padding: 24px;">
             <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Generate Executive Report</h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Export comprehensive operational and risk summary</p>
-            <div style="display: flex; gap: 10px; margin-bottom: 12px;">
-                <select id="report-type" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
+                <select id="report-type" style="flex: 1; min-width: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.85rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                     <option value="EXECUTIVE">Executive Risk Summary</option>
                     <option value="EXECUTION_AUDIT">Execution Audit Log</option>
                 </select>
-                <button onclick="window.generateExecutiveReportAI()" class="btn-connect" style="padding: 10px 16px;">Generate</button>
+                <button onclick="window.generateExecutiveReportAI()" class="btn-connect" style="flex-shrink: 0; padding: 10px 18px; white-space: nowrap;">Generate</button>
             </div>
             <div id="report-result-box" style="display: none; margin-top: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-glow); border-radius: 8px; padding: 14px; font-size: 0.85rem; max-height: 260px; overflow-y: auto; word-break: break-word;"></div>
         </div>
