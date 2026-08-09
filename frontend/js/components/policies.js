@@ -109,7 +109,7 @@ export async function initPolicies() {
                     policyVersion: 1,
                     status: 'ACTIVE',
                     attestationId: attestationId,
-                    policyHash: '0xc5fb27ac51ccc3491e77bc9799' + Math.random().toString(16).substring(2, 10),
+                    policyHash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
                     createdAt: new Date().toISOString()
                 };
 

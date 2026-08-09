@@ -85,6 +85,7 @@ public class SecurityConfig {
                                 "/api/v1/health/**",
                                 "/api/v1/info/**",
                                 "/api/v1/ai/**",
+                                "/api/v1/decision/**",
                                 "/api/v1/decisions/**",
                                 "/api/v1/executions/**",
                                 "/api/v1/vaults/**",
