@@ -90,6 +90,31 @@ export async function initDecisions() {
     }
 }
 
+window.resetCenterpiecePipeline = function() {
+    const btn = document.getElementById('run-pipeline-btn');
+    if (btn) {
+        btn.disabled = false;
+        btn.innerText = '🚀 Run Centerpiece Flow';
+    }
+
+    const resetStep = (id, label) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.borderColor = 'var(--glass-border)';
+            el.style.background = 'rgba(255,255,255,0.03)';
+            const statusBadge = el.querySelector('.step-status');
+            if (statusBadge) statusBadge.innerText = label;
+        }
+    };
+
+    resetStep('pipe-step-1', 'Primary Treasury');
+    resetStep('pipe-step-2', 'AES-256 Encrypted');
+    resetStep('pipe-step-3', 'Hardware TEE Idle');
+    resetStep('pipe-step-4', 'Pending Quote');
+    resetStep('pipe-step-5', 'Pending Evaluation');
+    resetStep('pipe-step-6', 'Web3 Ready');
+};
+
 async function runFullCenterpiecePipeline() {
     const btn = document.getElementById('run-pipeline-btn');
     if (btn) {

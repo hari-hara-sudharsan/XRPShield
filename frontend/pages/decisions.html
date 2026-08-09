@@ -3,9 +3,14 @@
         <h2 style="font-size: 1.8rem; font-weight: 700;">Confidential Decision Center</h2>
         <p style="color: var(--text-secondary); font-size: 0.95rem;">Flare Confidential Compute (FCC) TEE Enclave Trigger Evaluation & Decision Logs</p>
     </div>
-    <button id="run-pipeline-btn" class="btn-primary" style="padding: 12px 24px;">
-        🚀 Run Centerpiece Flow
-    </button>
+    <div style="display: flex; gap: 10px;">
+        <button id="reset-pipeline-btn" onclick="window.resetCenterpiecePipeline()" class="btn-connect" style="padding: 12px 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer;">
+            🔄 Reset Confidential Flow
+        </button>
+        <button id="run-pipeline-btn" class="btn-primary" style="padding: 12px 24px;">
+            🚀 Run Centerpiece Flow
+        </button>
+    </div>
 </div>
 
 <!-- Centerpiece Timeline Component -->

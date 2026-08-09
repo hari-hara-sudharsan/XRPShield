@@ -3,8 +3,9 @@ spring:
     activate:
       on-profile: prod
   jpa:
+    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:
