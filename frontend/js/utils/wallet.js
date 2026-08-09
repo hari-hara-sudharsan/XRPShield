@@ -1,5 +1,6 @@
 import { CONFIG } from '../config/config.js';
 import { ApiClient } from './api.js';
+import { addDynamicNotification, renderHeaderNotifications } from '../components/notifications.js';
 
 export class WalletManager {
     static connectedAddress = null;
@@ -104,7 +105,12 @@ export class WalletManager {
 
             // Update UI with real connected address
             this.updateUI(address);
-            this.showNotification(`Wallet Connected Successfully!\nAddress: ${address}\nNetwork: ${CONFIG.FLARE_NETWORK.NAME}`, 'success');
+
+            addDynamicNotification({
+                type: 'wallet',
+                title: '🦊 Web3 Wallet Connected',
+                message: `Connected: ${address.substring(0, 6)}...${address.substring(address.length - 4)} on Flare Coston2 Testnet`
+            });
 
         } catch (error) {
             console.error('Wallet connection error:', error);

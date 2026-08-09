@@ -1,4 +1,5 @@
 import { CONFIG } from '../config/config.js';
+import { addDynamicNotification } from '../components/notifications.js';
 
 /* ===========================================================
    XRPShield — Execution Result Modal & Treasury State Manager
@@ -39,6 +40,14 @@ export function showExecutionSuccessModal({
 }) {
     // 1. Increment and update active treasury reserves
     const newTotalTreasury = updateActiveTreasury(addedTreasuryFXRP);
+
+    // 2. Dispatch dynamic real-time notification
+    addDynamicNotification({
+        type: 'execution',
+        title: title,
+        message: `${action} — Attestation ID: ${attestationId}`,
+        txHash: txHash
+    });
 
     // 2. Ensure modal overlay exists
     let overlay = document.getElementById('execution-modal-overlay');
