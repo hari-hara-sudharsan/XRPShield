@@ -46,7 +46,19 @@ export async function initVaults() {
 
                 console.log('Real On-Chain Vault Deployment Tx Hash:', txHash);
 
-                // 4. Save to backend database
+                // 4. Save custom created vault to localStorage
+                saveCustomVault({
+                    id: 'vault-' + Date.now(),
+                    vaultName,
+                    assetType: assetType || 'FXRP',
+                    balance: Number(initialBalance) || 100000,
+                    drawdownLimitPercent: Number(drawdown) || 10,
+                    attestationId: 'FCC-ATT-' + Math.random().toString(16).substring(2, 8).toUpperCase(),
+                    status: 'ACTIVE',
+                    txHash: txHash
+                });
+
+                // 5. Save to backend database
                 try {
                     await ApiClient.post('/vaults', {
                         vaultName,
@@ -145,29 +157,94 @@ function toHexWei(amount) {
     }
 }
 
+export function saveCustomVault(vaultObj) {
+    const list = getCustomVaults();
+    list.unshift(vaultObj);
+    localStorage.setItem('xrpshield_user_vaults', JSON.stringify(list));
+}
+
+function getCustomVaults() {
+    try {
+        const raw = localStorage.getItem('xrpshield_user_vaults');
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+const defaultVaults = [
+    {
+        id: 'v1',
+        vaultName: 'Primary XRP Treasury Vault',
+        assetType: 'FXRP',
+        balance: 150000,
+        drawdownLimitPercent: 10,
+        attestationId: 'FCC-ATT-VERIFIED',
+        status: 'ACTIVE'
+    },
+    {
+        id: 'v2',
+        vaultName: 'Yield Liquidity Reserve',
+        assetType: 'FXRP',
+        balance: 200000,
+        drawdownLimitPercent: 12,
+        attestationId: 'FCC-ATT-77B10C',
+        status: 'ACTIVE'
+    },
+    {
+        id: 'v3',
+        vaultName: 'Liquidity Safeguard Vault',
+        assetType: 'FXRP',
+        balance: 150000,
+        drawdownLimitPercent: 15,
+        attestationId: 'FCC-ATT-33F49A',
+        status: 'ACTIVE'
+    }
+];
+
 async function loadVaults(container) {
     if (!container) return;
 
+    let apiVaults = [];
     try {
         const res = await ApiClient.get('/vaults');
         if (res && res.data && res.data.length > 0) {
-            container.innerHTML = res.data.map(v => `
-                <tr>
-                    <td><strong>${escapeHtml(v.vaultName)}</strong></td>
-                    <td><span class="badge" style="color: var(--primary-cyan);">${escapeHtml(v.assetType || 'FXRP')}</span></td>
-                    <td><strong>${Number(v.balance || 500000).toLocaleString()} ${escapeHtml(v.assetType || 'FXRP')}</strong></td>
-                    <td><span style="color: #FF495C; font-weight: 600;">${v.drawdownLimitPercent || 10}%</span></td>
-                    <td><code>${escapeHtml(v.attestationId || 'FCC-ATT-VERIFIED')}</code></td>
-                    <td><span style="color: var(--accent-emerald); font-weight: 700;">● ${escapeHtml(v.status || 'ACTIVE')}</span></td>
-                    <td>
-                        <button onclick="window.openFundVaultModal('${escapeHtml(v.vaultName)}')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
-                    </td>
-                </tr>
-            `).join('');
+            apiVaults = res.data;
         }
     } catch (e) {
         console.warn('Backend vaults load fallback', e);
     }
+
+    const customVaults = getCustomVaults();
+    const combinedVaults = [...customVaults, ...apiVaults, ...defaultVaults];
+
+    const seen = new Set();
+    const uniqueVaults = combinedVaults.filter(v => {
+        if (!v.vaultName || seen.has(v.vaultName)) return false;
+        seen.add(v.vaultName);
+        return true;
+    });
+
+    container.innerHTML = uniqueVaults.map(v => `
+        <tr>
+            <td><strong>${escapeHtml(v.vaultName)}</strong></td>
+            <td><span class="badge" style="color: var(--primary-cyan);">${escapeHtml(v.assetType || 'FXRP')}</span></td>
+            <td><strong>${Number(v.balance || 100000).toLocaleString()} ${escapeHtml(v.assetType || 'FXRP')}</strong></td>
+            <td><span style="color: #FF495C; font-weight: 600;">${v.drawdownLimitPercent || 10}%</span></td>
+            <td><code>${escapeHtml(v.attestationId || 'FCC-ATT-VERIFIED')}</code></td>
+            <td><span style="color: var(--accent-emerald); font-weight: 700;">● ${escapeHtml(v.status || 'ACTIVE')}</span></td>
+            <td>
+                <button onclick="window.openFundVaultModal('${escapeHtml(v.vaultName)}')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
+            </td>
+        </tr>
+    `).join('');
+
+    const totalReserves = uniqueVaults.reduce((sum, v) => sum + Number(v.balance || 0), 0);
+    const vaultTotalEl = document.getElementById('vault-total-balance');
+    if (vaultTotalEl) vaultTotalEl.innerText = `${totalReserves.toLocaleString()} FXRP`;
+
+    const dashVaultsEl = document.getElementById('dash-active-vaults');
+    if (dashVaultsEl) dashVaultsEl.innerText = uniqueVaults.length;
 }
 
 window.openFundVaultModal = function(vaultName) {

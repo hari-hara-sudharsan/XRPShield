@@ -154,3 +154,6 @@ export function showExecutionSuccessModal({
     document.getElementById('close-exec-modal-btn')?.addEventListener('click', closeModal);
     document.getElementById('close-exec-modal-btn-2')?.addEventListener('click', closeModal);
 }
+
+window.showExecutionSuccessModal = showExecutionSuccessModal;
+window.updateActiveTreasury = updateActiveTreasury;
