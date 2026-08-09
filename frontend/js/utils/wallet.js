@@ -165,25 +165,42 @@ export class WalletManager {
      * Update topbar wallet button UI across pages
      */
     static updateUI(address) {
-        const btn = document.getElementById('wallet-connect-btn');
-        if (!btn) return;
-
         if (address) {
-            const shortAddr = address.substring(0, 6) + '...' + address.substring(address.length - 4);
-            btn.innerHTML = `🦊 ${shortAddr}`;
-            btn.classList.add('connected');
-            btn.title = `Connected Address: ${address}\nNetwork: Flare Coston2 Testnet (Chain ID 114)\nClick to manage session`;
-            btn.onclick = () => {
-                if (confirm(`Connected Wallet:\n${address}\n\nNetwork: Flare Coston2 Testnet\n\nWould you like to disconnect your wallet?`)) {
-                    this.handleDisconnect();
-                }
-            };
+            this.connectedAddress = address;
+            localStorage.setItem('xrpshield_user_address', address);
         } else {
-            btn.innerHTML = `🦊 Connect Wallet`;
-            btn.classList.remove('connected');
-            btn.title = `Connect MetaMask or EIP-1193 Web3 Wallet`;
-            btn.onclick = () => this.connect();
+            this.connectedAddress = null;
+            localStorage.removeItem('xrpshield_user_address');
         }
+
+        const btn = document.getElementById('wallet-connect-btn');
+        if (btn) {
+            if (address) {
+                const shortAddr = address.substring(0, 6) + '...' + address.substring(address.length - 4);
+                btn.innerHTML = `🦊 ${shortAddr}`;
+                btn.classList.add('connected');
+                btn.title = `Connected Address: ${address}\nNetwork: Flare Coston2 Testnet (Chain ID 114)\nClick to manage session`;
+                btn.onclick = () => {
+                    if (confirm(`Connected Wallet:\n${address}\n\nNetwork: Flare Coston2 Testnet\n\nWould you like to disconnect your wallet?`)) {
+                        this.handleDisconnect();
+                    }
+                };
+            } else {
+                btn.innerHTML = `🦊 Connect Wallet`;
+                btn.classList.remove('connected');
+                btn.title = `Connect MetaMask or EIP-1193 Web3 Wallet`;
+                btn.onclick = () => this.connect();
+            }
+        }
+
+        const dashAddr = document.getElementById('dash-connected-address');
+        if (dashAddr) {
+            const shortAddr = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
+            dashAddr.innerText = shortAddr;
+            dashAddr.style.color = address ? 'var(--secondary)' : 'var(--text-muted)';
+        }
+
+        window.dispatchEvent(new CustomEvent('xrpshield:walletChanged', { detail: { address } }));
     }
 
     static showNotification(msg, type = 'info') {

@@ -9,14 +9,39 @@ export async function initDashboard() {
     const walletAddrEl = document.getElementById('dash-connected-address');
     const activityBody = document.getElementById('dash-recent-activity');
 
-    // Update Connected Wallet Address
-    const address = WalletManager.connectedAddress || localStorage.getItem('xrpshield_user_address');
-    if (walletAddrEl) {
-        walletAddrEl.innerText = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
-        walletAddrEl.style.color = address ? 'var(--secondary)' : 'var(--text-muted)';
-    }
+    // Function to update wallet element display
+    const syncWalletAddress = () => {
+        const address = WalletManager.connectedAddress || localStorage.getItem('xrpshield_user_address');
+        const el = document.getElementById('dash-connected-address');
+        if (el) {
+            el.innerText = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
+            el.style.color = address ? 'var(--secondary)' : 'var(--text-muted)';
+        }
+    };
 
-    // Render immediate feed from localStorage custom decisions + defaults so UI never hangs
+    syncWalletAddress();
+    window.addEventListener('xrpshield:walletChanged', syncWalletAddress);
+
+    // Calculate active vaults and policies from localStorage
+    let userVaults = [];
+    try {
+        const rawV = localStorage.getItem('xrpshield_user_vaults');
+        if (rawV) userVaults = JSON.parse(rawV);
+    } catch(e) {}
+
+    let userPolicies = [];
+    try {
+        const rawP = localStorage.getItem('xrpshield_user_policies');
+        if (rawP) userPolicies = JSON.parse(rawP);
+    } catch(e) {}
+
+    const activeVaultsCount = Math.max(3, userVaults.length + 3);
+    const activePoliciesCount = Math.max(3, userPolicies.length + 3);
+
+    if (vaultsVal) vaultsVal.innerText = activeVaultsCount;
+    if (policiesVal) policiesVal.innerText = activePoliciesCount;
+
+    // Render immediate activity feed so UI never hangs on "Fetching..."
     let customDecisions = [];
     try {
         const raw = localStorage.getItem('xrpshield_user_decisions');
@@ -50,10 +75,11 @@ export async function initDashboard() {
     const initialFeed = [...customDecisions, ...defaultDecisions];
     renderActivityFeed(activityBody, initialFeed);
 
-    // Update treasury volume from localStorage if available
+    // Update treasury volume from localStorage
     const savedTreasury = localStorage.getItem('xrpshield_active_treasury');
-    if (volumeVal && savedTreasury) {
-        volumeVal.innerText = `${Number(savedTreasury).toLocaleString()} FXRP`;
+    if (volumeVal) {
+        const totalVol = savedTreasury ? Number(savedTreasury) : 500000;
+        volumeVal.innerText = `${totalVol.toLocaleString()} FXRP`;
     }
 
     try {
@@ -76,14 +102,13 @@ export async function initDashboard() {
             return true;
         });
 
-        // Calculate total reserves from backend
         let totalReserveFXRP = savedTreasury ? Number(savedTreasury) : 500000;
         if (vaults.length > 0) {
             totalReserveFXRP = vaults.reduce((acc, v) => acc + Number(v.balance || 0), 0);
         }
 
-        if (vaultsVal) vaultsVal.innerText = vaults.length > 0 ? vaults.length : '3';
-        if (policiesVal) policiesVal.innerText = policies.length > 0 ? policies.length : '3';
+        if (vaultsVal) vaultsVal.innerText = Math.max(activeVaultsCount, vaults.length);
+        if (policiesVal) policiesVal.innerText = Math.max(activePoliciesCount, policies.length);
         if (volumeVal) volumeVal.innerText = `${Number(totalReserveFXRP).toLocaleString()} FXRP`;
         if (fccVal) fccVal.innerText = 'SEALED & ATTESTED';
 
