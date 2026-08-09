@@ -10,8 +10,19 @@ export async function initDashboard() {
     const activityBody = document.getElementById('dash-recent-activity');
 
     // Function to update wallet element display
-    const syncWalletAddress = () => {
-        const address = WalletManager.getConnectedAddress();
+    const syncWalletAddress = async () => {
+        let address = WalletManager.getConnectedAddress();
+        if (!address && typeof window.ethereum !== 'undefined') {
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts && accounts.length > 0) {
+                    address = accounts[0];
+                    WalletManager.connectedAddress = address;
+                    localStorage.setItem('xrpshield_user_address', address);
+                    WalletManager.updateUI(address);
+                }
+            } catch (e) {}
+        }
         const el = document.getElementById('dash-connected-address');
         if (el) {
             el.innerText = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
@@ -19,7 +30,7 @@ export async function initDashboard() {
         }
     };
 
-    syncWalletAddress();
+    await syncWalletAddress();
     window.addEventListener('xrpshield:walletChanged', syncWalletAddress);
 
     // Calculate active vaults and policies from localStorage

@@ -203,10 +203,11 @@ export class WalletManager {
             localStorage.removeItem('xrpshield_user_address');
         }
 
+        const shortAddr = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
+
         const btn = document.getElementById('wallet-connect-btn');
         if (btn) {
             if (address) {
-                const shortAddr = address.substring(0, 6) + '...' + address.substring(address.length - 4);
                 btn.innerHTML = `🦊 ${shortAddr}`;
                 btn.classList.add('connected');
                 btn.title = `Connected Address: ${address}\nNetwork: Flare Coston2 Testnet (Chain ID 114)\nClick to manage session`;
@@ -225,9 +226,14 @@ export class WalletManager {
 
         const dashAddr = document.getElementById('dash-connected-address');
         if (dashAddr) {
-            const shortAddr = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
-            dashAddr.innerText = shortAddr;
+            dashAddr.innerText = address ? shortAddr : 'Not Connected';
             dashAddr.style.color = address ? 'var(--secondary)' : 'var(--text-muted)';
+        }
+
+        const settingsAddr = document.getElementById('settings-wallet-addr');
+        if (settingsAddr) {
+            settingsAddr.innerText = address || 'Not Connected';
+            settingsAddr.style.color = address ? 'var(--primary-cyan)' : '#FF495C';
         }
 
         window.dispatchEvent(new CustomEvent('xrpshield:walletChanged', { detail: { address } }));
