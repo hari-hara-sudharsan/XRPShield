@@ -5,11 +5,31 @@ import { addDynamicNotification, renderHeaderNotifications } from '../components
 export class WalletManager {
     static connectedAddress = null;
 
+    static getConnectedAddress() {
+        if (this.connectedAddress) return this.connectedAddress;
+        if (typeof window.ethereum !== 'undefined' && window.ethereum.selectedAddress) {
+            this.connectedAddress = window.ethereum.selectedAddress;
+            localStorage.setItem('xrpshield_user_address', window.ethereum.selectedAddress);
+            return window.ethereum.selectedAddress;
+        }
+        const saved = localStorage.getItem('xrpshield_user_address');
+        if (saved) {
+            this.connectedAddress = saved;
+            return saved;
+        }
+        return null;
+    }
+
     /**
      * Initialize Web3 wallet listeners (accountsChanged, chainChanged)
      */
     static init() {
         if (typeof window.ethereum !== 'undefined') {
+            if (window.ethereum.selectedAddress) {
+                this.connectedAddress = window.ethereum.selectedAddress;
+                this.updateUI(window.ethereum.selectedAddress);
+            }
+
             window.ethereum.on('accountsChanged', (accounts) => {
                 if (accounts.length === 0) {
                     this.handleDisconnect();
@@ -30,12 +50,22 @@ export class WalletManager {
                         this.connectedAddress = accounts[0];
                         this.updateUI(accounts[0]);
                     } else {
-                        this.updateUI(null);
+                        const saved = localStorage.getItem('xrpshield_user_address');
+                        if (saved) {
+                            this.connectedAddress = saved;
+                            this.updateUI(saved);
+                        } else {
+                            this.updateUI(null);
+                        }
                     }
                 })
-                .catch(() => this.updateUI(null));
+                .catch(() => {
+                    const saved = localStorage.getItem('xrpshield_user_address');
+                    this.updateUI(saved || null);
+                });
         } else {
-            this.updateUI(null);
+            const saved = localStorage.getItem('xrpshield_user_address');
+            this.updateUI(saved || null);
         }
     }
 

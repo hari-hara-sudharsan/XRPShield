@@ -92,9 +92,9 @@ export function renderHeaderNotifications() {
         badge.innerText = allNotifs.length;
     }
 
-    const drawerHead = `<div class="notif-drawer-head" style="display: flex; justify-content: space-between; align-items: center;">
-        <span>Real On-Chain Notifications</span>
-        <button onclick="window.clearNotifications()" style="background: none; border: none; color: var(--primary-cyan); font-size: 0.72rem; cursor: pointer;">Clear All</button>
+    const drawerHead = `<div class="notif-drawer-head" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <span style="font-weight: 700; font-size: 0.85rem; color: var(--primary-cyan);">Real On-Chain Notifications</span>
+        <button onclick="window.clearNotifications()" style="background: none; border: none; color: var(--text-muted); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">Clear All</button>
     </div>`;
 
     const rows = allNotifs.map(n => {
@@ -116,7 +116,9 @@ export function renderHeaderNotifications() {
         `;
     }).join('');
 
-    drawer.innerHTML = drawerHead + rows;
+    const scrollContainer = `<div style="max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px;">${rows}</div>`;
+
+    drawer.innerHTML = drawerHead + scrollContainer;
 }
 
 window.clearNotifications = function() {

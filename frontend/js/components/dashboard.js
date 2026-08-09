@@ -11,7 +11,7 @@ export async function initDashboard() {
 
     // Function to update wallet element display
     const syncWalletAddress = () => {
-        const address = WalletManager.connectedAddress || localStorage.getItem('xrpshield_user_address');
+        const address = WalletManager.getConnectedAddress();
         const el = document.getElementById('dash-connected-address');
         if (el) {
             el.innerText = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';

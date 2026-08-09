@@ -1,6 +1,7 @@
 import { WalletManager } from '../utils/wallet.js';
 import { showToast } from './notifications.js';
 import { showExecutionSuccessModal } from '../utils/execution-modal.js';
+import { I18nEngine } from '../utils/i18n.js';
 
 export function initSettings() {
     const walletAddrEl = document.getElementById('settings-wallet-addr');
@@ -10,7 +11,7 @@ export function initSettings() {
     const userTzEl = document.getElementById('settings-user-tz');
 
     // 1. Connected wallet
-    const address = WalletManager.connectedAddress || localStorage.getItem('xrpshield_user_address') || 'Not Connected';
+    const address = WalletManager.getConnectedAddress() || 'Not Connected';
     if (walletAddrEl) {
         walletAddrEl.innerText = address;
         walletAddrEl.style.color = address !== 'Not Connected' ? 'var(--primary-cyan)' : '#FF495C';
@@ -37,16 +38,22 @@ window.saveSettingsPreferences = function() {
     const userLangEl = document.getElementById('settings-user-lang');
     const userTzEl = document.getElementById('settings-user-tz');
 
+    const selectedLang = userLangEl ? userLangEl.value : 'en';
+
     const settingsObj = {
         name: userNameEl ? userNameEl.value : 'Treasury Administrator',
         email: userEmailEl ? userEmailEl.value : 'owner@xrpshield.io',
-        lang: userLangEl ? userLangEl.value : 'en',
+        lang: selectedLang,
         tz: userTzEl ? userTzEl.value : 'UTC',
         updatedAt: new Date().toISOString()
     };
 
     localStorage.setItem('xrpshield_user_settings', JSON.stringify(settingsObj));
-    showToast(`Preferences & Language (${settingsObj.lang.toUpperCase()}) saved successfully!`, 'success');
+    
+    // Apply language translation dynamically
+    I18nEngine.setLanguage(selectedLang);
+
+    showToast(I18nEngine.t('msg_prefs_saved'), 'success');
 };
 
 window.refreshSessionTokens = async function() {

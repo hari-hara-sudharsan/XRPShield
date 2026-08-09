@@ -2,6 +2,7 @@ import { WalletManager } from './utils/wallet.js';
 import { updateActiveTreasury } from './utils/execution-modal.js';
 import { initGlobalSearch } from './components/search.js';
 import { renderHeaderNotifications } from './components/notifications.js';
+import { I18nEngine } from './utils/i18n.js';
 
 /* ===========================================================
    XRPShield — Main Frontend Single Page Application Router
@@ -45,6 +46,9 @@ async function navigateTo(routeKey) {
                 item.classList.remove('active');
             }
         });
+
+        // Apply active language translations
+        I18nEngine.translatePage();
 
     } catch (err) {
         container.innerHTML = `
