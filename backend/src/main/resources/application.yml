@@ -10,26 +10,26 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
   datasource:
-    url: ${DATABASE_URL:jdbc:h2:mem:xrpshielddb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
-    username: ${DATABASE_USERNAME:sa}
-    password: ${DATABASE_PASSWORD:}
+    url: ${DATABASE_URL:${SPRING_DATASOURCE_URL:jdbc:h2:mem:xrpshielddb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}}
+    username: ${DATABASE_USERNAME:${SPRING_DATASOURCE_USERNAME:sa}}
+    password: ${DATABASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:}}
 
     hikari:
-      maximum-pool-size: 5
+      maximum-pool-size: 10
       minimum-idle: 1
       idle-timeout: 300000
-      connection-timeout: 30000
-      initialization-fail-timeout: -1
-
+      connection-timeout: 10000
+      initialization-fail-timeout: 0
 
   jpa:
     open-in-view: false
-    database-platform: ${HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         format_sql: true
+        temp:
+          use_jdbc_metadata_defaults: false
 
 
 
