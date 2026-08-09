@@ -83,6 +83,17 @@ export async function initVaults() {
         });
     }
 
+function toHexWei(amount) {
+    try {
+        const num = Number(amount);
+        if (isNaN(num) || num <= 0) return '0x0';
+        const wei = BigInt(Math.floor(num * 1e18));
+        return '0x' + wei.toString(16);
+    } catch (e) {
+        return '0x0';
+    }
+}
+
     if (fundForm && !fundForm.dataset.initialized) {
         fundForm.dataset.initialized = 'true';
         fundForm.addEventListener('submit', async (e) => {
@@ -99,6 +110,7 @@ export async function initVaults() {
                 await WalletManager.ensureFlareNetwork();
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 const userAddr = accounts[0];
+                const hexValue = toHexWei(amount);
 
                 const txHash = await window.ethereum.request({
                     method: 'eth_sendTransaction',
@@ -106,7 +118,7 @@ export async function initVaults() {
                         from: userAddr,
                         to: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
                         data: '0xd4c2b9f3',
-                        value: '0x0'
+                        value: hexValue
                     }]
                 });
 
