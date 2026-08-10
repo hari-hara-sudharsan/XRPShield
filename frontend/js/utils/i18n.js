@@ -122,17 +122,9 @@ export const DICTIONARY = {
 
 export class I18nEngine {
     static currentLang = localStorage.getItem('xrpshield_user_language') || 'en';
-    static observer = null;
+    static isTranslating = false;
 
     static init() {
-        // Observe container mutations so dynamically loaded page views translate automatically
-        const container = document.getElementById('page-render-container') || document.body;
-        if (container && !this.observer) {
-            this.observer = new MutationObserver(() => {
-                this.translatePage();
-            });
-            this.observer.observe(container, { childList: true, subtree: true });
-        }
         this.translatePage();
     }
 
@@ -152,7 +144,11 @@ export class I18nEngine {
     }
 
     static translatePage() {
-        const lang = this.currentLang;
+        if (this.isTranslating) return;
+        this.isTranslating = true;
+
+        try {
+            const lang = this.currentLang;
 
         // 1. Translate Navigation Menu
         const navMap = {
@@ -211,5 +207,8 @@ export class I18nEngine {
                 }
             }
         });
+        } finally {
+            this.isTranslating = false;
+        }
     }
 }
