@@ -18,13 +18,29 @@ export function initSettings() {
     }
 
     // 2. Load saved settings from local storage
+    const activeLang = localStorage.getItem('xrpshield_user_language') || I18nEngine.currentLang || 'en';
+    if (userLangEl) {
+        userLangEl.value = activeLang;
+        if (!userLangEl.dataset.i18nBound) {
+            userLangEl.dataset.i18nBound = 'true';
+            userLangEl.addEventListener('change', (e) => {
+                const newLang = e.target.value;
+                I18nEngine.setLanguage(newLang);
+                showToast(`Language set to: ${newLang.toUpperCase()}`, 'info');
+            });
+        }
+    }
+
     try {
         const savedRaw = localStorage.getItem('xrpshield_user_settings');
         if (savedRaw) {
             const saved = JSON.parse(savedRaw);
             if (userNameEl && saved.name) userNameEl.value = saved.name;
             if (userEmailEl && saved.email) userEmailEl.value = saved.email;
-            if (userLangEl && saved.lang) userLangEl.value = saved.lang;
+            if (userLangEl && saved.lang) {
+                userLangEl.value = saved.lang;
+                I18nEngine.setLanguage(saved.lang);
+            }
             if (userTzEl && saved.tz) userTzEl.value = saved.tz;
         }
     } catch (e) {
