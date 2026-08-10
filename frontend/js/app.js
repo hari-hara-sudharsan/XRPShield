@@ -116,6 +116,7 @@ function handleHashChange() {
 
 window.addEventListener('hashchange', handleHashChange);
 window.addEventListener('DOMContentLoaded', () => {
+    I18nEngine.init();
     handleHashChange();
     WalletManager.init();
     initHeaderNotifications();
