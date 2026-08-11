@@ -49,14 +49,14 @@ export class WalletManager {
                     if (accounts && accounts.length > 0) {
                         this.connectedAddress = accounts[0];
                         this.updateUI(accounts[0]);
+                    } else if (window.ethereum.selectedAddress) {
+                        this.connectedAddress = window.ethereum.selectedAddress;
+                        this.updateUI(window.ethereum.selectedAddress);
                     } else {
-                        const saved = localStorage.getItem('xrpshield_user_address');
-                        if (saved) {
-                            this.connectedAddress = saved;
-                            this.updateUI(saved);
-                        } else {
-                            this.updateUI(null);
-                        }
+                        // Not connected in MetaMask
+                        this.connectedAddress = null;
+                        localStorage.removeItem('xrpshield_user_address');
+                        this.updateUI(null);
                     }
                 })
                 .catch(() => {

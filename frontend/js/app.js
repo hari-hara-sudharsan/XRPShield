@@ -50,6 +50,9 @@ async function navigateTo(routeKey) {
         // Apply active language translations
         I18nEngine.translatePage();
 
+        // Synchronize Web3 Wallet UI state across header and page cards
+        WalletManager.updateUI(WalletManager.getConnectedAddress());
+
     } catch (err) {
         container.innerHTML = `
             <div class="card" style="padding: 40px; text-align: center;">

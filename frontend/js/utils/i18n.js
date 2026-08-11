@@ -179,8 +179,15 @@ export class I18nEngine {
         );
 
         targetElements.forEach(el => {
-            // Ignore code blocks, inputs, script tags
-            if (el.tagName === 'CODE' || el.tagName === 'INPUT' || el.tagName === 'SCRIPT') return;
+            // Ignore code blocks, inputs, script tags, wallet connect button, or dynamic data elements
+            if (
+                el.tagName === 'CODE' || 
+                el.tagName === 'INPUT' || 
+                el.tagName === 'SCRIPT' || 
+                el.id === 'wallet-connect-btn' || 
+                el.closest('#wallet-connect-btn') ||
+                el.hasAttribute('data-no-i18n')
+            ) return;
 
             // Preserve icons/svging inside buttons or elements
             const originalText = el.getAttribute('data-i18n-orig') || el.innerText.trim();

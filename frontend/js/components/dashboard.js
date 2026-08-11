@@ -30,7 +30,11 @@ export async function initDashboard() {
         }
     };
 
-    await syncWalletAddress();
+    try {
+        await syncWalletAddress();
+    } catch (e) {
+        console.warn('Wallet address sync notice', e);
+    }
     window.addEventListener('xrpshield:walletChanged', syncWalletAddress);
 
     // Calculate active vaults and policies from localStorage
