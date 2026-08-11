@@ -202,6 +202,21 @@ const defaultVaults = [
     }
 ];
 
+function getVaultStatuses() {
+    try {
+        const raw = localStorage.getItem('xrpshield_vault_statuses');
+        return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function setVaultStatus(vaultName, status) {
+    const map = getVaultStatuses();
+    map[vaultName] = status;
+    localStorage.setItem('xrpshield_vault_statuses', JSON.stringify(map));
+}
+
 async function loadVaults(container) {
     if (!container) return;
 
@@ -217,34 +232,56 @@ async function loadVaults(container) {
 
     const customVaults = getCustomVaults();
     const combinedVaults = [...customVaults, ...apiVaults, ...defaultVaults];
+    const statusesMap = getVaultStatuses();
 
     const seen = new Set();
     const uniqueVaults = combinedVaults.filter(v => {
         if (!v.vaultName || seen.has(v.vaultName)) return false;
         seen.add(v.vaultName);
         return true;
+    }).map(v => {
+        const savedStatus = statusesMap[v.vaultName];
+        return {
+            ...v,
+            status: savedStatus || v.status || 'ACTIVE'
+        };
     });
 
-    container.innerHTML = uniqueVaults.map(v => `
-        <tr>
-            <td><strong>${escapeHtml(v.vaultName)}</strong></td>
-            <td><span class="badge" style="color: var(--primary-cyan);">${escapeHtml(v.assetType || 'FXRP')}</span></td>
-            <td><strong>${Number(v.balance || 100000).toLocaleString()} ${escapeHtml(v.assetType || 'FXRP')}</strong></td>
-            <td><span style="color: #FF495C; font-weight: 600;">${v.drawdownLimitPercent || 10}%</span></td>
-            <td><code>${escapeHtml(v.attestationId || 'FCC-ATT-VERIFIED')}</code></td>
-            <td><span style="color: var(--accent-emerald); font-weight: 700;">● ${escapeHtml(v.status || 'ACTIVE')}</span></td>
-            <td>
-                <button onclick="window.openFundVaultModal('${escapeHtml(v.vaultName)}')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
-            </td>
-        </tr>
-    `).join('');
+    container.innerHTML = uniqueVaults.map(v => {
+        const isActive = v.status === 'ACTIVE';
+        const statusColor = isActive ? 'var(--accent-emerald, #10B981)' : '#F59E0B';
+        const toggleActionText = isActive ? 'Deactivate' : 'Activate';
+        const toggleBtnStyle = isActive 
+            ? 'background: rgba(239,68,68,0.15); color: #F87171; border: 1px solid rgba(239,68,68,0.4);' 
+            : 'background: rgba(16,185,129,0.15); color: #34D399; border: 1px solid rgba(16,185,129,0.4);';
+
+        return `
+            <tr>
+                <td><strong>${escapeHtml(v.vaultName)}</strong></td>
+                <td><span class="badge" style="color: var(--primary-cyan);">${escapeHtml(v.assetType || 'FXRP')}</span></td>
+                <td><strong>${Number(v.balance || 100000).toLocaleString()} ${escapeHtml(v.assetType || 'FXRP')}</strong></td>
+                <td><span style="color: #FF495C; font-weight: 600;">${v.drawdownLimitPercent || 10}%</span></td>
+                <td><code>${escapeHtml(v.attestationId || 'FCC-ATT-VERIFIED')}</code></td>
+                <td><span style="color: ${statusColor}; font-weight: 700;">● ${escapeHtml(v.status)}</span></td>
+                <td>
+                    <button onclick="window.openFundVaultModal('${escapeHtml(v.vaultName)}')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
+                    <button onclick="window.openDeactivateVaultModal('${escapeHtml(v.vaultName)}', '${v.status}')" style="${toggleBtnStyle} padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">${toggleActionText}</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+
+    const activeCount = uniqueVaults.filter(v => v.status === 'ACTIVE').length;
 
     const totalReserves = uniqueVaults.reduce((sum, v) => sum + Number(v.balance || 0), 0);
-    const vaultTotalEl = document.getElementById('vault-total-balance');
+    const vaultTotalEl = document.getElementById('total-treasury-balance');
     if (vaultTotalEl) vaultTotalEl.innerText = `${totalReserves.toLocaleString()} FXRP`;
 
+    const activeVaultCountEl = document.getElementById('active-vault-count');
+    if (activeVaultCountEl) activeVaultCountEl.innerText = activeCount;
+
     const dashVaultsEl = document.getElementById('dash-active-vaults');
-    if (dashVaultsEl) dashVaultsEl.innerText = uniqueVaults.length;
+    if (dashVaultsEl) dashVaultsEl.innerText = activeCount;
 }
 
 window.openFundVaultModal = function(vaultName) {
@@ -252,6 +289,66 @@ window.openFundVaultModal = function(vaultName) {
     if (nameLabel) nameLabel.innerText = vaultName;
     const modal = document.getElementById('modal-fund-vault');
     if (modal) modal.style.display = 'flex';
+};
+
+window.openDeactivateVaultModal = function(vaultName, currentStatus) {
+    const isCurrentlyActive = currentStatus === 'ACTIVE';
+    const modal = document.getElementById('modal-deactivate-vault');
+    const titleEl = document.getElementById('deactivate-modal-title');
+    const descEl = document.getElementById('deactivate-modal-desc');
+    const targetNameEl = document.getElementById('deactivate-target-vault-name');
+    const confirmBtn = document.getElementById('confirm-deactivate-btn');
+
+    if (!modal) return;
+
+    if (targetNameEl) targetNameEl.innerText = vaultName;
+
+    if (isCurrentlyActive) {
+        if (titleEl) {
+            titleEl.innerText = '⚠️ Deactivate Vault';
+            titleEl.style.color = '#F87171';
+        }
+        if (descEl) {
+            descEl.innerHTML = `Are you sure you want to deactivate <strong style="color: var(--text-primary);">${escapeHtml(vaultName)}</strong>? Deactivating will pause Flare TEE policy enforcement and seal reserve transactions.`;
+        }
+        if (confirmBtn) {
+            confirmBtn.innerText = 'Confirm Deactivation';
+            confirmBtn.style.background = 'linear-gradient(135deg, #EF4444, #DC2626)';
+        }
+    } else {
+        if (titleEl) {
+            titleEl.innerText = '✅ Re-activate Vault';
+            titleEl.style.color = 'var(--accent-emerald)';
+        }
+        if (descEl) {
+            descEl.innerHTML = `Are you sure you want to re-activate <strong style="color: var(--text-primary);">${escapeHtml(vaultName)}</strong>? Activating will resume Flare TEE attestation monitoring and enclave protection.`;
+        }
+        if (confirmBtn) {
+            confirmBtn.innerText = 'Confirm Re-Activation';
+            confirmBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+        }
+    }
+
+    modal.style.display = 'flex';
+
+    confirmBtn.onclick = async () => {
+        const newStatus = isCurrentlyActive ? 'DEACTIVATED' : 'ACTIVE';
+        setVaultStatus(vaultName, newStatus);
+        modal.style.display = 'none';
+
+        // Add dynamic notification
+        try {
+            const { addDynamicNotification } = await import('./notifications.js');
+            addDynamicNotification({
+                type: isCurrentlyActive ? 'warning' : 'success',
+                title: isCurrentlyActive ? `Vault ${vaultName} Deactivated` : `Vault ${vaultName} Re-Activated`,
+                message: `Status updated to ${newStatus} on Flare Coston2 Testnet.`
+            });
+        } catch (e) {}
+
+        const tableBody = document.getElementById('vaults-table-body');
+        if (tableBody) await loadVaults(tableBody);
+    };
 };
 
 function escapeHtml(text) {
