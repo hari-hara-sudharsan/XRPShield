@@ -177,7 +177,7 @@ const defaultVaults = [
         id: 'v1',
         vaultName: 'Primary XRP Treasury Vault',
         assetType: 'FXRP',
-        balance: 150000,
+        balance: 25000,
         drawdownLimitPercent: 10,
         attestationId: 'FCC-ATT-VERIFIED',
         status: 'ACTIVE'
@@ -186,7 +186,7 @@ const defaultVaults = [
         id: 'v2',
         vaultName: 'Yield Liquidity Reserve',
         assetType: 'FXRP',
-        balance: 200000,
+        balance: 15000,
         drawdownLimitPercent: 12,
         attestationId: 'FCC-ATT-77B10C',
         status: 'ACTIVE'
@@ -195,7 +195,7 @@ const defaultVaults = [
         id: 'v3',
         vaultName: 'Liquidity Safeguard Vault',
         assetType: 'FXRP',
-        balance: 150000,
+        balance: 10000,
         drawdownLimitPercent: 15,
         attestationId: 'FCC-ATT-33F49A',
         status: 'ACTIVE'

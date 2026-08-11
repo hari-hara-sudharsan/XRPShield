@@ -90,10 +90,10 @@ export async function initDashboard() {
     const initialFeed = [...customDecisions, ...defaultDecisions];
     renderActivityFeed(activityBody, initialFeed);
 
-    // Update treasury volume from localStorage
+    // Update treasury volume dynamically from custom & default vaults
     const savedTreasury = localStorage.getItem('xrpshield_active_treasury');
     if (volumeVal) {
-        const totalVol = savedTreasury ? Number(savedTreasury) : 500000;
+        const totalVol = savedTreasury ? Number(savedTreasury) : 50000;
         volumeVal.innerText = `${totalVol.toLocaleString()} FXRP`;
     }
 
@@ -117,7 +117,7 @@ export async function initDashboard() {
             return true;
         });
 
-        let totalReserveFXRP = savedTreasury ? Number(savedTreasury) : 500000;
+        let totalReserveFXRP = savedTreasury ? Number(savedTreasury) : 50000;
         if (vaults.length > 0) {
             totalReserveFXRP = vaults.reduce((acc, v) => acc + Number(v.balance || 0), 0);
         }
