@@ -81,10 +81,15 @@
         <!-- AI Builder Box -->
         <div style="background: rgba(91,140,255,0.1); border: 1px solid rgba(91,140,255,0.3); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
             <label style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); display: block; margin-bottom: 6px;">🤖 AI Policy Builder (Powered by OpenAI)</label>
-            <input type="text" id="ai-policy-prompt" placeholder="e.g. Protect 70% of my treasury. Maximum loss 8%. Never exceed 2x leverage." style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 10px;">
-            <button type="button" id="ai-generate-policy-btn" class="btn-primary" style="width: 100%; justify-content: center; padding: 8px 14px; font-size: 0.85rem;">
-                ✨ Infer Parameters via OpenAI
-            </button>
+            <input type="text" id="ai-policy-prompt" placeholder="e.g. Protect 70% of my treasury. Maximum loss 8%. Maintain 350,000 FXRP reserve." style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 12px;">
+            <div style="display: flex; gap: 10px;">
+                <button type="button" id="ai-generate-policy-btn" class="btn-secondary" style="flex: 1; justify-content: center; padding: 8px 12px; font-size: 0.82rem;">
+                    ✨ Auto-Fill Form via AI
+                </button>
+                <button type="button" id="ai-commit-policy-btn" class="btn-primary" style="flex: 1.2; justify-content: center; padding: 8px 12px; font-size: 0.82rem;">
+                    ⚡ Infer & Commit On-Chain
+                </button>
+            </div>
         </div>
 
         <form id="create-policy-form">
