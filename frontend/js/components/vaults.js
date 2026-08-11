@@ -134,15 +134,27 @@ function toHexWei(amount) {
                     }]
                 });
 
+                const vaultName = document.getElementById('fund-vault-name')?.innerText || 'Primary XRP Treasury Vault';
+                const delta = action === 'DEPOSIT' ? Number(amount) : -Number(amount);
+
+                // Update vault balance override
+                updateVaultBalance(vaultName, delta);
+
+                // Update 24h Net Deposit Flow
+                recordDepositFlow(delta);
+
                 document.getElementById('modal-fund-vault').style.display = 'none';
 
                 showExecutionSuccessModal({
                     title: `Vault ${action} Execution Confirmed`,
-                    action: `${action} ${amount} FXRP`,
+                    action: `${action} ${amount} FXRP on ${vaultName}`,
                     txHash: txHash,
                     attestationId: 'FCC-ATT-REBALANCE',
-                    addedTreasuryFXRP: action === 'DEPOSIT' ? Number(amount) : -Number(amount)
+                    addedTreasuryFXRP: delta
                 });
+
+                // Dispatch data sync event across application
+                window.dispatchEvent(new CustomEvent('xrpshield:dataChanged'));
 
                 await loadVaults(tableBody);
 
@@ -202,6 +214,45 @@ const defaultVaults = [
     }
 ];
 
+export function getNetDepositFlow() {
+    try {
+        const raw = localStorage.getItem('xrpshield_net_deposit_flow');
+        return raw !== null ? Number(raw) : 45000;
+    } catch (e) {
+        return 45000;
+    }
+}
+
+export function recordDepositFlow(delta) {
+    const current = getNetDepositFlow();
+    const updated = current + Number(delta);
+    localStorage.setItem('xrpshield_net_deposit_flow', String(updated));
+    return updated;
+}
+
+export function getVaultBalances() {
+    try {
+        const raw = localStorage.getItem('xrpshield_vault_balances');
+        return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+export function updateVaultBalance(vaultName, delta) {
+    const map = getVaultBalances();
+    const current = map[vaultName] !== undefined ? map[vaultName] : null;
+    if (current !== null) {
+        map[vaultName] = current + Number(delta);
+    } else {
+        // Find default initial balance
+        const dVault = defaultVaults.find(v => v.vaultName === vaultName);
+        const base = dVault ? dVault.balance : 100000;
+        map[vaultName] = base + Number(delta);
+    }
+    localStorage.setItem('xrpshield_vault_balances', JSON.stringify(map));
+}
+
 function getVaultStatuses() {
     try {
         const raw = localStorage.getItem('xrpshield_vault_statuses');
@@ -233,6 +284,7 @@ async function loadVaults(container) {
     const customVaults = getCustomVaults();
     const combinedVaults = [...customVaults, ...apiVaults, ...defaultVaults];
     const statusesMap = getVaultStatuses();
+    const balancesMap = getVaultBalances();
 
     const seen = new Set();
     const uniqueVaults = combinedVaults.filter(v => {
@@ -241,9 +293,11 @@ async function loadVaults(container) {
         return true;
     }).map(v => {
         const savedStatus = statusesMap[v.vaultName];
+        const savedBalance = balancesMap[v.vaultName];
         return {
             ...v,
-            status: savedStatus || v.status || 'ACTIVE'
+            status: savedStatus || v.status || 'ACTIVE',
+            balance: savedBalance !== undefined ? savedBalance : v.balance
         };
     });
 
@@ -277,11 +331,23 @@ async function loadVaults(container) {
     const vaultTotalEl = document.getElementById('total-treasury-balance');
     if (vaultTotalEl) vaultTotalEl.innerText = `${totalReserves.toLocaleString()} FXRP`;
 
+    // Save total active treasury reserves to localStorage for dashboard sync
+    localStorage.setItem('xrpshield_active_treasury', String(totalReserves));
+
     const activeVaultCountEl = document.getElementById('active-vault-count');
     if (activeVaultCountEl) activeVaultCountEl.innerText = activeCount;
 
     const dashVaultsEl = document.getElementById('dash-active-vaults');
     if (dashVaultsEl) dashVaultsEl.innerText = activeCount;
+
+    // Update 24h Net Deposit Flow card value
+    const flowEl = document.getElementById('net-deposit-flow');
+    if (flowEl) {
+        const flow = getNetDepositFlow();
+        const sign = flow >= 0 ? '+' : '';
+        flowEl.innerText = `${sign}${flow.toLocaleString()} FXRP`;
+        flowEl.style.color = flow >= 0 ? 'var(--accent-emerald, #10B981)' : '#EF4444';
+    }
 }
 
 window.openFundVaultModal = function(vaultName) {

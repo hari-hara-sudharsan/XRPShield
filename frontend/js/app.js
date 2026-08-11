@@ -117,6 +117,19 @@ function handleHashChange() {
     navigateTo(hash);
 }
 
+// Real-time synchronization across browser tabs and backend state changes
+window.addEventListener('storage', (e) => {
+    if (e.key && e.key.startsWith('xrpshield_')) {
+        const routeKey = window.location.hash.replace('#', '') || 'dashboard';
+        dispatchComponentInit(routeKey);
+    }
+});
+
+window.addEventListener('xrpshield:dataChanged', () => {
+    const routeKey = window.location.hash.replace('#', '') || 'dashboard';
+    dispatchComponentInit(routeKey);
+});
+
 window.addEventListener('hashchange', handleHashChange);
 window.addEventListener('DOMContentLoaded', () => {
     I18nEngine.init();
