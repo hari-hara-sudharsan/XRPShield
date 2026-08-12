@@ -4,28 +4,36 @@
    =========================================================== */
 
 export const DICTIONARY = {
-    // Navigation
+    // Navigation Links
     "Landing overview": { ja: "ランディング概要", es: "Visión general", de: "Überblick", zh: "首页概览" },
     "Treasury overview": { ja: "財務概要", es: "Resumen del tesoro", de: "Tresor-Übersicht", zh: "财库概览" },
     "Vault management": { ja: "ボルト管理", es: "Gestión de bóvedas", de: "Tresor-Verwaltung", zh: "金库管理" },
     "Confidential policies": { ja: "機密ポリシー", es: "Políticas confidenciales", de: "Vertrauliche Richtlinien", zh: "保密策略" },
+    "Privacy Proof Center": { ja: "プライバシー証明センター", es: "Centro de Pruebas de Privacidad", de: "Datenschutz-Nachweiszentrum", zh: "隐私证明中心" },
+    "10-Stage Audit Trail": { ja: "10段階監査トレイル", es: "Ruta de Auditoría de 10 Etapas", de: "10-Stufen-Audit-Pfad", zh: "10阶段审计追溯" },
+    "Verification Hub": { ja: "検証ハブ", es: "Centro de Verificación", de: "Verifizierungs-Hub", zh: "验证中心" },
     "Decision engine": { ja: "意思決定エンジン", es: "Motor de decisiones", de: "Entscheidungs-Engine", zh: "决策引擎" },
     "Protected executions": { ja: "保護された実行", es: "Ejecuciones protegidas", de: "Geschützte Ausführungen", zh: "受保护执行" },
     "AI intelligence": { ja: "AIインテリジェンス", es: "Inteligencia IA", de: "KI-Intelligenz", zh: "AI 智能" },
     "System status": { ja: "システムステータス", es: "Estado del sistema", de: "Systemstatus", zh: "系统状态" },
-    "Settings and security": { ja: "設定とセキュリティ", es: "Configuración y seguridad", de: "Einstellungen & Sicherheit", zh: "设置与安全" },
+    "Technical Architecture": { ja: "技術アーキテクチャ", es: "Arquitectura Técnica", de: "Technische Architektur", zh: "技术架构" },
+    "Settings and security": { ja: "設定とセキュリティ", es: "Configuración yセキュリティ", de: "Einstellungen & Sicherheit", zh: "设置与安全" },
 
     // Page Titles
     "Treasury Portfolio Overview": { ja: "財務ポートフォリオ概要", es: "Resumen del Portafolio del Tesoro", de: "Treasury-Portfolio-Übersicht", zh: "财库资产组合概览" },
     "Confidential Vault Management": { ja: "機密ボルト保護管理", es: "Gestión de Bóvedas Confidenciales", de: "Vertrauliche Tresor-Verwaltung", zh: "保密金库安全管理" },
     "Confidential Risk Policies": { ja: "機密リスクコントロールポリシー", es: "Políticas de Riesgo Confidenciales", de: "Vertrauliche Risikorichtlinien", zh: "保密风险控制策略" },
+    "XRPShield Privacy Proof Center": { ja: "XRPShieldプライバシー証明センター", es: "Centro de Pruebas de Privacidad XRPShield", de: "XRPShield Datenschutz-Nachweiszentrum", zh: "XRPShield 隐私证明中心" },
+    "Public Execution Verification Hub": { ja: "公開実行検証ハブ", es: "Centro Público de Verificación de Ejecución", de: "Öffentlicher Ausführungs-Verifizierungs-Hub", zh: "公开执行验证中心" },
+    "10-Stage Real Execution Audit Trail": { ja: "10段階リアル実行監査トレイル", es: "Ruta de Auditoría de Ejecución Real en 10 Etapas", de: "10-Stufen Echte Ausführungs-Audit-Trail", zh: "10阶段真实执行审计轨迹" },
     "Flare TEE Decision Engine": { ja: "Flare TEE意思決定エンジン", es: "Motor de Decisiones Flare TEE", de: "Flare TEE-Entscheidungs-Engine", zh: "Flare TEE 硬件决策引擎" },
     "Protected Treasury Execution Pipeline": { ja: "保護された財務実行パイプライン", es: "Canal de Ejecución Protegida del Tesoro", de: "Geschützte Treasury-Ausführungspipeline", zh: "受保护财库执行流水线" },
     "AI Confidential Treasury Assistant": { ja: "AI機密財務アシスタント", es: "Asistente Confidencial de IA del Tesoro", de: "Vertraulicher KI-Treasury-Assistent", zh: "AI 保密财库智能助手" },
     "System & Platform Status": { ja: "システムおよびプラットフォームのステータス", es: "Estado del Sistema y Plataforma", de: "System- & Plattformstatus", zh: "系统与平台运行状态" },
+    "XRPShield Technical Architecture Guide": { ja: "XRPShield技術アーキテクチャガイド", es: "Guía de Arquitectura Técnica de XRPShield", de: "XRPShield Technischer Architektur-Leitfaden", zh: "XRPShield 技术架构指南" },
     "Platform Settings & Profile Security": { ja: "プラットフォーム設定とプロファイルセキュリティ", es: "Configuración de Plataforma y Seguridad", de: "Plattform-Einstellungen & Profilsicherheit", zh: "平台设置与个人资料安全" },
 
-    // Page Subtitles
+    // Subtitles & Text
     "Real-time confidential FXRP reserve tracking, risk metrics, and Flare TEE attestation status": {
         ja: "リアルタイム機密FXRPリザーブ追跡、リスク指標、およびFlare TEE証明ステータス",
         es: "Seguimiento en tiempo real de reservas FXRP, métricas de riesgo y atestación Flare TEE",
@@ -82,19 +90,25 @@ export const DICTIONARY = {
     "ACTIVE RISK POLICIES": { ja: "有効なリスクポリシー", es: "POLÍTICAS DE RIESGO ACTIVAS", de: "AKTIVE RISIKORICHTLINIEN", zh: "生效风险策略" },
     "TOTAL TREASURY RESERVES": { ja: "総財務リザーブ", es: "RESERVAS TOTALES DEL TESORO", de: "GESAMTE TREASURY-RESERVEN", zh: "财库总储备" },
     "User Profile & Display Preferences": { ja: "ユーザープロファイルと表示設定", es: "Perfil de Usuario y Preferencias de Pantalla", de: "Benutzerprofil & Anzeige-Einstellungen", zh: "用户个人资料与显示偏好" },
-    "Flare Coston2 Smart Contracts & Security": { ja: "Flare Coston2スマートコントラクトとセキュリティ", es: "Contratos Inteligentes Flare Coston2 y Seguridad", de: "Flare Coston2 Smart Contracts & Sicherheit", zh: "Flare Coston2 智能合约与安全" },
+    "Flare Coston2 Smart Contracts & Security": { ja: "Flare Coston2スマートコントラクトとセキュリティ", es: "Contratos Inteligentes Flare Coston2 y Seguridad", de: "Flare Coston2 Smart Contracts & Seguridad", zh: "Flare Coston2 智能合约与安全" },
 
     // Form Labels
+    "Treasury Administrator": { ja: "財務管理者", es: "Administrador del Tesoro", de: "Treasury-Administrator", zh: "财库管理员" },
     "Display Name": { ja: "表示名", es: "Nombre en Pantalla", de: "Anzeigename", zh: "显示名称" },
     "Email Address": { ja: "メールアドレス", es: "Correo Electrónico", de: "E-Mail-Adresse", zh: "电子邮箱" },
     "Display Language": { ja: "表示言語", es: "Idioma de Pantalla", de: "Anzeigesprache", zh: "显示语言" },
     "Default Timezone": { ja: "デフォルトタイムゾーン", es: "Zona Horaria Predeterminada", de: "Standard-Zeitzone", zh: "默认时区" },
 
-    // Statuses
+    // Statuses & Badges
     "Not Connected": { ja: "未接続", es: "No Conectado", de: "Nicht Verbunden", zh: "未连接" },
     "Verified On-Chain": { ja: "オンチェーン検証済み", es: "Verificado En Cadena", de: "On-Chain Verifiziert", zh: "链上已验证" },
     "100% Verified in TEE Enclaves": { ja: "TEEエンクレイブで100％検証済み", es: "100% Verificado en Enclaves TEE", de: "100% in TEE-Enklaven Verifiziert", zh: "100% TEE 硬件安全区验证" },
     "AES-256 Encrypted Rules": { ja: "AES-256暗号化ルール", es: "Reglas Encriptadas AES-256", de: "AES-256 Verschlüsselte Regeln", zh: "AES-256 加密保护规则" },
+    "ACTIVE": { ja: "アクティブ", es: "ACTIVO", de: "AKTIV", zh: "生效中" },
+    "COMPLIANT": { ja: "適合", es: "CONFORME", de: "KONFORM", zh: "符合规范" },
+    "VERIFIED": { ja: "検証済み", es: "VERIFICADO", de: "VERIFIZIERT", zh: "已验证" },
+    "RECORDED": { ja: "記録済み", es: "REGISTRADO", de: "AUFGEZEICHNET", zh: "已记录" },
+    "CONFIRMED": { ja: "確認済み", es: "CONFIRMADO", de: "BESTÄTIGT", zh: "已确认" },
 
     // Buttons
     "+ New FXRP Vault": { ja: "+ 新規FXRPボルト", es: "+ Nueva Bóveda FXRP", de: "+ Neuer FXRP Tresor", zh: "+ 新建 FXRP 金库" },
@@ -150,72 +164,69 @@ export class I18nEngine {
         try {
             const lang = this.currentLang;
 
-        // 1. Translate Navigation Menu
-        const navMap = {
-            '#landing': this.t('Landing overview'),
-            '#dashboard': this.t('Treasury overview'),
-            '#vaults': this.t('Vault management'),
-            '#policies': this.t('Confidential policies'),
-            '#decisions': this.t('Decision engine'),
-            '#executions': this.t('Protected executions'),
-            '#ai-assistant': this.t('AI intelligence'),
-            '#status': this.t('System status'),
-            '#settings': this.t('Settings and security')
-        };
+            // 1. Translate Navigation Links (Preserve SVG Icons)
+            const navMap = {
+                '#landing': 'Landing overview',
+                '#dashboard': 'Treasury overview',
+                '#vaults': 'Vault management',
+                '#policies': 'Confidential policies',
+                '#privacy-proof': 'Privacy Proof Center',
+                '#audit-trail': '10-Stage Audit Trail',
+                '#verification': 'Verification Hub',
+                '#decisions': 'Decision engine',
+                '#executions': 'Protected executions',
+                '#ai-assistant': 'AI intelligence',
+                '#status': 'System status',
+                '#docs': 'Technical Architecture',
+                '#settings': 'Settings and security'
+            };
 
-        document.querySelectorAll('.nav-list a, .nav-menu a, .sidebar a').forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && navMap[href]) {
-                const span = link.querySelector('span');
-                if (span) {
-                    span.innerText = navMap[href];
-                }
-            }
-        });
-
-        // 2. Translate All Text Nodes In Active DOM
-        const targetElements = document.querySelectorAll(
-            'h1, h2, h3, h4, h5, h6, p, label, button, th, td, span.card-title, span.card-subtext, div.card-title, div.card-subtext, div.section-label'
-        );
-
-        targetElements.forEach(el => {
-            // Ignore code blocks, inputs, script tags, wallet connect button, or dynamic data elements
-            if (
-                el.tagName === 'CODE' || 
-                el.tagName === 'INPUT' || 
-                el.tagName === 'SCRIPT' || 
-                el.id === 'wallet-connect-btn' || 
-                el.closest('#wallet-connect-btn') ||
-                el.hasAttribute('data-no-i18n')
-            ) return;
-
-            // Preserve icons/svging inside buttons or elements
-            const originalText = el.getAttribute('data-i18n-orig') || el.innerText.trim();
-            if (!el.getAttribute('data-i18n-orig')) {
-                el.setAttribute('data-i18n-orig', originalText);
-            }
-
-            if (lang === 'en') {
-                if (el.querySelector('svg')) {
-                    const span = el.querySelector('span');
-                    if (span) span.innerText = originalText;
-                } else {
-                    el.innerText = originalText;
-                }
-            } else {
-                const translated = this.t(originalText);
-                if (translated && translated !== originalText) {
-                    if (el.querySelector('svg')) {
-                        const span = el.querySelector('span');
-                        if (span) span.innerText = translated;
+            document.querySelectorAll('.nav-list a, .nav-menu a, .sidebar a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && navMap[href]) {
+                    const originalLabel = navMap[href];
+                    const translatedText = this.t(originalLabel);
+                    const svg = link.querySelector('svg');
+                    
+                    if (svg) {
+                        link.innerHTML = '';
+                        link.appendChild(svg);
+                        link.appendChild(document.createTextNode(' ' + translatedText));
                     } else {
-                        el.innerText = translated;
+                        link.innerText = translatedText;
                     }
                 }
-            }
-        });
+            });
+
+            // 2. Translate All Text Elements Across Current Page
+            const targetElements = document.querySelectorAll(
+                'h1, h2, h3, h4, h5, h6, p, label, button, th, td, span, div.card-title, div.card-subtext, div.section-label, strong'
+            );
+
+            targetElements.forEach(el => {
+                if (
+                    el.tagName === 'CODE' || 
+                    el.tagName === 'INPUT' || 
+                    el.tagName === 'SCRIPT' || 
+                    el.id === 'wallet-connect-btn' || 
+                    el.closest('#wallet-connect-btn') ||
+                    el.hasAttribute('data-no-i18n')
+                ) return;
+
+                const textNodes = Array.from(el.childNodes).filter(node => node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0);
+                textNodes.forEach(node => {
+                    const rawStr = node.nodeValue.trim();
+                    const translated = this.t(rawStr);
+                    if (translated && translated !== rawStr) {
+                        node.nodeValue = node.nodeValue.replace(rawStr, translated);
+                    }
+                });
+            });
+
         } finally {
             this.isTranslating = false;
         }
     }
 }
+
+window.I18nEngine = I18nEngine;

@@ -21,7 +21,8 @@ const routes = {
     'executions': 'pages/executions.html',
     'ai-assistant': 'pages/ai-assistant.html',
     'platform-status': 'pages/platform-status.html',
-    'settings': 'pages/settings.html'
+    'settings': 'pages/settings.html',
+    'docs': 'pages/docs.html'
 };
 
 async function navigateTo(routeKey) {
@@ -102,6 +103,8 @@ function dispatchComponentInit(routeKey) {
             break;
         case 'audit-trail':
             import('./components/audit-timeline.js').then(m => m.initAuditTimeline()).catch(e => console.warn(e));
+            break;
+        case 'docs':
             break;
     }
 }
