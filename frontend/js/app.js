@@ -15,6 +15,7 @@ const routes = {
     'vaults': 'pages/vault.html',
     'policies': 'pages/policies.html',
     'privacy-proof': 'pages/privacy-proof.html',
+    'verification': 'pages/verification.html',
     'decisions': 'pages/decisions.html',
     'executions': 'pages/executions.html',
     'ai-assistant': 'pages/ai-assistant.html',
@@ -94,6 +95,9 @@ function dispatchComponentInit(routeKey) {
             break;
         case 'privacy-proof':
             import('./components/privacy-proof.js').then(m => m.initPrivacyProof()).catch(e => console.warn(e));
+            break;
+        case 'verification':
+            import('./components/verification.js').then(m => m.initVerification()).catch(e => console.warn(e));
             break;
     }
 }
