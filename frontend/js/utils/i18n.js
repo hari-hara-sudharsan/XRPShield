@@ -56,11 +56,11 @@ export const DICTIONARY = {
         de: "On-Chain-Transaktionsausführung, Warteschlangenüberwachung und Flare-Bestätigung",
         zh: "链上交易执行、队列监控与 Flare 区块确认收据验证"
     },
-    "Ask questions about vault safety, policy simulation, and TEE attestation proofs": {
-        ja: "ボルトの安全性、ポリシーシミュレーション、TEE証明について質問する",
-        es: "Haga preguntas sobre seguridad de bóvedas, simulación de políticas y pruebas TEE",
-        de: "Fragen zu Tresorsicherheit, Richtliniensimulation und TEE-Attestierungsnachweisen",
-        zh: "询问有关金库安全、策略模拟和 TEE 硬件认证证明的问题"
+    "Ask questions about vault safety, policy evaluation, and TEE attestation proofs": {
+        ja: "ボルトの安全性、ポリシー評価、TEE証明について質問する",
+        es: "Haga preguntas sobre seguridad de bóvedas, evaluación de políticas y pruebas TEE",
+        de: "Fragen zu Tresorsicherheit, Richtlinienbewertung und TEE-Attestierungsnachweisen",
+        zh: "询问有关金库安全、策略评估和 TEE 硬件认证证明的问题"
     },
     "Real-time health, TEE enclave attestations, API latencies, and Flare smart contracts": {
         ja: "リアルタイムヘルス、TEEエンクレイブ証明、APIレイテンシ、Flareスマートコントラクト",
