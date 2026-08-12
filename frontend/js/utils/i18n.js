@@ -267,7 +267,9 @@ export class I18nEngine {
                     el.tagName === 'SCRIPT' || 
                     el.id === 'wallet-connect-btn' || 
                     el.closest('#wallet-connect-btn') ||
-                    el.hasAttribute('data-no-i18n')
+                    el.closest('.sidebar-logo') ||
+                    el.hasAttribute('data-no-i18n') ||
+                    el.closest('[data-no-i18n="true"]')
                 ) return;
 
                 const origText = el.getAttribute('data-i18n-orig') || el.innerText.trim();
