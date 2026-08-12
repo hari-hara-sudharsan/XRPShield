@@ -112,6 +112,7 @@ function toHexWei(amount) {
             e.preventDefault();
             const amount = document.getElementById('fund-amount-input').value || '500';
             const action = document.getElementById('fund-action-select').value || 'DEPOSIT';
+            const vaultName = document.getElementById('fund-vault-name')?.innerText || 'Primary XRP Treasury Vault';
 
             if (typeof window.ethereum === 'undefined') {
                 alert('🦊 MetaMask Web3 wallet extension not detected!');
@@ -122,47 +123,90 @@ function toHexWei(amount) {
                 await WalletManager.ensureFlareNetwork();
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 const userAddr = accounts[0];
-                const hexValue = toHexWei(amount);
 
-                const txHash = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [{
-                        from: userAddr,
-                        to: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-                        data: '0xd4c2b9f3',
-                        value: hexValue
-                    }]
-                });
+                const weiAmount = BigInt(Math.floor(Number(amount) * 1e18));
+                const amountHex64 = weiAmount.toString(16).padStart(64, '0');
 
-                const vaultName = document.getElementById('fund-vault-name')?.innerText || 'Primary XRP Treasury Vault';
+                let txHash = null;
+
+                if (action === 'DEPOSIT') {
+                    // Step 1: Check ERC-20 FXRP Allowance
+                    const currentAllowanceStr = await WalletManager.readAllowance(userAddr, CONFIG.CONTRACTS.VAULT_MANAGER);
+                    const currentAllowanceWei = BigInt(Math.floor(Number(currentAllowanceStr) * 1e18));
+
+                    if (currentAllowanceWei < weiAmount) {
+                        // Prompt ERC-20 approve transaction in MetaMask
+                        const approveData = CONFIG.CONTRACTS.SELECTORS.APPROVE + 
+                            CONFIG.CONTRACTS.VAULT_MANAGER.toLowerCase().replace('0x', '').padStart(64, '0') + 
+                            amountHex64;
+
+                        alert(`🦊 Step 1 of 2: Please sign the ERC-20 FXRP Allowance Approval in MetaMask (${amount} FXRP).`);
+
+                        const approveTxHash = await window.ethereum.request({
+                            method: 'eth_sendTransaction',
+                            params: [{
+                                from: userAddr,
+                                to: CONFIG.CONTRACTS.FXRP_TOKEN,
+                                data: approveData,
+                                value: '0x0'
+                            }]
+                        });
+                        console.log('ERC-20 FXRP Approval Tx Hash:', approveTxHash);
+                    }
+
+                    // Step 2: Execute depositFXRP(uint256) on VaultManager
+                    const depositData = CONFIG.CONTRACTS.SELECTORS.DEPOSIT_FXRP + amountHex64;
+
+                    txHash = await window.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [{
+                            from: userAddr,
+                            to: CONFIG.CONTRACTS.VAULT_MANAGER,
+                            data: depositData,
+                            value: '0x0'
+                        }]
+                    });
+
+                } else {
+                    // Execute withdrawFXRP(uint256) on VaultManager
+                    const withdrawData = CONFIG.CONTRACTS.SELECTORS.WITHDRAW_FXRP + amountHex64;
+
+                    txHash = await window.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [{
+                            from: userAddr,
+                            to: CONFIG.CONTRACTS.VAULT_MANAGER,
+                            data: withdrawData,
+                            value: '0x0'
+                        }]
+                    });
+                }
+
+                console.log(`Real On-Chain Vault ${action} Tx Hash:`, txHash);
+
                 const delta = action === 'DEPOSIT' ? Number(amount) : -Number(amount);
-
-                // Update vault balance override
                 updateVaultBalance(vaultName, delta);
-
-                // Update 24h Net Deposit Flow
                 recordDepositFlow(delta);
 
                 document.getElementById('modal-fund-vault').style.display = 'none';
 
                 showExecutionSuccessModal({
-                    title: `Vault ${action} Execution Confirmed`,
+                    title: `Real On-Chain ${action} Executed`,
                     action: `${action} ${amount} FXRP on ${vaultName}`,
                     txHash: txHash,
                     attestationId: 'FCC-ATT-REBALANCE',
                     addedTreasuryFXRP: delta
                 });
 
-                // Dispatch data sync event across application
                 window.dispatchEvent(new CustomEvent('xrpshield:dataChanged'));
-
                 await loadVaults(tableBody);
 
             } catch (err) {
+                console.error(`Web3 Vault ${action} Error:`, err);
                 if (err.code === 4001) {
-                    alert('❌ Transaction Cancelled by User in MetaMask.');
+                    alert(`❌ Transaction Cancelled by User in MetaMask.`);
                 } else {
-                    alert('⚠️ Transaction Error: ' + (err.message || 'Failed to submit'));
+                    alert(`⚠️ Web3 Transaction Failed: ` + (err.message || 'EVM execution reverted'));
                 }
             }
         });

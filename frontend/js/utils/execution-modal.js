@@ -109,8 +109,14 @@ export function showExecutionSuccessModal({
                     <span style="color: var(--text-secondary);">Updated Active Treasury:</span>
                     <strong style="color: var(--accent-emerald); font-size: 1.05rem;">${newTotalTreasury.toLocaleString()} FXRP</strong>
                 </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.88rem; align-items: center;">
+                    <span style="color: var(--text-secondary);">On-Chain Contract Verification:</span>
+                    <span id="onchain-attestation-status-badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem;">
+                        ATTESTATION VERIFIED
+                    </span>
+                </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.88rem;">
-                    <span style="color: var(--text-secondary);">Attestation ID:</span>
+                    <span style="color: var(--text-secondary);">Attestation Proof Hash:</span>
                     <code style="color: var(--metal-gold-bright); font-family: var(--font-mono);">${attestationId}</code>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">

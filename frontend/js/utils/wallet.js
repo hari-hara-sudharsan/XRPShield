@@ -264,4 +264,92 @@ export class WalletManager {
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 5000);
     }
+
+    /**
+     * Read real ERC-20 FXRP wallet balance via Web3 eth_call RPC
+     */
+    static async readFXRPBalance(address) {
+        if (!address) return '0';
+        try {
+            const paddedAddr = address.toLowerCase().replace('0x', '').padStart(64, '0');
+            const data = CONFIG.CONTRACTS.SELECTORS.BALANCE_OF + paddedAddr;
+            const response = await fetch(CONFIG.FLARE_NETWORK.RPC_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'eth_call',
+                    params: [{ to: CONFIG.CONTRACTS.FXRP_TOKEN, data: data }, 'latest'],
+                    id: 1
+                })
+            });
+            const res = await response.json();
+            if (res.result && res.result !== '0x') {
+                const wei = BigInt(res.result);
+                return (Number(wei) / 1e18).toString();
+            }
+        } catch (e) {
+            console.warn('Real Web3 FXRP balance fetch fallback', e);
+        }
+        return '0';
+    }
+
+    /**
+     * Read real vault FXRP balance for user via Web3 eth_call RPC
+     */
+    static async readVaultFXRPBalance(address) {
+        if (!address) return '0';
+        try {
+            const paddedAddr = address.toLowerCase().replace('0x', '').padStart(64, '0');
+            const data = CONFIG.CONTRACTS.SELECTORS.GET_USER_FXRP_BALANCE + paddedAddr;
+            const response = await fetch(CONFIG.FLARE_NETWORK.RPC_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'eth_call',
+                    params: [{ to: CONFIG.CONTRACTS.VAULT_MANAGER, data: data }, 'latest'],
+                    id: 1
+                })
+            });
+            const res = await response.json();
+            if (res.result && res.result !== '0x') {
+                const wei = BigInt(res.result);
+                return (Number(wei) / 1e18).toString();
+            }
+        } catch (e) {
+            console.warn('Real Web3 vault FXRP balance fetch fallback', e);
+        }
+        return '0';
+    }
+
+    /**
+     * Read real ERC-20 FXRP allowance for VaultManager via Web3 eth_call RPC
+     */
+    static async readAllowance(ownerAddr, spenderAddr = CONFIG.CONTRACTS.VAULT_MANAGER) {
+        if (!ownerAddr) return '0';
+        try {
+            const paddedOwner = ownerAddr.toLowerCase().replace('0x', '').padStart(64, '0');
+            const paddedSpender = spenderAddr.toLowerCase().replace('0x', '').padStart(64, '0');
+            const data = CONFIG.CONTRACTS.SELECTORS.ALLOWANCE + paddedOwner + paddedSpender;
+            const response = await fetch(CONFIG.FLARE_NETWORK.RPC_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'eth_call',
+                    params: [{ to: CONFIG.CONTRACTS.FXRP_TOKEN, data: data }, 'latest'],
+                    id: 1
+                })
+            });
+            const res = await response.json();
+            if (res.result && res.result !== '0x') {
+                const wei = BigInt(res.result);
+                return (Number(wei) / 1e18).toString();
+            }
+        } catch (e) {
+            console.warn('Real Web3 allowance fetch fallback', e);
+        }
+        return '0';
+    }
 }

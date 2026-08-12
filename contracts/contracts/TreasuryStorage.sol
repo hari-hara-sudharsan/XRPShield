@@ -15,6 +15,8 @@ contract TreasuryStorage {
     mapping(address => bytes32) private _policyCommitments;
     mapping(address => bytes32) private _decisionHashes;
     mapping(address => bytes32) private _executionHashes;
+    mapping(address => uint256) private _vaultNonces;
+    mapping(address => uint256) private _vaultVersions;
     address[] private _allVaultAddresses;
 
     modifier onlyManager() {
@@ -55,6 +57,11 @@ contract TreasuryStorage {
         _executionHashes[vaultAddress] = executionHash;
     }
 
+    function setVaultNonceAndVersion(address vaultAddress, uint256 nonce, uint256 version) external onlyManager {
+        _vaultNonces[vaultAddress] = nonce;
+        _vaultVersions[vaultAddress] = version;
+    }
+
     function getVault(address vaultAddress) external view returns (IVaultManager.VaultInfo memory) {
         return _vaults[vaultAddress];
     }
@@ -65,6 +72,14 @@ contract TreasuryStorage {
 
     function getPolicyCommitment(address vaultAddress) external view returns (bytes32) {
         return _policyCommitments[vaultAddress];
+    }
+
+    function getVaultNonce(address vaultAddress) external view returns (uint256) {
+        return _vaultNonces[vaultAddress];
+    }
+
+    function getVaultVersion(address vaultAddress) external view returns (uint256) {
+        return _vaultVersions[vaultAddress];
     }
 
     function getDecisionHash(address vaultAddress) external view returns (bytes32) {

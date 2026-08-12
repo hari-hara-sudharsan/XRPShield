@@ -1,7 +1,10 @@
 import { ApiClient } from '../utils/api.js';
 import { WalletManager } from '../utils/wallet.js';
+import { renderFtsoPriceWidget } from './ftso-market.js';
 
 export async function initDashboard() {
+    renderFtsoPriceWidget('ftso-xrp-widget');
+
     const vaultsVal = document.getElementById('dash-active-vaults');
     const policiesVal = document.getElementById('dash-active-policies');
     const volumeVal = document.getElementById('dash-protected-volume');

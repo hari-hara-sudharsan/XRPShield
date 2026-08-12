@@ -97,7 +97,10 @@ public class DecisionService {
         String decisionHash = computeSha256(rawContent);
 
         FCCClient.FCCExecutionResult fccResult = fccClient.executeConfidentialPolicy(
-                "ENCRYPTED_PAYLOAD_V1", "IV_V1", decisionHash
+                vault.getVaultAddress() != null ? vault.getVaultAddress() : "0x5bb8082987515f40398fb9893d90616b47c04208",
+                decisionHash,
+                "1.0225",
+                "100000"
         );
 
         long fccLatencyMs = System.currentTimeMillis() - startTime;

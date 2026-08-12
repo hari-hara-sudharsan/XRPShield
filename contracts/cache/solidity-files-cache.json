@@ -299,8 +299,8 @@
       ]
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\VaultManager.sol": {
-      "lastModificationDate": 1786021631409,
-      "contentHash": "43bb267e55edcbc078d4ed90ccb248b7",
+      "lastModificationDate": 1786538672730,
+      "contentHash": "e2cd5cd57f85e4604cb32c63f4fac5a9",
       "sourceName": "contracts/VaultManager.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -329,7 +329,9 @@
       "imports": [
         "@openzeppelin/contracts/utils/Pausable.sol",
         "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
         "./interfaces/IVaultManager.sol",
+        "./interfaces/IFtsoV2.sol",
         "./AccessManager.sol",
         "./TreasuryStorage.sol",
         "./common/CommonErrors.sol"
@@ -378,8 +380,8 @@
       ]
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\TreasuryStorage.sol": {
-      "lastModificationDate": 1786021620655,
-      "contentHash": "89c3f3b7cedc038d9b19a15066ed2969",
+      "lastModificationDate": 1786537262800,
+      "contentHash": "b4ae8f37ccbcde77791a10925f5ecff9",
       "sourceName": "contracts/TreasuryStorage.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -526,6 +528,390 @@
       ],
       "artifacts": [
         "StorageSlot"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\interfaces\\IFtsoV2.sol": {
+      "lastModificationDate": 1786537074555,
+      "contentHash": "9b57142212a90e545bc00b7d678d4ccf",
+      "sourceName": "contracts/interfaces/IFtsoV2.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.24"
+      ],
+      "artifacts": [
+        "IFtsoV2"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\IERC20.sol": {
+      "lastModificationDate": 1786015768183,
+      "contentHash": "9261adf6457863de3e9892f51317ec89",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.16"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\extensions\\IERC20Metadata.sol": {
+      "lastModificationDate": 1786015768187,
+      "contentHash": "513778b30d2750f5d2b9b19bbcf748a5",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC20.sol"
+      ],
+      "versionPragmas": [
+        ">=0.6.2"
+      ],
+      "artifacts": [
+        "IERC20Metadata"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\ERC20.sol": {
+      "lastModificationDate": 1786015767986,
+      "contentHash": "d15c4d05583536e080f1960ab282772d",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC20.sol",
+        "./extensions/IERC20Metadata.sol",
+        "../../utils/Context.sol",
+        "../../interfaces/draft-IERC6093.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\node_modules\\@openzeppelin\\contracts\\interfaces\\draft-IERC6093.sol": {
+      "lastModificationDate": 1786015767888,
+      "contentHash": "bcc76f4747d56c28c40ae272ef3470a6",
+      "sourceName": "@openzeppelin/contracts/interfaces/draft-IERC6093.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.4"
+      ],
+      "artifacts": [
+        "IERC1155Errors",
+        "IERC20Errors",
+        "IERC721Errors"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1786015768276,
+      "contentHash": "d3c790edc9ccf808a17c5a6cd13614fd",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\TestFXRPToken.sol": {
+      "lastModificationDate": 1786536605328,
+      "contentHash": "10466a96bdcd9d60d96678f326802655",
+      "sourceName": "contracts/TestFXRPToken.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.24"
+      ],
+      "artifacts": [
+        "TestFXRPToken"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\FCCExtensionAdapter.sol": {
+      "lastModificationDate": 1786537806337,
+      "contentHash": "c9774e19963ed311d1859ab4400bd2b7",
+      "sourceName": "contracts/FCCExtensionAdapter.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "./common/CommonErrors.sol"
+      ],
+      "versionPragmas": [
+        "0.8.24"
+      ],
+      "artifacts": [
+        "FCCExtensionAdapter"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\TestUSDT0Token.sol": {
+      "lastModificationDate": 1786538412614,
+      "contentHash": "bccf70a0f50b09f6b73420513748e555",
+      "sourceName": "contracts/TestUSDT0Token.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.24"
+      ],
+      "artifacts": [
+        "TestUSDT0Token"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\DEXRouterAdapter.sol": {
+      "lastModificationDate": 1786538325111,
+      "contentHash": "9bcb57190888d090560a0e9cde1db36b",
+      "sourceName": "contracts/DEXRouterAdapter.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "./common/CommonErrors.sol"
+      ],
+      "versionPragmas": [
+        "0.8.24"
+      ],
+      "artifacts": [
+        "DEXRouterAdapter"
       ]
     }
   }

@@ -1,0 +1,13 @@
+{
+  "extensionId": "fce-xrpshield-v1",
+  "name": "XRPShield Confidential Treasury Extension",
+  "network": "coston2",
+  "chainId": 114,
+  "signerAddress": "0x3C44CdD45914c1b25515c10097782163b21c439f",
+  "adapterContractAddress": "0x0000000000000000000000000000000000000000",
+  "commands": [
+    "EVALUATE_HEDGE_POLICY",
+    "GET_EXTENSION_STATUS"
+  ],
+  "deployedAt": "2026-08-12T12:27:00.000Z"
+}

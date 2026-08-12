@@ -14,6 +14,7 @@ const routes = {
     'dashboard': 'pages/dashboard.html',
     'vaults': 'pages/vault.html',
     'policies': 'pages/policies.html',
+    'privacy-proof': 'pages/privacy-proof.html',
     'decisions': 'pages/decisions.html',
     'executions': 'pages/executions.html',
     'ai-assistant': 'pages/ai-assistant.html',
@@ -90,6 +91,9 @@ function dispatchComponentInit(routeKey) {
             break;
         case 'policies':
             import('./components/policies.js').then(m => m.initPolicies()).catch(e => console.warn(e));
+            break;
+        case 'privacy-proof':
+            import('./components/privacy-proof.js').then(m => m.initPrivacyProof()).catch(e => console.warn(e));
             break;
     }
 }

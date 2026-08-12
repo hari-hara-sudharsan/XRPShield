@@ -1,21 +1,21 @@
 package com.xrpshield.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
-@Table(name = "blockchain_event_logs")
-public class BlockchainEventLogEntity extends BaseEntity {
+@Table(name = "blockchain_event_logs", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_tx_hash_log_index", columnNames = {"transaction_hash", "log_index"})
+})
+public class BlockchainEventLogEntity {
 
-    @Column(name = "event_name", nullable = false, length = 100)
-    private String eventName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Column(name = "contract_address", nullable = false, length = 64)
-    private String contractAddress;
-
-    @Column(name = "tx_hash", nullable = false, length = 66)
-    private String txHash;
+    @Column(name = "transaction_hash", length = 66, nullable = false)
+    private String transactionHash;
 
     @Column(name = "block_number", nullable = false)
     private Long blockNumber;
@@ -23,42 +23,56 @@ public class BlockchainEventLogEntity extends BaseEntity {
     @Column(name = "log_index", nullable = false)
     private Integer logIndex;
 
-    @Column(name = "event_data", columnDefinition = "TEXT")
-    private String eventData;
+    @Column(name = "event_type", length = 64, nullable = false)
+    private String eventType;
+
+    @Column(name = "wallet_address", length = 42)
+    private String walletAddress;
+
+    @Column(name = "vault_id", length = 42)
+    private String vaultId;
+
+    @Column(name = "event_timestamp", nullable = false)
+    private LocalDateTime eventTimestamp;
+
+    @Column(name = "status", length = 32, nullable = false)
+    private String status;
+
+    @Column(name = "raw_payload", columnDefinition = "TEXT")
+    private String rawPayload;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     public BlockchainEventLogEntity() {}
 
-    public BlockchainEventLogEntity(String eventName, String contractAddress, String txHash, Long blockNumber, Integer logIndex, String eventData) {
-        this.eventName = eventName;
-        this.contractAddress = contractAddress;
-        this.txHash = txHash;
+    public BlockchainEventLogEntity(String transactionHash, Long blockNumber, Integer logIndex, String eventType, String walletAddress, String vaultId, LocalDateTime eventTimestamp, String status, String rawPayload) {
+        this.transactionHash = transactionHash;
         this.blockNumber = blockNumber;
         this.logIndex = logIndex;
-        this.eventData = eventData;
+        this.eventType = eventType;
+        this.walletAddress = walletAddress;
+        this.vaultId = vaultId;
+        this.eventTimestamp = eventTimestamp;
+        this.status = status;
+        this.rawPayload = rawPayload;
+        this.createdAt = LocalDateTime.now();
     }
 
-    public String getEventName() {
-        return eventName;
+    public UUID getId() {
+        return id;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public String getContractAddress() {
-        return contractAddress;
+    public String getTransactionHash() {
+        return transactionHash;
     }
 
-    public void setContractAddress(String contractAddress) {
-        this.contractAddress = contractAddress;
-    }
-
-    public String getTxHash() {
-        return txHash;
-    }
-
-    public void setTxHash(String txHash) {
-        this.txHash = txHash;
+    public void setTransactionHash(String transactionHash) {
+        this.transactionHash = transactionHash;
     }
 
     public Long getBlockNumber() {
@@ -77,11 +91,59 @@ public class BlockchainEventLogEntity extends BaseEntity {
         this.logIndex = logIndex;
     }
 
-    public String getEventData() {
-        return eventData;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setEventData(String eventData) {
-        this.eventData = eventData;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getWalletAddress() {
+        return walletAddress;
+    }
+
+    public void setWalletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
+    }
+
+    public String getVaultId() {
+        return vaultId;
+    }
+
+    public void setVaultId(String vaultId) {
+        this.vaultId = vaultId;
+    }
+
+    public LocalDateTime getEventTimestamp() {
+        return eventTimestamp;
+    }
+
+    public void setEventTimestamp(LocalDateTime eventTimestamp) {
+        this.eventTimestamp = eventTimestamp;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getRawPayload() {
+        return rawPayload;
+    }
+
+    public void setRawPayload(String rawPayload) {
+        this.rawPayload = rawPayload;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

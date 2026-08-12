@@ -61,6 +61,24 @@ public class PolicyService {
         this.mapper = mapper;
     }
 
+    public String computeCanonicalPolicyCommitment(CanonicalPolicyPayloadDto dto) {
+        String canonicalStr = String.format(
+            "{\"vaultAddress\":\"%s\",\"asset\":\"%s\",\"hedgeRatio\":\"%s\",\"triggerThreshold\":\"%s\",\"maximumProtection\":\"%s\",\"deadline\":%d,\"nonce\":%d,\"policyVersion\":%d}",
+            dto.getVaultAddress() != null ? dto.getVaultAddress().toLowerCase() : "0x0",
+            dto.getAsset() != null ? dto.getAsset() : "FXRP",
+            dto.getHedgeRatio() != null ? dto.getHedgeRatio().toPlainString() : "1.0",
+            dto.getTriggerThreshold() != null ? dto.getTriggerThreshold().toPlainString() : "10.0",
+            dto.getMaximumProtection() != null ? dto.getMaximumProtection().toPlainString() : "100000.0",
+            dto.getDeadline() != null ? dto.getDeadline() : 0L,
+            dto.getNonce() != null ? dto.getNonce() : 1L,
+            dto.getPolicyVersion() != null ? dto.getPolicyVersion() : 1L
+        );
+        byte[] hashBytes = org.web3j.crypto.Hash.sha3(canonicalStr.getBytes(StandardCharsets.UTF_8));
+        String commitmentHex = org.web3j.utils.Numeric.toHexString(hashBytes);
+        logger.info("Computed canonical Keccak256 commitment hash: {} for vault {}", commitmentHex, dto.getVaultAddress());
+        return commitmentHex;
+    }
+
     @Transactional
     public PolicyResponseDto createPolicy(CreatePolicyRequestDto dto, UserEntity user) {
         logger.debug("Creating policy: {} for user: {}", dto.getName(), user.getEmail());

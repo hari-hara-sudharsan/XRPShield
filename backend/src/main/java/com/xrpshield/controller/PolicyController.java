@@ -28,6 +28,13 @@ public class PolicyController {
         this.policyService = policyService;
     }
 
+    @PostMapping("/compute-commitment")
+    @Operation(summary = "Compute Canonical Policy Keccak256 Hash", description = "Generates deterministic keccak256 policy commitment hash from canonical payload")
+    public ResponseEntity<ApiResponse<String>> computeCommitment(@Valid @RequestBody CanonicalPolicyPayloadDto payload) {
+        String commitmentHash = policyService.computeCanonicalPolicyCommitment(payload);
+        return ResponseEntity.ok(ApiResponse.success("Canonical keccak256 policy commitment computed successfully", commitmentHash));
+    }
+
     @PostMapping
     @Operation(summary = "Create Confidential Policy", description = "Defines a new encrypted risk policy and submits it to Flare Confidential Compute (FCC)")
     public ResponseEntity<ApiResponse<PolicyResponseDto>> createPolicy(

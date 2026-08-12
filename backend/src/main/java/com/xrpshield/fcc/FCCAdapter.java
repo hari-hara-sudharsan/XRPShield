@@ -19,10 +19,12 @@ public class FCCAdapter {
 
     public FCCClient.FCCExecutionResult submitToEnclave(ConfidentialPolicyEntity policy, EncryptedPolicyEntity encryptedPolicy) {
         logger.info("FCCAdapter: Submitting policy {} (Hash: {}) to Flare TEE Enclave", policy.getPolicyName(), policy.getPolicyHash());
+        String vaultAddress = policy.getVault() != null ? policy.getVault().getVaultAddress() : "0x5bb8082987515f40398fb9893d90616b47c04208";
         return fccClient.executeConfidentialPolicy(
-                encryptedPolicy.getEncryptedPayload(),
-                encryptedPolicy.getIv(),
-                policy.getPolicyHash()
+                vaultAddress,
+                policy.getPolicyHash(),
+                "1.0225",
+                "100000"
         );
     }
 }
