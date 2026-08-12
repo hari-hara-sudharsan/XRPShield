@@ -17,6 +17,7 @@ async function evaluatePrivateHedgePolicy(params, config, wallet) {
     const contractAddress = params.contractAddress || config.coston2Network.teeRegistryAddress;
     const chainId = parseInt(params.chainId || config.coston2Network.chainId);
     const committedPolicyHash = params.policyCommitment || params.committedPolicyHash;
+    const instructionId = params.instructionId || ethers.keccak256(ethers.toUtf8Bytes(`inst-${timestamp}`));
 
     const currentPrice = parseFloat(params.currentPrice || '1.00');
     const referencePrice = parseFloat(params.referencePrice || '1.15');
@@ -99,9 +100,11 @@ async function evaluatePrivateHedgePolicy(params, config, wallet) {
 
         return {
             success: status !== 'REJECTED',
+            resultStatus: status === 'REJECTED' ? 'ERROR' : 'SUCCESS',
             status: status,
             decision: status,
             rationale: rationale,
+            instructionId: instructionId,
             policyCommitment: committedPolicyHash || ethers.ZeroHash,
             policyHash: committedPolicyHash || ethers.ZeroHash,
             vaultId: vaultAddress,

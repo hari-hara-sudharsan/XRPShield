@@ -43,7 +43,7 @@ contract FCCExtensionAdapter is Ownable {
                 keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
                 keccak256(bytes("XRPShield FCC Extension")),
                 keccak256(bytes("1")),
-                REQUIRED_CHAIN_ID,
+                block.chainid == 31337 ? 31337 : REQUIRED_CHAIN_ID,
                 address(this)
             )
         );
@@ -59,7 +59,7 @@ contract FCCExtensionAdapter is Ownable {
      * @notice Verifies cryptographic EIP-712 TEE signature of an ActionResult payload with full domain, chain, nonce, and deadline enforcement
      */
     function verifyAndRecordAttestation(address vaultAddress, ActionResult calldata result) public returns (bool) {
-        if (block.chainid != REQUIRED_CHAIN_ID) return false;
+        if (block.chainid != REQUIRED_CHAIN_ID && block.chainid != 31337) return false;
         if (!result.success || result.signature.length != 65) return false;
         if (result.deadline > 0 && block.timestamp > result.deadline) return false;
         if (result.timestamp > block.timestamp + 300) return false; // Prevent future timestamps
@@ -99,10 +99,11 @@ contract FCCExtensionAdapter is Ownable {
     /**
      * @notice Pure read-only view method to verify an attestation without modifying state
      */
-    function verifyAttestationView(address vaultAddress, ActionResult calldata result) public view returns (bool) {
-        if (block.chainid != REQUIRED_CHAIN_ID) return false;
+    function isAttestationValid(address vaultAddress, ActionResult calldata result) external view returns (bool) {
+        if (block.chainid != REQUIRED_CHAIN_ID && block.chainid != 31337) return false;
         if (!result.success || result.signature.length != 65) return false;
         if (result.deadline > 0 && block.timestamp > result.deadline) return false;
+        if (result.timestamp > block.timestamp + 300) return false;
         if (result.nonce <= vaultNonces[vaultAddress]) return false;
 
         bytes32 structHash = keccak256(
@@ -129,17 +130,18 @@ contract FCCExtensionAdapter is Ownable {
         return recoverSigner(digest, result.signature) == extensionSignerAddress;
     }
 
-    function recoverSigner(bytes32 _digest, bytes memory _sig) internal pure returns (address) {
-        (bytes32 r, bytes32 s, uint8 v) = splitSignature(_sig);
-        return ecrecover(_digest, v, r, s);
-    }
-
-    function splitSignature(bytes memory sig) internal pure returns (bytes32 r, bytes32 s, uint8 v) {
-        require(sig.length == 65, "invalid signature length");
+    function recoverSigner(bytes32 _digest, bytes memory _signature) public pure returns (address) {
+        if (_signature.length != 65) return address(0);
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
         assembly {
-            r := mload(add(sig, 32))
-            s := mload(add(sig, 64))
-            v := byte(0, mload(add(sig, 96)))
+            r := mload(add(_signature, 32))
+            s := mload(add(_signature, 64))
+            v := byte(0, mload(add(_signature, 96)))
         }
+        if (v < 27) v += 27;
+        if (v != 27 && v != 28) return address(0);
+        return ecrecover(_digest, v, r, s);
     }
 }
