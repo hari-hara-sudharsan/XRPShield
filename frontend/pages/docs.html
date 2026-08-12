@@ -1,0 +1,82 @@
+<div style="margin-bottom: 24px;">
+    <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(201,169,106,0.14); color:var(--gold-bright); font-family:monospace; font-size:0.75rem; padding:4px 10px; border-radius:20px; margin-bottom:12px;">
+        FLARE NETWORK HACKATHON DOCUMENTATION
+    </div>
+    <h2 style="font-size: 1.8rem; font-weight: 700;">XRPShield Technical Architecture Guide</h2>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">Comprehensive developer & judge guide to the confidential treasury protection pipeline on Flare Coston2 Testnet</p>
+</div>
+
+<!-- ARCHITECTURE OVERVIEW -->
+<div class="card" style="padding: 24px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">1. System Architecture & Topology</h3>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px;">
+        XRPShield is a non-custodial treasury risk management protocol built on Flare Network. It combines <strong>Flare Confidential Compute (FCC)</strong> TEE hardware enclaves with <strong>FTSOv2 decentralized price feeds</strong> and <strong>SparkDEX V2 liquidity pools</strong> to deliver automated FXRP hedging without exposing user risk parameters on-chain.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">🌐 Flare Coston2 EVM</h4>
+            <p style="font-size: 0.82rem; color: var(--text-secondary);">Chain ID <code>114</code>. Settles <code>XRPShieldVault.sol</code> custody and <code>HedgeExecutor.sol</code> swaps.</p>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">🔒 Flare FCC TEE Enclave</h4>
+            <p style="font-size: 0.82rem; color: var(--text-secondary);">Extension <code>0x585250...001</code>. Evaluates confidential ECIES policies inside isolated hardware memory.</p>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+            <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">📈 FTSOv2 Oracle</h4>
+            <p style="font-size: 0.82rem; color: var(--text-secondary);">Feed <code>0x01...001</code>. Delivers real-time, tamper-proof XRP/USD price feeds on-chain.</p>
+        </div>
+    </div>
+</div>
+
+<!-- KEY CONTRACT ADDRESSES -->
+<div class="card" style="padding: 24px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">2. Production Smart Contract Manifest</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Contract Component</th>
+                <th>Coston2 Verified Address</th>
+                <th>Explorer Verification Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>XRPShieldVault.sol</strong></td>
+                <td><code>0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9</code></td>
+                <td><a href="https://coston2-explorer.flare.network/address/0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9" target="_blank" style="color:var(--accent-teal);">View On Explorer ↗</a></td>
+            </tr>
+            <tr>
+                <td><strong>HedgeExecutor.sol</strong></td>
+                <td><code>0x70997970C51812dc3A010C7d01b50e0d17dc79C8</code></td>
+                <td><a href="https://coston2-explorer.flare.network/address/0x70997970C51812dc3A010C7d01b50e0d17dc79C8" target="_blank" style="color:var(--accent-teal);">View On Explorer ↗</a></td>
+            </tr>
+            <tr>
+                <td><strong>SparkDEX Router V2</strong></td>
+                <td><code>0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B</code></td>
+                <td><a href="https://coston2-explorer.flare.network/address/0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B" target="_blank" style="color:var(--accent-teal);">View On Explorer ↗</a></td>
+            </tr>
+            <tr>
+                <td><strong>FXRP ERC-20 Token</strong></td>
+                <td><code>0xC04E1A9D4e2f6B72A6bca2626e2E505A415c81b4</code></td>
+                <td><a href="https://coston2-explorer.flare.network/address/0xC04E1A9D4e2f6B72A6bca2626e2E505A415c81b4" target="_blank" style="color:var(--accent-teal);">View On Explorer ↗</a></td>
+            </tr>
+            <tr>
+                <td><strong>USDT0 ERC-20 Token</strong></td>
+                <td><code>0x1C3132E02206b1f4f6e8f4D5C58a59C45dcED780</code></td>
+                <td><a href="https://coston2-explorer.flare.network/address/0x1C3132E02206b1f4f6e8f4D5C58a59C45dcED780" target="_blank" style="color:var(--accent-teal);">View On Explorer ↗</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- TRUST MODEL SUMMARY -->
+<div class="card" style="padding: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">3. Security Invariants & Emergency Controls</h3>
+    <ul style="margin-left: 20px; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+        <li><strong style="color:#fff;">FCC Zero Bypass:</strong> Direct calls to <code>executeHedge()</code> revert unless preceded by a verified EIP-712 TEE attestation.</li>
+        <li><strong style="color:#fff;">Strict Recipient Custody:</strong> Swapped USDT0 funds must return directly to <code>address(XRPShieldVault)</code>; external wallet recipients revert.</li>
+        <li><strong style="color:#fff;">Zero Capital Lock Emergency Pause:</strong> Calling <code>setPaused(true)</code> halts new hedge executions while leaving <code>withdrawFXRP()</code> 100% active for user fund retrieval.</li>
+        <li><strong style="color:#fff;">Circuit Breaker Manager:</strong> Automatically pauses execution after 3 consecutive external failure events.</li>
+    </ul>
+</div>
