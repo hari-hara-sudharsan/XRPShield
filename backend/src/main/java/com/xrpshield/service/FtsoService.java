@@ -7,7 +7,6 @@ import com.xrpshield.exception.BusinessException;
 import com.xrpshield.repository.MarketPriceSnapshotRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -24,22 +23,26 @@ public class FtsoService {
 
     private static final Logger logger = LoggerFactory.getLogger(FtsoService.class);
 
-    private static final String FTSOV2_CONTRACT_ADDRESS = "0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d";
     private static final String XRP_USD_FEED_ID = "0x015852502f55534400000000000000000000000000";
     private static final String GET_FEED_BY_ID_SELECTOR = "0x93e9f806";
     private static final long STALE_THRESHOLD_SECONDS = 180; // 3 minutes
 
     private final BlockchainClient blockchainClient;
     private final MarketPriceSnapshotRepository snapshotRepository;
+    private final FlareContractRegistryService flareRegistryService;
 
-    public FtsoService(BlockchainClient blockchainClient, MarketPriceSnapshotRepository snapshotRepository) {
+    public FtsoService(BlockchainClient blockchainClient,
+                       MarketPriceSnapshotRepository snapshotRepository,
+                       FlareContractRegistryService flareRegistryService) {
         this.blockchainClient = blockchainClient;
         this.snapshotRepository = snapshotRepository;
+        this.flareRegistryService = flareRegistryService;
     }
 
     @Transactional
     public MarketPriceResponseDto fetchLiveXRPUSDPrice() {
-        logger.info("Querying Flare FTSOv2 contract at {} for XRP/USD feed {}", FTSOV2_CONTRACT_ADDRESS, XRP_USD_FEED_ID);
+        String ftsoV2Address = flareRegistryService.resolveContractAddress("FtsoV2");
+        logger.info("Querying Flare FTSOv2 contract at {} (resolved via Registry) for XRP/USD feed {}", ftsoV2Address, XRP_USD_FEED_ID);
 
         try {
             // Function selector: 0x93e9f806
@@ -47,7 +50,7 @@ public class FtsoService {
             String paddedFeedId = XRP_USD_FEED_ID.substring(2) + "00000000000000000000000000";
             String dataHex = GET_FEED_BY_ID_SELECTOR + paddedFeedId;
 
-            Transaction transaction = Transaction.createEthCallTransaction(null, FTSOV2_CONTRACT_ADDRESS, dataHex);
+            Transaction transaction = Transaction.createEthCallTransaction(null, ftsoV2Address, dataHex);
             EthCall response = blockchainClient.getWeb3j().ethCall(transaction, DefaultBlockParameterName.LATEST).send();
 
             if (response.hasError() || response.getValue() == null || response.getValue().equals("0x")) {
