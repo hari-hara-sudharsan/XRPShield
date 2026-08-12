@@ -38,7 +38,7 @@ export async function initVaults() {
                     method: 'eth_sendTransaction',
                     params: [{
                         from: userAddr,
-                        to: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+                        to: CONFIG.CONTRACTS.VAULT_MANAGER || '0x5bb8082987515f40398fb9893d90616b47c04208',
                         data: '0xd4c2b9f3', // verifyStatus() smart contract execution
                         value: '0x0'
                     }]

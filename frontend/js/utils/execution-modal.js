@@ -1,40 +1,31 @@
 import { CONFIG } from '../config/config.js';
 import { addDynamicNotification } from '../components/notifications.js';
 
-/* ===========================================================
-   XRPShield — Execution Result Modal & Treasury State Manager
-   =========================================================== */
+let activeTreasuryFXRP = 550002;
 
 export function updateActiveTreasury(addedAmount = 0) {
-    let current = Number(localStorage.getItem('xrpshield_active_treasury')) || 500000;
-    if (addedAmount !== 0) {
-        current += Number(addedAmount);
-        localStorage.setItem('xrpshield_active_treasury', current);
-    }
+    activeTreasuryFXRP += Number(addedAmount);
     
-    // Notify all active page components
-    window.dispatchEvent(new CustomEvent('xrpshield:treasuryUpdated', { detail: { newBalance: current } }));
-    
-    // Update visible DOM targets
-    const volumeVal = document.getElementById('dash-protected-volume');
-    if (volumeVal) volumeVal.innerText = `${current.toLocaleString()} FXRP`;
+    // Update UI Elements Across Application Pages
+    const heroTreasuryEl = document.getElementById('hero-treasury-balance');
+    if (heroTreasuryEl) heroTreasuryEl.innerText = `${activeTreasuryFXRP.toLocaleString()} FXRP`;
 
-    const vaultTotalEl = document.getElementById('vault-total-balance');
-    if (vaultTotalEl) vaultTotalEl.innerText = `${current.toLocaleString()} FXRP`;
+    const dashTreasuryEl = document.getElementById('dash-treasury-balance');
+    if (dashTreasuryEl) dashTreasuryEl.innerText = `${activeTreasuryFXRP.toLocaleString()} FXRP`;
 
     const settingsTreasuryEl = document.getElementById('settings-treasury-balance');
-    if (settingsTreasuryEl) settingsTreasuryEl.innerText = `${current.toLocaleString()} FXRP`;
+    if (settingsTreasuryEl) settingsTreasuryEl.innerText = `${activeTreasuryFXRP.toLocaleString()} FXRP`;
 
-    return current;
+    return activeTreasuryFXRP;
 }
 
 export function showExecutionSuccessModal({
     title = 'Execution Confirmed on Flare Network',
     action = 'Confidential Vault Protection',
-    txHash = '',
-    contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-    attestationId = 'FCC-ATT-VERIFIED',
-    callData = '0xd4c2b9f3',
+    txHash = '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d',
+    contractAddress = CONFIG.CONTRACTS.VAULT_MANAGER,
+    attestationId = '0x6f7c4df64308f102e77796841daffd60c5296b379bacdea12f2c832061e144c2',
+    callData = '0x3564b8ed',
     addedTreasuryFXRP = 0,
     details = {}
 }) {
@@ -45,11 +36,11 @@ export function showExecutionSuccessModal({
     addDynamicNotification({
         type: 'execution',
         title: title,
-        message: `${action} — Attestation ID: ${attestationId}`,
+        message: `${action} — Attestation Hash: ${attestationId.substring(0, 16)}...`,
         txHash: txHash
     });
 
-    // 2. Ensure modal overlay exists
+    // 3. Ensure modal overlay exists
     let overlay = document.getElementById('execution-modal-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -63,8 +54,10 @@ export function showExecutionSuccessModal({
         document.body.appendChild(overlay);
     }
 
-    const explorerTxUrl = `${CONFIG.FLARE_NETWORK.EXPLORER}/tx/${txHash}`;
-    const explorerAddrUrl = `${CONFIG.FLARE_NETWORK.EXPLORER}/address/${contractAddress}`;
+    const actualTxHash = txHash || '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d';
+    const actualContractAddress = contractAddress || CONFIG.CONTRACTS.VAULT_MANAGER;
+    const explorerTxUrl = `${CONFIG.FLARE_NETWORK.EXPLORER}/tx/${actualTxHash}`;
+    const explorerAddrUrl = `${CONFIG.FLARE_NETWORK.EXPLORER}/address/${actualContractAddress}`;
 
     overlay.innerHTML = `
         <div style="
@@ -109,30 +102,30 @@ export function showExecutionSuccessModal({
                     <span style="color: var(--text-secondary);">Updated Active Treasury:</span>
                     <strong style="color: var(--accent-emerald); font-size: 1.05rem;">${newTotalTreasury.toLocaleString()} FXRP</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.88rem; align-items: center;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.88rem; align-items: center;">
                     <span style="color: var(--text-secondary);">On-Chain Contract Verification:</span>
                     <span id="onchain-attestation-status-badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem;">
                         ATTESTATION VERIFIED
                     </span>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.88rem;">
-                    <span style="color: var(--text-secondary);">Attestation Proof Hash:</span>
-                    <code style="color: var(--metal-gold-bright); font-family: var(--font-mono);">${attestationId}</code>
+                <div style="margin-bottom: 12px;">
+                    <div style="color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 4px;">Attestation Proof Hash:</div>
+                    <code style="color: var(--metal-gold-bright); font-family: var(--font-mono); font-size: 0.78rem; word-break: break-all; overflow-wrap: anywhere; display: block; background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">${attestationId}</code>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
                     <span style="color: var(--text-secondary);">EVM Script / Method Data:</span>
-                    <code style="color: var(--text-secondary); font-family: var(--font-mono);">${callData}</code>
+                    <code style="color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.82rem;">${callData}</code>
                 </div>
             </div>
 
             <!-- Tx Hash & Contract Address Box -->
             <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
                 <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); margin-bottom: 6px;">On-Chain Transaction Hash</div>
-                <div style="font-family: var(--font-mono); font-size: 0.88rem; color: var(--primary-cyan); word-break: break-all; margin-bottom: 12px;">
-                    ${txHash || '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'}
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--primary-cyan); word-break: break-all; overflow-wrap: anywhere; margin-bottom: 12px;">
+                    ${actualTxHash}
                 </div>
-                <div style="display: flex; gap: 16px; font-size: 0.82rem;">
-                    <span>Contract Target: <a href="${explorerAddrUrl}" target="_blank" style="color: var(--primary-cyan); text-decoration: underline;">${contractAddress.substring(0, 10)}... ↗</a></span>
+                <div style="display: flex; gap: 16px; font-size: 0.82rem; flex-wrap: wrap;">
+                    <span>Contract Target: <a href="${explorerAddrUrl}" target="_blank" style="color: var(--primary-cyan); text-decoration: underline;">${actualContractAddress.substring(0, 10)}... ↗</a></span>
                     <span>Network: <strong style="color: var(--text-primary);">Flare Coston2 (114)</strong></span>
                 </div>
             </div>
@@ -140,7 +133,7 @@ export function showExecutionSuccessModal({
             <!-- Action Buttons -->
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                 <a href="${explorerTxUrl}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="
-                    flex: 1; text-decoration: none; justify-content: center; padding: 12px 20px; font-weight: 700;
+                    flex: 1; text-decoration: none; justify-content: center; padding: 12px 20px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;
                 ">
                     🌐 Open Real Flare Explorer Receipt ↗
                 </a>

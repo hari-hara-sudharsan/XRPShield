@@ -374,7 +374,7 @@ window.viewAttestationProof = function(name, attestationId, hash) {
             <div style="margin-bottom: 8px;"><strong>Hardware Enclave Model:</strong> Intel SGX & AMD SEV Hardware Enclave</div>
             <div style="margin-bottom: 8px;"><strong>Enclave Attestation Status:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">● VERIFIED ON-CHAIN (100% COMPLIANT)</span></div>
             <div style="margin-bottom: 8px;"><strong>Verification Timestamp:</strong> ${new Date().toUTCString()}</div>
-            <div><strong>BlockScout On-Chain Proof:</strong><br><a href="${CONFIG.FLARE_NETWORK.EXPLORER}/address/0x5FbDB2315678afecb367f032d93F642f64180aa3" target="_blank" style="color: var(--primary-cyan); font-weight: 600; text-decoration: underline;">Verify Enclave Quote on Flare Coston2 BlockScout ↗</a></div>
+            <div><strong>BlockScout On-Chain Proof:</strong><br><a href="${CONFIG.FLARE_NETWORK.EXPLORER}/address/${CONFIG.CONTRACTS.VAULT_MANAGER || '0x5bb8082987515f40398fb9893d90616b47c04208'}" target="_blank" style="color: var(--primary-cyan); font-weight: 600; text-decoration: underline;">Verify Enclave Quote on Flare Coston2 BlockScout ↗</a></div>
         `;
     }
     const modal = document.getElementById('modal-attestation-detail');

@@ -179,7 +179,7 @@ window.viewTxReceipt = function(txHash, blockNum) {
             <div style="margin-bottom: 6px;"><strong>Status:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">SUCCESS (CONFIRMED ON COSTON2)</span></div>
             <div style="margin-bottom: 6px;"><strong>Gas Used:</strong> 65,000</div>
             <div style="margin-bottom: 6px;"><strong>Network:</strong> Flare Coston2 Testnet (Chain ID 114)</div>
-            <div><strong>Smart Contract:</strong><br><code style="word-break: break-all; overflow-wrap: anywhere; color: var(--text-secondary);">0x5FbDB2315678afecb367f032d93F642f64180aa3</code></div>
+            <div><strong>Smart Contract:</strong><br><code style="word-break: break-all; overflow-wrap: anywhere; color: var(--text-secondary);">${CONFIG.CONTRACTS.VAULT_MANAGER || '0x5bb8082987515f40398fb9893d90616b47c04208'}</code></div>
         `;
     }
     document.getElementById('modal-tx-viewer').style.display = 'flex';

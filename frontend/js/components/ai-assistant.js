@@ -291,7 +291,7 @@ window.generateExecutiveReportAI = async function() {
                 `**Report Type**: On-Chain Execution Audit Trail\n` +
                 `**Generated Timestamp**: ${new Date().toUTCString()}\n` +
                 `**Target Network**: Flare Coston2 Testnet (Chain ID 114)\n` +
-                `**Smart Contract Target**: VaultManager (0x5FbDB2315678afecb367f032d93F642f64180aa3)\n` +
+                `**Smart Contract Target**: VaultManager (${CONFIG.CONTRACTS.VAULT_MANAGER || '0x5bb8082987515f40398fb9893d90616b47c04208'})\n` +
                 `**Web3 Signer Address**: ${walletAddr}\n\n` +
                 `## 1. Confirmed On-Chain Execution Audit Trail\n` +
                 `| Transaction Hash | Block Number | Action | State | Attestation ID | Timestamp |\n` +
@@ -362,7 +362,7 @@ window.commitPolicyToTEE = async function(name, drawdown, liquidity) {
             method: 'eth_sendTransaction',
             params: [{
                 from: userAddr,
-                to: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+                to: CONFIG.CONTRACTS.VAULT_MANAGER || '0x5bb8082987515f40398fb9893d90616b47c04208',
                 data: '0xd4c2b9f3',
                 value: '0x0'
             }]
