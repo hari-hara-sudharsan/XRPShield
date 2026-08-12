@@ -11,7 +11,7 @@ const { decryptECIES } = require('./crypto-utils');
  * Handles encrypted ECIES ciphertext payloads and evaluates trigger threshold, risk limits, vault balance, deadline, and price freshness.
  */
 async function evaluatePrivateHedgePolicy(params, config, wallet) {
-    const timestamp = Math.floor(Date.now() / 1000);
+    const timestamp = params.timestamp || Math.floor(Date.now() / 1000);
 
     const vaultAddress = params.vaultAddress || params.vaultId;
     const contractAddress = params.contractAddress || config.coston2Network.teeRegistryAddress;
@@ -159,8 +159,8 @@ async function evaluatePrivateHedgePolicy(params, config, wallet) {
             hedgeRatio: policy.hedgeRatio || '1.0000',
             triggerThreshold: policy.triggerThreshold || '10.0',
             maximumProtection: policy.maximumProtection || policy.maximumHedgeAmount || '100000.0',
-            deadline: deadline,
-            nonce: nonce,
+            deadline: policy.deadline !== undefined ? parseInt(policy.deadline) : deadline,
+            nonce: policy.nonce !== undefined ? parseInt(policy.nonce) : nonce,
             policyVersion: parseInt(policy.policyVersion || 1)
         });
 
