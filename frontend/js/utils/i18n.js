@@ -14,7 +14,7 @@ export const DICTIONARY = {
     "10-Stage Audit Trail": { ja: "10段階監査トレイル", es: "Ruta de Auditoría de 10 Etapas", de: "10-Stufen-Audit-Pfad", zh: "10阶段审计追溯" },
     "Verification Hub": { ja: "検証ハブ", es: "Centro de Verificación", de: "Verifizierungs-Hub", zh: "验证中心" },
     "Decision engine": { ja: "意思決定エンジン", es: "Motor de decisiones", de: "Entscheidungs-Engine", zh: "决策引擎" },
-    "Protected executions": { ja: "保護された実行", es: "Ejecuciones protegidas", de: "Geschützte Ausführungen", zh: "受保護执行" },
+    "Protected executions": { ja: "保護された実行", es: "Ejecuciones protegidas", de: "Geschützte Ausführungen", zh: "受保护执行" },
     "AI intelligence": { ja: "AIインテリジェンス", es: "Inteligencia IA", de: "KI-Intelligenz", zh: "AI 智能" },
     "System status": { ja: "システムステータス", es: "Estado del sistema", de: "Systemstatus", zh: "系统状态" },
     "Technical Architecture": { ja: "技術アーキテクチャ", es: "Arquitectura Técnica", de: "Technische Architektur", zh: "技术架构" },
@@ -34,7 +34,7 @@ export const DICTIONARY = {
     "XRPShield Technical Architecture Guide": { ja: "XRPShield技術アーキテクチャガイド", es: "Guía de Arquitectura Técnica de XRPShield", de: "XRPShield Technischer Architektur-Leitfaden", zh: "XRPShield 技术架构指南" },
     "Platform Settings & Profile Security": { ja: "プラットフォーム設定とプロファイルセキュリティ", es: "Configuración de Plataforma y Seguridad", de: "Plattform-Einstellungen & Profilsicherheit", zh: "平台设置与个人资料安全" },
 
-    // Dashboard Cards & Stat Labels (Supports Title Case & Uppercase)
+    // Dashboard Cards & Stat Labels
     "Active Protected Vaults": { ja: "アクティブな保護ボルト", es: "Bóvedas Protegidas Activas", de: "Aktive Geschützte Tresore", zh: "活跃受保护金库" },
     "Active Risk Policies": { ja: "有効なリスクポリシー", es: "Políticas de Riesgo Activas", de: "Aktive Risikorichtlinien", zh: "生效风险策略" },
     "Total Treasury Reserves": { ja: "総財務リザーブ", es: "Reservas Totales del Tesoro", de: "Gesamte Treasury-Reserven", zh: "财库总储备" },
@@ -117,34 +117,6 @@ export const DICTIONARY = {
         zh: "保密财库保护全生命周期步步可查的密码学透明度"
     },
 
-    // Privacy Proof Labels & Headings
-    "POLICY COMMITMENT": { ja: "ポリシーコミットメント", es: "COMPROMISO DE POLÍTICA", de: "RICHTLINIEN-COMMITMENT", zh: "策略密码承诺" },
-    "CONFIDENTIAL COMPUTE": { ja: "機密計算", es: "CÓMPUTO CONFIDENCIAL", de: "VERTRAULICHE BERECHNUNG", zh: "保密计算" },
-    "ON-CHAIN SETTLEMENT": { ja: "オンチェーン決済", es: "LIQUIDACIÓN EN CADENA", de: "ON-CHAIN-ABWICKLUNG", zh: "链上结算收据" },
-    "Publicly revealed": { ja: "公開開示パラメーター", es: "Revelado públicamente", de: "Öffentlich offengelegt", zh: "公开显示信息" },
-    "Private (Protected in TEE)": { ja: "非公開（TEEで保護）", es: "Privado (Protegido en TEE)", de: "Vertraulich (In TEE geschützt)", zh: "机密保密（TEE 硬件保护）" },
-    "Trigger threshold": { ja: "トリガー閾値", es: "Umbral de activación", de: "Auslöseschwelle", zh: "触发阈值" },
-    "Hedge ratio": { ja: "ヘッジ比率", es: "Ratio de cobertura", de: "Absicherungsverhältnis", zh: "对冲比例" },
-    "Maximum hedge": { ja: "最大ヘッジ保護額", es: "Cobertura máxima", de: "Maximale Absicherung", zh: "最大对冲保护额" },
-    "Risk parameters": { ja: "リスク分析パラメーター", es: "Parámetros de riesgo", de: "Risikoparameter", zh: "风险规则参数" },
-    "Instruction": { ja: "指示ID", es: "Instrucción", de: "Anweisung", zh: "指令代码" },
-    "TEE Result": { ja: "TEE検証結果", es: "Resultado TEE", de: "TEE-Ergebnis", zh: "TEE 计算结果" },
-    "Decision": { ja: "意思決定", es: "Decisión", de: "Entscheidung", zh: "决策结论" },
-    "Execution": { ja: "実行トランザクション", es: "Ejecución", de: "Ausführung", zh: "执行哈希" },
-
-    // Verification Table Headers & Labels
-    "Operation": { ja: "操作項目", es: "Operación", de: "Operation", zh: "操作类型" },
-    "Function Selector": { ja: "関数セレクター", es: "Selector de Función", de: "Funktions-Selektor", zh: "函数选择器" },
-    "Block Height": { ja: "ブロック高度", es: "Altura de Bloque", de: "Blockhöhe", zh: "区块高度" },
-    "Contract / Tx Hash": { ja: "コントラクト / 取引ハッシュ", es: "Contrato / Hash Tx", de: "Vertrag / Transaktions-Hash", zh: "合约 / 交易哈希" },
-    "Verification Link": { ja: "検証リンク", es: "Enlace de Verificación", de: "Verifizierungs-Link", zh: "验证链接" },
-    "Verify Vault ↗": { ja: "ボルト検証 ↗", es: "Verificar Bóveda ↗", de: "Tresor Verifizieren ↗", zh: "验证金库 ↗" },
-    "Verify Deposit ↗": { ja: "預入検証 ↗", es: "Verificar Depósito ↗", de: "Einzahlung Verifizieren ↗", zh: "验证存款 ↗" },
-    "Verify Policy ↗": { ja: "ポリシー検証 ↗", es: "Verificar Política ↗", de: "Richtlinie Verifizieren ↗", zh: "验证策略 ↗" },
-    "Verify Oracle ↗": { ja: "オラクル検証 ↗", es: "Verificar Oráculo ↗", de: "Oráculo Verifizieren ↗", zh: "验证预言机 ↗" },
-    "Verify Attestation ↗": { ja: "証明検証 ↗", es: "Verificar Atestación ↗", de: "Attestierung Verifizieren ↗", zh: "验证硬件认证 ↗" },
-    "Verify DEX Swap ↗": { ja: "DEXスワップ検証 ↗", es: "Verificar Swap DEX ↗", de: "DEX-Swap Verifizieren ↗", zh: "验证 DEX 兑换 ↗" },
-
     // Form Labels & User Profile
     "Treasury Administrator": { ja: "財務管理者", es: "Administrador del Tesoro", de: "Treasury-Administrator", zh: "财库管理员" },
     "User Profile & Display Preferences": { ja: "ユーザープロファイルと表示設定", es: "Perfil de Usuario y Preferencias de Pantalla", de: "Benutzerprofil & Anzeige-Einstellungen", zh: "用户个人资料与显示偏好" },
@@ -172,23 +144,10 @@ export const DICTIONARY = {
     "+ Create New Vault": { ja: "+ 新規ボルト作成", es: "+ Crear Nueva Bóveda", de: "+ Neuen Tresor Erstellen", zh: "+ 创建新金库" },
     "+ Create Risk Policy": { ja: "+ リスクポリシー作成", es: "+ Crear Política de Riesgo", de: "+ Risikorichtlinie Erstellen", zh: "+ 创建风险控制策略" },
     "🚀 Run Centerpiece Flow": { ja: "🚀 フルパイプライン実行", es: "🚀 Ejecutar Flujo Principal", de: "🚀 Haupt-Flow Ausführen", zh: "🚀 运行完整保密流程" },
-    "+ Execute Approved Decision": { ja: "+ 承認済み決定を実行", es: "+ Ejecutar Decisión Aprobada", de: "+ Genehmigte Entscheidung Ausführen", zh: "+ 执行已批准决策" },
-
-    // Table Headers
-    "Vault Name": { ja: "ボルト名", es: "Nombre de Bóveda", de: "Tresorname", zh: "金库名称" },
-    "Vault": { ja: "ボルト名", es: "Bóveda", de: "Tresor", zh: "金库" },
-    "Decision Action": { ja: "決定アクション", es: "Acción de Decisión", de: "Entscheidungsaktion", zh: "决策类型" },
-    "Execution State": { ja: "実行ステータス", es: "Estado de Ejecución", de: "Ausführungsstatus", zh: "执行状态" },
-    "Status": { ja: "ステータス", es: "Estado", de: "Status", zh: "状态" },
-    "Transaction Hash": { ja: "取引ハッシュ", es: "Hash de Transacción", de: "Transaktions-Hash", zh: "交易哈希" },
-    "Block Number": { ja: "ブロック番号", es: "Número de Bloque", de: "Blocknummer", zh: "区块高度" },
-    "Completed At": { ja: "完了日時", es: "Completado En", de: "Abgeschlossen am", zh: "完成时间" },
-    "Actions": { ja: "操作", es: "Acciones", de: "Aktionen", zh: "操作" },
-    "Version": { ja: "バージョン", es: "Versión", de: "Version", zh: "版本" },
-    "Attestation ID": { ja: "証明ID", es: "ID de Atestación", de: "Attestierungs-ID", zh: "认证 ID" }
+    "+ Execute Approved Decision": { ja: "+ 承認済み決定を実行", es: "+ Ejecutar Decisión Aprobada", de: "+ Genehmigte Entscheidung Ausführen", zh: "+ 执行已批准决策" }
 };
 
-// Case-Insensitive Dictionary Indexing for Fault-Tolerant Match
+// Case-Insensitive Dictionary Indexing
 const LOWER_DICTIONARY = {};
 Object.keys(DICTIONARY).forEach(key => {
     LOWER_DICTIONARY[key.toLowerCase().trim()] = DICTIONARY[key];
@@ -210,7 +169,7 @@ export class I18nEngine {
     }
 
     static t(text) {
-        if (!text || this.currentLang === 'en') return text;
+        if (!text) return text;
         const clean = text.trim();
         let entry = DICTIONARY[clean];
         if (!entry) {
@@ -251,7 +210,7 @@ export class I18nEngine {
                 const href = link.getAttribute('href');
                 if (href && navMap[href]) {
                     const originalLabel = navMap[href];
-                    const translatedText = this.t(originalLabel);
+                    const translatedText = lang === 'en' ? originalLabel : this.t(originalLabel);
                     const svg = link.querySelector('svg');
                     
                     if (svg) {
@@ -264,15 +223,20 @@ export class I18nEngine {
                 }
             });
 
-            // Translate Sidebar Header
-            document.querySelectorAll('.sidebar-header, div.sidebar-title, .brand-title').forEach(el => {
-                const text = el.getAttribute('data-i18n-orig') || el.innerText.trim();
-                if (!el.getAttribute('data-i18n-orig')) el.setAttribute('data-i18n-orig', text);
-                const translated = this.t(text);
-                if (translated) el.innerText = translated;
+            // 2. Sidebar Header Tag
+            document.querySelectorAll('.sidebar-header, div.sidebar-title, .brand-title, .sidebar-tag').forEach(el => {
+                const orig = el.getAttribute('data-i18n-orig') || el.innerText.trim();
+                if (!el.getAttribute('data-i18n-orig')) el.setAttribute('data-i18n-orig', orig);
+                
+                if (lang === 'en') {
+                    el.innerText = orig;
+                } else {
+                    const translated = this.t(orig);
+                    if (translated) el.innerText = translated;
+                }
             });
 
-            // Translate Input Boxes
+            // 3. Input Attributes
             document.querySelectorAll('input, textarea').forEach(input => {
                 const orig = input.getAttribute('data-i18n-orig-ph') || input.getAttribute(attrKey);
                 if (orig) {
@@ -288,7 +252,7 @@ export class I18nEngine {
                 }
             });
 
-            // 2. Translate All Text Elements Across Current Page
+            // 4. All Page Text Elements
             const targetElements = document.querySelectorAll(
                 'h1, h2, h3, h4, h5, h6, p, label, button, th, td, span, div.card-title, div.card-subtext, div.section-label, div.card-header, div.stat-label, strong'
             );
@@ -303,14 +267,29 @@ export class I18nEngine {
                     el.hasAttribute('data-no-i18n')
                 ) return;
 
-                const textNodes = Array.from(el.childNodes).filter(node => node.nodeType === Node.TEXT_NODE && node.nodeValue.trim().length > 0);
-                textNodes.forEach(node => {
-                    const rawStr = node.nodeValue.trim();
-                    const translated = this.t(rawStr);
-                    if (translated && translated !== rawStr) {
-                        node.nodeValue = node.nodeValue.replace(rawStr, translated);
+                const origText = el.getAttribute('data-i18n-orig') || el.innerText.trim();
+                if (!el.getAttribute('data-i18n-orig')) {
+                    el.setAttribute('data-i18n-orig', origText);
+                }
+
+                if (lang === 'en') {
+                    if (el.children.length === 0) {
+                        el.innerText = origText;
+                    } else {
+                        const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
+                        if (textNode) textNode.nodeValue = origText;
                     }
-                });
+                } else {
+                    const translated = this.t(origText);
+                    if (translated && translated !== origText) {
+                        if (el.children.length === 0) {
+                            el.innerText = translated;
+                        } else {
+                            const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
+                            if (textNode) textNode.nodeValue = translated;
+                        }
+                    }
+                }
             });
 
         } finally {

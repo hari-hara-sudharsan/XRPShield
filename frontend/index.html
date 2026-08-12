@@ -362,9 +362,85 @@ button{font-family:inherit;border:none;cursor:pointer;}
 <body>
 <div class="app-container">
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6L12 2z"/></svg></div>
-      <span>XRPShield</span>
+    <div class="sidebar-logo" style="padding: 12px 16px 8px; display: flex; align-items: center; justify-content: flex-start; gap: 8px;">
+      <div style="height: 48px; width: 100%; display: flex; align-items: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" style="height: 48px; width: auto; max-width: 100%;" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+          <defs>
+            <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="16" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            <filter id="glow-emerald" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="22" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+            <filter id="glass-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#020617" flood-opacity="0.8"/>
+            </filter>
+            <linearGradient id="shield-frame-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38BDF8" />
+              <stop offset="40%" stop-color="#1E293B" />
+              <stop offset="70%" stop-color="#0F172A" />
+              <stop offset="100%" stop-color="#10B981" />
+            </linearGradient>
+            <linearGradient id="shield-bg-grad" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop offset="0%" stop-color="#0F172A" stop-opacity="0.95" />
+              <stop offset="100%" stop-color="#020617" stop-opacity="0.98" />
+            </linearGradient>
+            <linearGradient id="wing-top-left" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00F0FF" />
+              <stop offset="100%" stop-color="#0052FF" />
+            </linearGradient>
+            <linearGradient id="wing-bottom-right" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0052FF" />
+              <stop offset="50%" stop-color="#059669" />
+              <stop offset="100%" stop-color="#10B981" />
+            </linearGradient>
+            <linearGradient id="core-growth-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#0284C7" />
+              <stop offset="40%" stop-color="#00F0FF" />
+              <stop offset="100%" stop-color="#34D399" />
+            </linearGradient>
+            <linearGradient id="glass-reflect" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35" />
+              <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.05" />
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.0" />
+            </linearGradient>
+            <linearGradient id="text-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FFFFFF" />
+              <stop offset="100%" stop-color="#94A3B8" />
+            </linearGradient>
+            <linearGradient id="text-accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#00F0FF" />
+              <stop offset="100%" stop-color="#10B981" />
+            </linearGradient>
+          </defs>
+          <g transform="translate(0, -30)">
+            <circle cx="400" cy="330" r="180" fill="#0052FF" opacity="0.15" filter="url(#glow-cyan)" />
+            <circle cx="440" cy="280" r="130" fill="#10B981" opacity="0.12" filter="url(#glow-emerald)" />
+            <path d="M 400 120 L 540 180 C 540 330 460 430 400 470 C 340 430 260 330 260 180 Z" fill="url(#shield-bg-grad)" stroke="url(#shield-frame-grad)" stroke-width="6" stroke-linejoin="round" filter="url(#glass-shadow)" />
+            <path d="M 400 135 L 400 450 M 280 190 L 520 190 M 295 250 L 505 250 M 320 310 L 480 310 M 350 370 L 450 370" stroke="#1E293B" stroke-width="2" opacity="0.4" stroke-dasharray="4 4" />
+            <path d="M 310 200 C 360 200 375 240 390 270 L 355 295 C 335 260 310 240 285 240 Z" fill="url(#wing-top-left)" />
+            <path d="M 300 370 C 330 370 355 330 380 290 L 405 310 C 375 365 345 400 310 400 Z" fill="#0052FF" opacity="0.8" />
+            <path d="M 490 200 C 440 200 425 240 410 270 L 445 295 C 465 260 490 240 515 240 Z" fill="url(#wing-top-left)" opacity="0.7" />
+            <path d="M 345 355 L 420 250 L 400 250 L 455 195 L 485 255 L 465 255 L 380 375 Z" fill="url(#core-growth-grad)" filter="url(#glow-cyan)" />
+            <path d="M 400 123 L 537 181 C 537 250 515 320 475 375 L 400 210 Z" fill="url(#glass-reflect)" />
+            <circle cx="400" cy="282" r="7" fill="#00F0FF" />
+            <circle cx="400" cy="282" r="12" stroke="#00F0FF" stroke-width="2" fill="none" opacity="0.6" />
+            <circle cx="455" cy="195" r="5" fill="#34D399" />
+            <circle cx="455" cy="195" r="10" stroke="#34D399" stroke-width="1.5" fill="none" opacity="0.5" />
+            <circle cx="310" cy="200" r="4" fill="#00F0FF" opacity="0.8" />
+            <circle cx="490" cy="200" r="4" fill="#00F0FF" opacity="0.8" />
+          </g>
+          <g transform="translate(400, 580)">
+            <text x="0" y="0" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="800" font-size="52" letter-spacing="3" text-anchor="middle">
+              <tspan fill="url(#text-grad)">XRP</tspan>
+              <tspan fill="url(#text-accent-grad)">SHIELD</tspan>
+            </text>
+            <text x="0" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="600" font-size="14" letter-spacing="7" fill="#64748B" text-anchor="middle" opacity="0.9">CONFIDENTIAL VOLATILITY ENGINE</text>
+          </g>
+        </svg>
+      </div>
     </div>
     <span class="sidebar-tag">Confidential treasury</span>
     <ul class="nav-list" id="nav-list">
