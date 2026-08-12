@@ -25,6 +25,8 @@ contract HedgeExecutor is ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
     mapping(address => bool) public approvedRouters;
+    mapping(address => bool) public approvedTokens;
+    bool public allowAllTokens = true;
 
     event SwapExecuted(
         address indexed router,
@@ -36,11 +38,14 @@ contract HedgeExecutor is ReentrancyGuard, Ownable {
         uint256 timestamp
     );
     event RouterApprovalUpdated(address indexed router, bool approved);
+    event TokenApprovalUpdated(address indexed token, bool approved);
 
     error RouterNotApproved();
+    error TokenNotApproved();
     error ZeroAddress();
     error ZeroAmount();
     error InvalidPath();
+    error InvalidRecipient();
     error SwapFailed();
 
     constructor(address _initialRouter) Ownable(msg.sender) {
@@ -48,12 +53,26 @@ contract HedgeExecutor is ReentrancyGuard, Ownable {
             approvedRouters[_initialRouter] = true;
             emit RouterApprovalUpdated(_initialRouter, true);
         }
+        // Pre-approve standard Coston2 tokens
+        approvedTokens[0xC04E1A9D4e2f6B72A6bca2626e2E505A415c81b4] = true; // FXRP
+        approvedTokens[0x1C3132E02206b1f4f6e8f4D5C58a59C45dcED780] = true; // USDT0
+        approvedTokens[0xC67DcE33D7a8eFD5BfeB96188c4eDd573739a8C5] = true; // WNAT
     }
 
     function setRouterApproved(address _router, bool _approved) external onlyOwner {
         if (_router == address(0)) revert ZeroAddress();
         approvedRouters[_router] = _approved;
         emit RouterApprovalUpdated(_router, _approved);
+    }
+
+    function setTokenApproved(address _token, bool _approved) external onlyOwner {
+        if (_token == address(0)) revert ZeroAddress();
+        approvedTokens[_token] = _approved;
+        emit TokenApprovalUpdated(_token, _approved);
+    }
+
+    function setAllowAllTokens(bool _allowAll) external onlyOwner {
+        allowAllTokens = _allowAll;
     }
 
     /**
@@ -69,11 +88,16 @@ contract HedgeExecutor is ReentrancyGuard, Ownable {
     ) external nonReentrant returns (uint256 amountOut) {
         if (!approvedRouters[_router]) revert RouterNotApproved();
         if (_recipient == address(0)) revert ZeroAddress();
+        if (_recipient != msg.sender) revert InvalidRecipient(); // Must return directly to calling Vault contract!
         if (_amountIn == 0) revert ZeroAmount();
         if (_path.length < 2) revert InvalidPath();
 
         address tokenIn = _path[0];
         address tokenOut = _path[_path.length - 1];
+
+        if (!allowAllTokens) {
+            if (!approvedTokens[tokenIn] || !approvedTokens[tokenOut]) revert TokenNotApproved();
+        }
 
         // Safe transfer tokenIn from msg.sender (XRPShieldVault) to this executor
         IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), _amountIn);

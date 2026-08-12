@@ -107,12 +107,17 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     bytes32 public extensionId = 0x585250536869656c64464343457874656e73696f6e0000000000000000000001;
     uint8 public constant OP_TYPE_XRP_SHIELD = 42;
 
+    uint256 public constant MAX_DAILY_HEDGE_LIMIT = 1000000 ether;
+    uint256 public maxHedgeAmountPerTx = 100000 ether;
+
     mapping(bytes32 => Vault) public vaults;
     mapping(address => bytes32) public userVaults;
     mapping(bytes32 => InstructionRecord) public instructions;
     mapping(bytes32 => VerifiedFCCAttestation) public verifiedAttestations;
     mapping(bytes32 => bool) public processedInstructionIds;
     mapping(bytes32 => bool) public executedInstructionIds;
+    mapping(bytes32 => uint256) public dailyHedgeAmounts;
+    mapping(bytes32 => uint256) public lastHedgeDay;
     bytes32[] public allVaultIds;
     bytes32[] public allInstructionIds;
 
@@ -172,6 +177,8 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     error InvalidDecision();
     error InvalidRouter();
     error InvalidRoute();
+    error ExceedsMaxHedgeAmount();
+    error ExceedsDailyHedgeLimit();
     error ExecutionFailed();
 
     constructor(address _flareRegistryAddress, address _fxrpTokenAddress) Ownable(msg.sender) {
@@ -353,7 +360,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     }
 
     /**
-     * @notice Production FCC-Gated Hedge Execution swapping FXRP -> USDT0 via HedgeExecutor & verified DEX router.
+     * @notice Production Hardened FCC-Gated Hedge Execution swapping FXRP -> USDT0 with Risk Controls.
      */
     function executeHedge(ExecuteHedgeParams calldata params) external nonReentrant returns (uint256 amountOut) {
         Vault storage v = vaults[params.vaultId];
@@ -381,10 +388,21 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
             revert AttestationVerificationFailed();
         }
 
+        // On-Chain Risk Control Enforcement
         if (params.amountIn == 0) revert ZeroAmount();
+        if (params.amountIn > maxHedgeAmountPerTx) revert ExceedsMaxHedgeAmount();
+        if (att.approvedHedgeAmount > 0 && params.amountIn > att.approvedHedgeAmount) revert ExceedsMaxHedgeAmount();
         if (v.currentBalance < params.amountIn) revert InsufficientVaultBalance();
         if (params.deadline > 0 && block.timestamp > params.deadline) revert PolicyExpired();
         if (params.route.length < 2) revert InvalidRoute();
+
+        // Daily Limit Tracking
+        uint256 currentDay = block.timestamp / 1 days;
+        if (lastHedgeDay[params.vaultId] != currentDay) {
+            lastHedgeDay[params.vaultId] = currentDay;
+            dailyHedgeAmounts[params.vaultId] = 0;
+        }
+        if (dailyHedgeAmounts[params.vaultId] + params.amountIn > MAX_DAILY_HEDGE_LIMIT) revert ExceedsDailyHedgeLimit();
 
         address fxrp = resolveFXRPToken();
         if (params.route[0] != fxrp) revert InvalidRoute();
@@ -394,6 +412,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         // State Machine Transition: EXECUTING
         record.status = "EXECUTING";
         v.currentBalance -= params.amountIn;
+        dailyHedgeAmounts[params.vaultId] += params.amountIn;
 
         if (hedgeExecutorAddress != address(0) && hedgeExecutorAddress.code.length > 0) {
             // Approve HedgeExecutor to pull FXRP
@@ -470,5 +489,9 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
 
     function setDexRouterAddress(address _dexRouterAddress) external onlyOwner {
         dexRouterAddress = _dexRouterAddress;
+    }
+
+    function setMaxHedgeAmountPerTx(uint256 _maxHedgeAmountPerTx) external onlyOwner {
+        maxHedgeAmountPerTx = _maxHedgeAmountPerTx;
     }
 }
