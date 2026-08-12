@@ -120,8 +120,8 @@ async function evaluatePrivateHedgePolicy(params, config, wallet) {
     };
 
     // 1. Validate Contract Address & Chain ID
-    if (!contractAddress || !ethers.isAddress(contractAddress) || contractAddress === ethers.ZeroAddress) {
-        return buildResult('REJECTED', 'Invalid target contract address.');
+    if (!contractAddress || !ethers.isAddress(contractAddress) || contractAddress === ethers.ZeroAddress || contractAddress.toLowerCase() !== config.coston2Network.teeRegistryAddress.toLowerCase()) {
+        return buildResult('REJECTED', 'Invalid target contract address. Target must match registered TeeExtensionRegistry.');
     }
     if (chainId !== 114) {
         return buildResult('REJECTED', 'Chain ID mismatch. Execution allowed only on Flare Coston2 (Chain ID 114).');
