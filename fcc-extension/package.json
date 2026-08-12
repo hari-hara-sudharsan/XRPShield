@@ -1,0 +1,14 @@
+{
+  "name": "xrpshield-fcc-extension",
+  "version": "1.0.0",
+  "description": "Official Flare Confidential Compute (FCC) Extension for XRPShield",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node src/server.js --test"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ethers": "^6.11.1"
+  }
+}

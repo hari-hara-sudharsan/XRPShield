@@ -1,0 +1,21 @@
+{
+  "extensionName": "XRPShield Confidential Compute Extension",
+  "extensionId": "0x585250536869656c64464343457874656e73696f6e0000000000000000000001",
+  "operationType": 42,
+  "supportedCommands": [
+    "EVALUATE_POLICY",
+    "GET_STATUS"
+  ],
+  "coston2Network": {
+    "chainId": 114,
+    "chainName": "Flare Coston2 Testnet",
+    "rpcUrl": "https://coston2-api.flare.network/ext/C/rpc",
+    "teeRegistryAddress": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+  },
+  "eip712Domain": {
+    "name": "XRPShield FCC Extension",
+    "version": "1",
+    "chainId": 114,
+    "verifyingContract": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+  }
+}

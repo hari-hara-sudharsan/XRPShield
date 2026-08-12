@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  extension-tee:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    container_name: xrpshield-extension-tee
+    restart: always
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+      - SIMULATED_TEE=${SIMULATED_TEE:-true}
+      - COSTON2_RPC_URL=${FLARE_COSTON2_RPC_URL:-https://coston2-api.flare.network/ext/C/rpc}
+      - EXTENSION_SIGNER_KEY=${EXTENSION_SIGNER_KEY}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+
+  ext-proxy:
+    image: flarenetwork/ext-proxy:latest
+    container_name: xrpshield-ext-proxy
+    restart: always
+    environment:
+      - PROXY_PORT=3000
+      - TEE_ENDPOINT=http://extension-tee:8080
+      - REDIS_HOST=redis
+    ports:
+      - "3000:3000"
+    depends_on:
+      - extension-tee
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: xrpshield-redis
+    restart: always
+    ports:
+      - "6379:6379"
