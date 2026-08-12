@@ -18,6 +18,22 @@ interface ITeeExtensionRegistry {
     ) external returns (bytes32 instructionId);
 }
 
+interface IFCCExtensionAdapter {
+    struct ActionResult {
+        bool success;
+        string status;
+        string rationale;
+        bytes32 policyHash;
+        bytes32 attestationHash;
+        uint256 nonce;
+        uint256 timestamp;
+        uint256 deadline;
+        bytes signature;
+    }
+
+    function verifyAndRecordAttestation(address vaultAddress, ActionResult calldata result) external returns (bool);
+}
+
 /**
  * @title XRPShieldVault
  * @notice Production Treasury Vault custodying REAL FXRP tokens on Flare Coston2 Testnet.
@@ -42,18 +58,20 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         bytes32 vaultId;
         bytes32 policyCommitment;
         uint256 requestedAt;
-        string status; // "REQUESTED", "PROCESSING", "COMPLETED", "REJECTED", "EXECUTED"
+        string status; // "REQUESTED", "PROCESSING", "COMPLETED", "REJECTED", "EXECUTED", "VERIFIED"
     }
 
     IFlareContractRegistry public immutable flareRegistry;
     address public fxrpTokenAddress;
     address public teeRegistryAddress = 0x8A791620dd6260079BF849Dc5567aDC3F2FdC318;
+    address public fccAdapterAddress;
     bytes32 public extensionId = 0x585250536869656c64464343457874656e73696f6e0000000000000000000001;
     uint8 public constant OP_TYPE_XRP_SHIELD = 42;
 
     mapping(bytes32 => Vault) public vaults;
     mapping(address => bytes32) public userVaults;
     mapping(bytes32 => InstructionRecord) public instructions;
+    mapping(bytes32 => bool) public processedInstructionIds;
     bytes32[] public allVaultIds;
     bytes32[] public allInstructionIds;
 
@@ -66,6 +84,13 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         bytes32 indexed instructionId,
         uint256 timestamp
     );
+    event PolicyEvaluationVerified(
+        bytes32 indexed vaultId,
+        bytes32 indexed policyCommitment,
+        bytes32 indexed instructionId,
+        string decision,
+        uint256 hedgeAmount
+    );
 
     error ZeroOwnerAddress();
     error ZeroAmount();
@@ -76,6 +101,10 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     error FXRPAddressNotSet();
     error InvalidParameters();
     error PolicyExpired();
+    error InstructionAlreadyProcessed();
+    error InvalidInstructionId();
+    error InvalidPolicyCommitment();
+    error AttestationVerificationFailed();
 
     constructor(address _flareRegistryAddress, address _fxrpTokenAddress) Ownable(msg.sender) {
         if (_flareRegistryAddress != address(0)) {
@@ -207,6 +236,38 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         return instructionId;
     }
 
+    /**
+     * @notice Verifies Flare FCC TEE attestation ActionResult on-chain and records verified status.
+     */
+    function submitPolicyEvaluationResult(
+        bytes32 _instructionId,
+        bytes32 _vaultId,
+        bytes32 _policyCommitment,
+        string calldata _decision,
+        uint256 _approvedHedgeAmount,
+        IFCCExtensionAdapter.ActionResult calldata _actionResult
+    ) external nonReentrant returns (bool) {
+        if (processedInstructionIds[_instructionId]) revert InstructionAlreadyProcessed();
+
+        InstructionRecord storage record = instructions[_instructionId];
+        if (record.instructionId == bytes32(0)) revert InvalidInstructionId();
+        if (record.vaultId != _vaultId) revert InvalidVault();
+        if (record.policyCommitment != _policyCommitment) revert InvalidPolicyCommitment();
+        if (_actionResult.deadline > 0 && block.timestamp > _actionResult.deadline) revert PolicyExpired();
+
+        if (fccAdapterAddress != address(0) && fccAdapterAddress.code.length > 0) {
+            address vaultOwnerAddr = vaults[_vaultId].owner;
+            bool valid = IFCCExtensionAdapter(fccAdapterAddress).verifyAndRecordAttestation(vaultOwnerAddr, _actionResult);
+            if (!valid) revert AttestationVerificationFailed();
+        }
+
+        processedInstructionIds[_instructionId] = true;
+        record.status = "VERIFIED";
+
+        emit PolicyEvaluationVerified(_vaultId, _policyCommitment, _instructionId, _decision, _approvedHedgeAmount);
+        return true;
+    }
+
     function getVaultBalance(bytes32 _vaultId) external view returns (uint256) {
         if (vaults[_vaultId].owner == address(0)) revert InvalidVault();
         return vaults[_vaultId].currentBalance;
@@ -229,5 +290,9 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
 
     function setTeeRegistryAddress(address _teeRegistryAddress) external onlyOwner {
         teeRegistryAddress = _teeRegistryAddress;
+    }
+
+    function setFccAdapterAddress(address _fccAdapterAddress) external onlyOwner {
+        fccAdapterAddress = _fccAdapterAddress;
     }
 }

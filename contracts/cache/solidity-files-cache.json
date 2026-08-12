@@ -1026,8 +1026,8 @@
       "artifacts": []
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\XRPShieldVault.sol": {
-      "lastModificationDate": 1786547232722,
-      "contentHash": "9fa95b93c72064e583d1304ceb2c1aaa",
+      "lastModificationDate": 1786548307421,
+      "contentHash": "81edd311a90d69259ca47c857a880199",
       "sourceName": "contracts/XRPShieldVault.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -1063,6 +1063,7 @@
         "^0.8.20"
       ],
       "artifacts": [
+        "IFCCExtensionAdapter",
         "IFlareContractRegistry",
         "ITeeExtensionRegistry",
         "XRPShieldVault"
