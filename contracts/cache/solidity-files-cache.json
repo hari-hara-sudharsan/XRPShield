@@ -1026,8 +1026,8 @@
       "artifacts": []
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\XRPShieldVault.sol": {
-      "lastModificationDate": 1786549842655,
-      "contentHash": "7c0018e965b6e1e0744dacd9aaf5dafe",
+      "lastModificationDate": 1786550526920,
+      "contentHash": "e8de0e9926b6acb2460440bbf95df314",
       "sourceName": "contracts/XRPShieldVault.sol",
       "solcConfig": {
         "version": "0.8.24",

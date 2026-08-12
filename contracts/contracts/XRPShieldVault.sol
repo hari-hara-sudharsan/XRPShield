@@ -49,6 +49,7 @@ interface IHedgeExecutor {
  * @title XRPShieldVault
  * @notice Production Treasury Vault custodying REAL FXRP tokens on Flare Coston2 Testnet.
  * Resolves FXRP token dynamically via official Flare Contract Registry (0xaD6740B4F817109E96238bA722880b91e92dEec9).
+ * Hardened with Emergency Pause Control (Hedge Execution Pausable, User Funds Always Withdrawable).
  */
 contract XRPShieldVault is ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
@@ -109,6 +110,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
 
     uint256 public constant MAX_DAILY_HEDGE_LIMIT = 1000000 ether;
     uint256 public maxHedgeAmountPerTx = 100000 ether;
+    bool public paused;
 
     mapping(bytes32 => Vault) public vaults;
     mapping(address => bytes32) public userVaults;
@@ -159,6 +161,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         string reason,
         uint256 timestamp
     );
+    event EmergencyPauseUpdated(bool indexed paused);
 
     error ZeroOwnerAddress();
     error ZeroAmount();
@@ -180,6 +183,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     error ExceedsMaxHedgeAmount();
     error ExceedsDailyHedgeLimit();
     error ExecutionFailed();
+    error EmergencyPaused();
 
     constructor(address _flareRegistryAddress, address _fxrpTokenAddress) Ownable(msg.sender) {
         if (_flareRegistryAddress != address(0)) {
@@ -200,6 +204,14 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
             } catch {}
         }
         return fxrpTokenAddress;
+    }
+
+    /**
+     * @notice Toggles Emergency Pause state. Prevents new evaluation requests & executions, but leaves withdrawals active.
+     */
+    function setPaused(bool _paused) external onlyOwner {
+        paused = _paused;
+        emit EmergencyPauseUpdated(_paused);
     }
 
     /**
@@ -252,6 +264,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
 
     /**
      * @notice Withdraws FXRP tokens. Strictly owner-authorized enforcing checks-effects-interactions.
+     * Note: Intentionally UNPAUSED so users can retrieve capital even during emergency pauses.
      */
     function withdrawFXRP(bytes32 _vaultId, uint256 _amount, address _recipient) external nonReentrant {
         if (_amount == 0) revert ZeroAmount();
@@ -280,6 +293,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         uint256 _currentPrice,
         uint256 _deadline
     ) external nonReentrant returns (bytes32 instructionId) {
+        if (paused) revert EmergencyPaused();
         Vault storage v = vaults[_vaultId];
         if (v.owner == address(0)) revert InvalidVault();
         if (msg.sender != v.owner) revert UnauthorizedCaller();
@@ -363,6 +377,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
      * @notice Production Hardened FCC-Gated Hedge Execution swapping FXRP -> USDT0 with Risk Controls.
      */
     function executeHedge(ExecuteHedgeParams calldata params) external nonReentrant returns (uint256 amountOut) {
+        if (paused) revert EmergencyPaused();
         Vault storage v = vaults[params.vaultId];
         if (v.owner == address(0)) revert InvalidVault();
         if (keccak256(bytes(v.status)) != keccak256(bytes("ACTIVE"))) revert InvalidVault();
