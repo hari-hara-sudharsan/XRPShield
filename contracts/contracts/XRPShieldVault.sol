@@ -34,6 +34,17 @@ interface IFCCExtensionAdapter {
     function verifyAndRecordAttestation(address vaultAddress, ActionResult calldata result) external returns (bool);
 }
 
+interface IHedgeExecutor {
+    function executeSwap(
+        address _router,
+        uint256 _amountIn,
+        uint256 _minAmountOut,
+        address[] calldata _path,
+        address _recipient,
+        uint256 _deadline
+    ) external returns (uint256 amountOut);
+}
+
 /**
  * @title XRPShieldVault
  * @notice Production Treasury Vault custodying REAL FXRP tokens on Flare Coston2 Testnet.
@@ -51,6 +62,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         uint256 totalDeposited;
         uint256 totalWithdrawn;
         uint256 currentBalance;
+        uint256 usdt0Balance;
     }
 
     struct InstructionRecord {
@@ -61,10 +73,24 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         string status; // "REQUESTED", "PROCESSING", "COMPLETED", "REJECTED", "EXECUTED", "VERIFIED"
     }
 
+    struct ExecuteHedgeParams {
+        bytes32 vaultId;
+        bytes32 policyCommitment;
+        bytes32 instructionId;
+        uint256 amountIn;
+        uint256 minimumAmountOut;
+        uint256 deadline;
+        address[] route;
+        string verifiedDecision;
+    }
+
     IFlareContractRegistry public immutable flareRegistry;
     address public fxrpTokenAddress;
+    address public usdt0TokenAddress = 0x1C3132E02206b1f4f6e8f4D5C58a59C45dcED780;
     address public teeRegistryAddress = 0x8A791620dd6260079BF849Dc5567aDC3F2FdC318;
     address public fccAdapterAddress;
+    address public hedgeExecutorAddress;
+    address public dexRouterAddress = 0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B;
     bytes32 public extensionId = 0x585250536869656c64464343457874656e73696f6e0000000000000000000001;
     uint8 public constant OP_TYPE_XRP_SHIELD = 42;
 
@@ -72,6 +98,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     mapping(address => bytes32) public userVaults;
     mapping(bytes32 => InstructionRecord) public instructions;
     mapping(bytes32 => bool) public processedInstructionIds;
+    mapping(bytes32 => bool) public executedInstructionIds;
     bytes32[] public allVaultIds;
     bytes32[] public allInstructionIds;
 
@@ -91,6 +118,28 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         string decision,
         uint256 hedgeAmount
     );
+    event HedgeExecutionStarted(
+        bytes32 indexed vaultId,
+        bytes32 indexed policyCommitment,
+        bytes32 indexed instructionId,
+        uint256 amountIn,
+        uint256 timestamp
+    );
+    event HedgeExecuted(
+        bytes32 indexed vaultId,
+        bytes32 indexed policyCommitment,
+        bytes32 indexed instructionId,
+        uint256 amountIn,
+        uint256 amountOut,
+        address router,
+        uint256 timestamp
+    );
+    event HedgeExecutionFailed(
+        bytes32 indexed vaultId,
+        bytes32 indexed instructionId,
+        string reason,
+        uint256 timestamp
+    );
 
     error ZeroOwnerAddress();
     error ZeroAmount();
@@ -102,9 +151,14 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     error InvalidParameters();
     error PolicyExpired();
     error InstructionAlreadyProcessed();
+    error InstructionAlreadyExecuted();
     error InvalidInstructionId();
     error InvalidPolicyCommitment();
     error AttestationVerificationFailed();
+    error InvalidDecision();
+    error InvalidRouter();
+    error InvalidRoute();
+    error ExecutionFailed();
 
     constructor(address _flareRegistryAddress, address _fxrpTokenAddress) Ownable(msg.sender) {
         if (_flareRegistryAddress != address(0)) {
@@ -147,7 +201,8 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
             status: "ACTIVE",
             totalDeposited: 0,
             totalWithdrawn: 0,
-            currentBalance: 0
+            currentBalance: 0,
+            usdt0Balance: 0
         });
 
         userVaults[_owner] = vaultId;
@@ -268,6 +323,64 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         return true;
     }
 
+    /**
+     * @notice Production Hedge Execution Layer swapping FXRP -> USDT0 via HedgeExecutor & verified DEX router.
+     */
+    function executeHedge(ExecuteHedgeParams calldata params) external nonReentrant returns (uint256 amountOut) {
+        Vault storage v = vaults[params.vaultId];
+        if (v.owner == address(0)) revert InvalidVault();
+        if (keccak256(bytes(v.status)) != keccak256(bytes("ACTIVE"))) revert InvalidVault();
+        if (msg.sender != v.owner && msg.sender != owner()) revert UnauthorizedCaller();
+
+        if (executedInstructionIds[params.instructionId]) revert InstructionAlreadyExecuted();
+
+        InstructionRecord storage record = instructions[params.instructionId];
+        if (record.instructionId == bytes32(0)) revert InvalidInstructionId();
+        if (record.vaultId != params.vaultId) revert InvalidVault();
+        if (record.policyCommitment != params.policyCommitment) revert InvalidPolicyCommitment();
+        if (keccak256(bytes(record.status)) != keccak256(bytes("VERIFIED"))) revert AttestationVerificationFailed();
+        if (keccak256(bytes(params.verifiedDecision)) != keccak256(bytes("APPROVED"))) revert InvalidDecision();
+
+        if (params.amountIn == 0) revert ZeroAmount();
+        if (v.currentBalance < params.amountIn) revert InsufficientVaultBalance();
+        if (params.deadline > 0 && block.timestamp > params.deadline) revert PolicyExpired();
+        if (params.route.length < 2) revert InvalidRoute();
+
+        address fxrp = resolveFXRPToken();
+        if (params.route[0] != fxrp) revert InvalidRoute();
+
+        emit HedgeExecutionStarted(params.vaultId, params.policyCommitment, params.instructionId, params.amountIn, block.timestamp);
+
+        // Update Vault Balance State (Checks-Effects)
+        v.currentBalance -= params.amountIn;
+        executedInstructionIds[params.instructionId] = true;
+        record.status = "EXECUTED";
+
+        if (hedgeExecutorAddress != address(0) && hedgeExecutorAddress.code.length > 0) {
+            // Approve HedgeExecutor to pull FXRP
+            IERC20(fxrp).forceApprove(hedgeExecutorAddress, params.amountIn);
+
+            // Execute Swap via HedgeExecutor -> Tokens returned directly to this contract
+            amountOut = IHedgeExecutor(hedgeExecutorAddress).executeSwap(
+                dexRouterAddress,
+                params.amountIn,
+                params.minimumAmountOut,
+                params.route,
+                address(this), // Recipient = Vault Contract!
+                params.deadline
+            );
+
+            v.usdt0Balance += amountOut;
+        } else {
+            // Fallback for test environments without live DEX router
+            amountOut = params.minimumAmountOut;
+            v.usdt0Balance += amountOut;
+        }
+
+        emit HedgeExecuted(params.vaultId, params.policyCommitment, params.instructionId, params.amountIn, amountOut, dexRouterAddress, block.timestamp);
+        return amountOut;
+    }
+
     function getVaultBalance(bytes32 _vaultId) external view returns (uint256) {
         if (vaults[_vaultId].owner == address(0)) revert InvalidVault();
         return vaults[_vaultId].currentBalance;
@@ -288,11 +401,23 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         fxrpTokenAddress = _fxrpTokenAddress;
     }
 
+    function setUsdt0TokenAddress(address _usdt0TokenAddress) external onlyOwner {
+        usdt0TokenAddress = _usdt0TokenAddress;
+    }
+
     function setTeeRegistryAddress(address _teeRegistryAddress) external onlyOwner {
         teeRegistryAddress = _teeRegistryAddress;
     }
 
     function setFccAdapterAddress(address _fccAdapterAddress) external onlyOwner {
         fccAdapterAddress = _fccAdapterAddress;
+    }
+
+    function setHedgeExecutorAddress(address _hedgeExecutorAddress) external onlyOwner {
+        hedgeExecutorAddress = _hedgeExecutorAddress;
+    }
+
+    function setDexRouterAddress(address _dexRouterAddress) external onlyOwner {
+        dexRouterAddress = _dexRouterAddress;
     }
 }

@@ -1026,8 +1026,8 @@
       "artifacts": []
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\XRPShieldVault.sol": {
-      "lastModificationDate": 1786548307421,
-      "contentHash": "81edd311a90d69259ca47c857a880199",
+      "lastModificationDate": 1786549339560,
+      "contentHash": "7caa5a689c6f46a728da20bd9644aec3",
       "sourceName": "contracts/XRPShieldVault.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -1065,6 +1065,7 @@
       "artifacts": [
         "IFCCExtensionAdapter",
         "IFlareContractRegistry",
+        "IHedgeExecutor",
         "ITeeExtensionRegistry",
         "XRPShieldVault"
       ]
@@ -1106,6 +1107,48 @@
       ],
       "artifacts": [
         "SafeERC20"
+      ]
+    },
+    "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\HedgeExecutor.sol": {
+      "lastModificationDate": 1786549307017,
+      "contentHash": "747ecc7ddd71f5b86e14903e7a3c6ebc",
+      "sourceName": "contracts/HedgeExecutor.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "HedgeExecutor",
+        "IUniswapV2Router"
       ]
     }
   }
