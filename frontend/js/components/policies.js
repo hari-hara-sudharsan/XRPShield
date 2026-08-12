@@ -14,11 +14,11 @@ export async function initPolicies() {
 
     const handleAIInfer = async () => {
         const promptInput = document.getElementById('ai-policy-prompt');
-        const prompt = promptInput ? promptInput.value : '';
+        let prompt = promptInput ? promptInput.value : '';
 
         if (!prompt || !prompt.trim()) {
-            alert('Please enter a natural language risk directive for the AI Policy Assistant.');
-            return null;
+            prompt = 'Protect 70% of my treasury. Maximum loss 8%. Maintain 350,000 FXRP reserve.';
+            if (promptInput) promptInput.value = prompt;
         }
 
         let parsed = null;
@@ -203,17 +203,16 @@ export async function initPolicies() {
             saveCustomPolicy(newPolicyObj);
 
             try {
-                await ApiClient.post('/policies', {
+                const res = await ApiClient.post('/policies', {
                     policyName: name,
                     vaultId: vaultId,
                     txHash: newPolicyObj.txHash,
                     policyCommitment: policyCommitmentHash,
                     publicMetadata: JSON.stringify(canonicalPayloadDto)
                 });
-            } catch (apiErr) {}
-                    })
-                });
-                if (res.data?.attestationId) attestationId = res.data.attestationId;
+                if (res && res.data && res.data.attestationId) {
+                    attestationId = res.data.attestationId;
+                }
             } catch (apiErr) {
                 console.warn('Backend policy API sync notice:', apiErr);
             }
