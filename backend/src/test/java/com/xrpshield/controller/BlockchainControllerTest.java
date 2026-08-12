@@ -2,8 +2,6 @@ package com.xrpshield.controller;
 
 import com.xrpshield.blockchain.BlockchainClient;
 import com.xrpshield.blockchain.BlockchainConfiguration;
-import com.xrpshield.blockchain.ContractService;
-import com.xrpshield.blockchain.NetworkService;
 import com.xrpshield.dto.ApiResponse;
 import com.xrpshield.service.FXRPService;
 import com.xrpshield.service.FlareContractRegistryService;

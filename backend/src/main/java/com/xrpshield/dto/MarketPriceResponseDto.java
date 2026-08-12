@@ -53,6 +53,10 @@ public class MarketPriceResponseDto {
         return stale;
     }
 
+    public Boolean isStale() {
+        return stale;
+    }
+
     public Long getFreshnessSeconds() {
         return freshnessSeconds;
     }
