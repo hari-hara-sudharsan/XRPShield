@@ -122,7 +122,7 @@ describe("XRPShield Real On-Chain FCC Result Verification Unit Tests", function 
       .withArgs(vaultId, policyCommitment, instructionId, "APPROVED", ethers.parseUnits("10000", 18));
 
     const record = await vaultContract.instructions(instructionId);
-    expect(record.status).to.equal("VERIFIED");
+    expect(record.status).to.equal("TEE_APPROVED");
     expect(await vaultContract.processedInstructionIds(instructionId)).to.be.true;
   });
 

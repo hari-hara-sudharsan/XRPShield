@@ -70,7 +70,20 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         bytes32 vaultId;
         bytes32 policyCommitment;
         uint256 requestedAt;
-        string status; // "REQUESTED", "PROCESSING", "COMPLETED", "REJECTED", "EXECUTED", "VERIFIED"
+        string status; // "REQUESTED", "PROCESSING", "TEE_APPROVED", "TEE_REJECTED", "EXECUTION_AUTHORIZED", "EXECUTING", "EXECUTED", "EXECUTION_FAILED"
+    }
+
+    struct VerifiedFCCAttestation {
+        bytes32 vaultId;
+        bytes32 policyCommitment;
+        bytes32 instructionId;
+        string decision;
+        uint256 approvedHedgeAmount;
+        uint256 nonce;
+        uint256 timestamp;
+        uint256 chainId;
+        address verifyingContract;
+        bool isVerified;
     }
 
     struct ExecuteHedgeParams {
@@ -97,6 +110,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
     mapping(bytes32 => Vault) public vaults;
     mapping(address => bytes32) public userVaults;
     mapping(bytes32 => InstructionRecord) public instructions;
+    mapping(bytes32 => VerifiedFCCAttestation) public verifiedAttestations;
     mapping(bytes32 => bool) public processedInstructionIds;
     mapping(bytes32 => bool) public executedInstructionIds;
     bytes32[] public allVaultIds;
@@ -282,7 +296,7 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
             vaultId: _vaultId,
             policyCommitment: _policyCommitment,
             requestedAt: block.timestamp,
-            status: "REQUESTED"
+            status: "EVALUATION_REQUESTED"
         });
 
         allInstructionIds.push(instructionId);
@@ -317,14 +331,29 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         }
 
         processedInstructionIds[_instructionId] = true;
-        record.status = "VERIFIED";
+
+        bool isApproved = (keccak256(bytes(_decision)) == keccak256(bytes("APPROVED")));
+        record.status = isApproved ? "TEE_APPROVED" : "TEE_REJECTED";
+
+        verifiedAttestations[_instructionId] = VerifiedFCCAttestation({
+            vaultId: _vaultId,
+            policyCommitment: _policyCommitment,
+            instructionId: _instructionId,
+            decision: _decision,
+            approvedHedgeAmount: _approvedHedgeAmount,
+            nonce: _actionResult.nonce,
+            timestamp: _actionResult.timestamp,
+            chainId: block.chainid,
+            verifyingContract: address(this),
+            isVerified: true
+        });
 
         emit PolicyEvaluationVerified(_vaultId, _policyCommitment, _instructionId, _decision, _approvedHedgeAmount);
         return true;
     }
 
     /**
-     * @notice Production Hedge Execution Layer swapping FXRP -> USDT0 via HedgeExecutor & verified DEX router.
+     * @notice Production FCC-Gated Hedge Execution swapping FXRP -> USDT0 via HedgeExecutor & verified DEX router.
      */
     function executeHedge(ExecuteHedgeParams calldata params) external nonReentrant returns (uint256 amountOut) {
         Vault storage v = vaults[params.vaultId];
@@ -338,8 +367,19 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
         if (record.instructionId == bytes32(0)) revert InvalidInstructionId();
         if (record.vaultId != params.vaultId) revert InvalidVault();
         if (record.policyCommitment != params.policyCommitment) revert InvalidPolicyCommitment();
-        if (keccak256(bytes(record.status)) != keccak256(bytes("VERIFIED"))) revert AttestationVerificationFailed();
+
+        // FCC Attestation Authorization Verification
+        VerifiedFCCAttestation storage att = verifiedAttestations[params.instructionId];
+        if (!att.isVerified) revert AttestationVerificationFailed();
+        if (att.vaultId != params.vaultId) revert InvalidVault();
+        if (att.policyCommitment != params.policyCommitment) revert InvalidPolicyCommitment();
+        if (keccak256(bytes(att.decision)) != keccak256(bytes("APPROVED"))) revert InvalidDecision();
         if (keccak256(bytes(params.verifiedDecision)) != keccak256(bytes("APPROVED"))) revert InvalidDecision();
+
+        bytes32 statusHash = keccak256(bytes(record.status));
+        if (statusHash != keccak256(bytes("TEE_APPROVED")) && statusHash != keccak256(bytes("EXECUTION_AUTHORIZED"))) {
+            revert AttestationVerificationFailed();
+        }
 
         if (params.amountIn == 0) revert ZeroAmount();
         if (v.currentBalance < params.amountIn) revert InsufficientVaultBalance();
@@ -351,30 +391,41 @@ contract XRPShieldVault is ReentrancyGuard, Ownable {
 
         emit HedgeExecutionStarted(params.vaultId, params.policyCommitment, params.instructionId, params.amountIn, block.timestamp);
 
-        // Update Vault Balance State (Checks-Effects)
+        // State Machine Transition: EXECUTING
+        record.status = "EXECUTING";
         v.currentBalance -= params.amountIn;
-        executedInstructionIds[params.instructionId] = true;
-        record.status = "EXECUTED";
 
         if (hedgeExecutorAddress != address(0) && hedgeExecutorAddress.code.length > 0) {
             // Approve HedgeExecutor to pull FXRP
             IERC20(fxrp).forceApprove(hedgeExecutorAddress, params.amountIn);
 
-            // Execute Swap via HedgeExecutor -> Tokens returned directly to this contract
-            amountOut = IHedgeExecutor(hedgeExecutorAddress).executeSwap(
+            // Execute Swap via HedgeExecutor -> Tokens returned directly to Vault contract
+            try IHedgeExecutor(hedgeExecutorAddress).executeSwap(
                 dexRouterAddress,
                 params.amountIn,
                 params.minimumAmountOut,
                 params.route,
-                address(this), // Recipient = Vault Contract!
+                address(this),
                 params.deadline
-            );
+            ) returns (uint256 resOut) {
+                amountOut = resOut;
+                v.usdt0Balance += amountOut;
 
-            v.usdt0Balance += amountOut;
+                // State Machine Transition: EXECUTED (ONLY upon DEX Swap Success!)
+                executedInstructionIds[params.instructionId] = true;
+                record.status = "EXECUTED";
+            } catch (bytes memory reason) {
+                record.status = "EXECUTION_FAILED";
+                emit HedgeExecutionFailed(params.vaultId, params.instructionId, string(reason), block.timestamp);
+                revert ExecutionFailed();
+            }
         } else {
             // Fallback for test environments without live DEX router
             amountOut = params.minimumAmountOut;
             v.usdt0Balance += amountOut;
+
+            executedInstructionIds[params.instructionId] = true;
+            record.status = "EXECUTED";
         }
 
         emit HedgeExecuted(params.vaultId, params.policyCommitment, params.instructionId, params.amountIn, amountOut, dexRouterAddress, block.timestamp);

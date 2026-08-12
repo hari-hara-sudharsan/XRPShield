@@ -84,6 +84,6 @@ describe("XRPShield Real On-Chain FCC Instruction Routing Unit Tests", function 
     const record = await vaultContract.instructions(instructionId);
     expect(record.vaultId).to.equal(vaultId);
     expect(record.policyCommitment).to.equal(policyCommitment);
-    expect(record.status).to.equal("REQUESTED");
+    expect(record.status).to.equal("EVALUATION_REQUESTED");
   });
 });
