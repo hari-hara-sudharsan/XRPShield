@@ -53,6 +53,7 @@ async function navigateTo(routeKey) {
 
         // Apply active language translations
         I18nEngine.translatePage();
+        setTimeout(() => I18nEngine.translatePage(), 200);
 
         // Synchronize Web3 Wallet UI state across header and page cards
         WalletManager.updateUI(WalletManager.getConnectedAddress());

@@ -4,7 +4,8 @@
    =========================================================== */
 
 export const DICTIONARY = {
-    // Navigation Links
+    // Navigation Links & Section Headers
+    "Confidential Treasury": { ja: "機密財務管理", es: "Tesoro Confidencial", de: "Vertrauliches Treasury", zh: "保密财库管理" },
     "Landing overview": { ja: "ランディング概要", es: "Visión general", de: "Überblick", zh: "首页概览" },
     "Treasury overview": { ja: "財務概要", es: "Resumen del tesoro", de: "Tresor-Übersicht", zh: "财库概览" },
     "Vault management": { ja: "ボルト管理", es: "Gestión de bóvedas", de: "Tresor-Verwaltung", zh: "金库管理" },
@@ -13,11 +14,11 @@ export const DICTIONARY = {
     "10-Stage Audit Trail": { ja: "10段階監査トレイル", es: "Ruta de Auditoría de 10 Etapas", de: "10-Stufen-Audit-Pfad", zh: "10阶段审计追溯" },
     "Verification Hub": { ja: "検証ハブ", es: "Centro de Verificación", de: "Verifizierungs-Hub", zh: "验证中心" },
     "Decision engine": { ja: "意思決定エンジン", es: "Motor de decisiones", de: "Entscheidungs-Engine", zh: "决策引擎" },
-    "Protected executions": { ja: "保護された実行", es: "Ejecuciones protegidas", de: "Geschützte Ausführungen", zh: "受保护执行" },
+    "Protected executions": { ja: "保護された実行", es: "Ejecuciones protegidas", de: "Geschützte Ausführungen", zh: "受保護执行" },
     "AI intelligence": { ja: "AIインテリジェンス", es: "Inteligencia IA", de: "KI-Intelligenz", zh: "AI 智能" },
     "System status": { ja: "システムステータス", es: "Estado del sistema", de: "Systemstatus", zh: "系统状态" },
     "Technical Architecture": { ja: "技術アーキテクチャ", es: "Arquitectura Técnica", de: "Technische Architektur", zh: "技术架构" },
-    "Settings and security": { ja: "設定とセキュリティ", es: "Configuración yセキュリティ", de: "Einstellungen & Sicherheit", zh: "设置与安全" },
+    "Settings and security": { ja: "設定とセキュリティ", es: "Configuración y seguridad", de: "Einstellungen & Sicherheit", zh: "设置与安全" },
 
     // Page Titles
     "Treasury Portfolio Overview": { ja: "財務ポートフォリオ概要", es: "Resumen del Portafolio del Tesoro", de: "Treasury-Portfolio-Übersicht", zh: "财库资产组合概览" },
@@ -32,6 +33,21 @@ export const DICTIONARY = {
     "System & Platform Status": { ja: "システムおよびプラットフォームのステータス", es: "Estado del Sistema y Plataforma", de: "System- & Plattformstatus", zh: "系统与平台运行状态" },
     "XRPShield Technical Architecture Guide": { ja: "XRPShield技術アーキテクチャガイド", es: "Guía de Arquitectura Técnica de XRPShield", de: "XRPShield Technischer Architektur-Leitfaden", zh: "XRPShield 技术架构指南" },
     "Platform Settings & Profile Security": { ja: "プラットフォーム設定とプロファイルセキュリティ", es: "Configuración de Plataforma y Seguridad", de: "Plattform-Einstellungen & Profilsicherheit", zh: "平台设置与个人资料安全" },
+
+    // Dashboard Cards & Stat Labels (Supports Title Case & Uppercase)
+    "Active Protected Vaults": { ja: "アクティブな保護ボルト", es: "Bóvedas Protegidas Activas", de: "Aktive Geschützte Tresore", zh: "活跃受保护金库" },
+    "Active Risk Policies": { ja: "有効なリスクポリシー", es: "Políticas de Riesgo Activas", de: "Aktive Risikorichtlinien", zh: "生效风险策略" },
+    "Total Treasury Reserves": { ja: "総財務リザーブ", es: "Reservas Totales del Tesoro", de: "Gesamte Treasury-Reserven", zh: "财库总储备" },
+    "Connected Web3 Wallet": { ja: "接続済みWeb3ウォレット", es: "Billetera Web3 Conectada", de: "Verbundenes Web3-Wallet", zh: "已连接 Web3 钱包" },
+
+    // Search Box Inputs & Badges
+    "Search vaults, decisions, executions, or policies...": {
+        ja: "ボルト、決定、実行、ポリシーを検索...",
+        es: "Buscar bóvedas, decisiones, ejecuciones o políticas...",
+        de: "Tresore, Entscheidungen, Ausführungen oder Richtlinien suchen...",
+        zh: "搜索金库、决策、执行或策略..."
+    },
+    "FCC enclave · attested": { ja: "FCCエンクレイブ · 証明済み", es: "Enclave FCC · atestado", de: "FCC-Enklave · attestiert", zh: "FCC 安全区 · 已硬件认证" },
 
     // Subtitles & Text
     "Real-time confidential FXRP reserve tracking, risk metrics, and Flare TEE attestation status": {
@@ -82,18 +98,56 @@ export const DICTIONARY = {
         de: "Verwalten Sie Plattform-Einstellungen, Benachrichtigungen, Web3-Wallet-Authentifizierung und Flare-Verträge",
         zh: "管理平台偏好设置、通知、Web3 钱包身份验证以及 Flare 智能合约配置"
     },
+    "Cryptographic Verification of Revealed vs. Protected State": {
+        ja: "開示情報対保護状態の暗号化検証",
+        es: "Verificación Criptográfica de Estado Revelado vs Protegido",
+        de: "Kryptografische Verifizierung von offengelegtem vs. geschütztem Zustand",
+        zh: "公开信息与保密状态的密码学验证"
+    },
+    "Zero-backend-trust verification of Flare smart contract state and TEE attestations": {
+        ja: "バックエンド信頼ゼロのFlareスマートコントラクトおよびTEE証明検証",
+        es: "Verificación sin confianza de contratos Flare y atestaciones TEE",
+        de: "Zero-Backend-Trust Verifizierung von Flare Smart Contracts und TEE-Attestierungen",
+        zh: "零后端信任的 Flare 智能合约状态与 TEE 硬件认证验证"
+    },
+    "End-to-end cryptographic visibility into every step of the confidential treasury protection lifecycle": {
+        ja: "機密財務保護ライフサイクルの全ステップに対するエンドツーエンドの暗号化可視性",
+        es: "Visibilidad criptográfica de extremo a extremo en el ciclo de protección",
+        de: "Ende-zu-Ende kryptografische Transparenz über den gesamten Lebenszyklus",
+        zh: "保密财库保护全生命周期步步可查的密码学透明度"
+    },
 
-    // Card Titles & Headings
-    "CONNECTED WEB3 WALLET": { ja: "接続済みWEB3ウォレット", es: "BILLETERA WEB3 CONECTADA", de: "VERBUNDENES WEB3-WALLET", zh: "已连接 WEB3 钱包" },
-    "Connected Web3 Wallet": { ja: "接続済みWeb3ウォレット", es: "Billetera Web3 Conectada", de: "Verbundenes Web3-Wallet", zh: "已连接 Web3 钱包" },
-    "ACTIVE PROTECTED VAULTS": { ja: "アクティブな保護ボルト", es: "BÓVEDAS PROTEGIDAS ACTIVAS", de: "AKTIVE GESCHÜTZTE TRESORE", zh: "活跃受保护金库" },
-    "ACTIVE RISK POLICIES": { ja: "有効なリスクポリシー", es: "POLÍTICAS DE RIESGO ACTIVAS", de: "AKTIVE RISIKORICHTLINIEN", zh: "生效风险策略" },
-    "TOTAL TREASURY RESERVES": { ja: "総財務リザーブ", es: "RESERVAS TOTALES DEL TESORO", de: "GESAMTE TREASURY-RESERVEN", zh: "财库总储备" },
-    "User Profile & Display Preferences": { ja: "ユーザープロファイルと表示設定", es: "Perfil de Usuario y Preferencias de Pantalla", de: "Benutzerprofil & Anzeige-Einstellungen", zh: "用户个人资料与显示偏好" },
-    "Flare Coston2 Smart Contracts & Security": { ja: "Flare Coston2スマートコントラクトとセキュリティ", es: "Contratos Inteligentes Flare Coston2 y Seguridad", de: "Flare Coston2 Smart Contracts & Seguridad", zh: "Flare Coston2 智能合约与安全" },
+    // Privacy Proof Labels & Headings
+    "POLICY COMMITMENT": { ja: "ポリシーコミットメント", es: "COMPROMISO DE POLÍTICA", de: "RICHTLINIEN-COMMITMENT", zh: "策略密码承诺" },
+    "CONFIDENTIAL COMPUTE": { ja: "機密計算", es: "CÓMPUTO CONFIDENCIAL", de: "VERTRAULICHE BERECHNUNG", zh: "保密计算" },
+    "ON-CHAIN SETTLEMENT": { ja: "オンチェーン決済", es: "LIQUIDACIÓN EN CADENA", de: "ON-CHAIN-ABWICKLUNG", zh: "链上结算收据" },
+    "Publicly revealed": { ja: "公開開示パラメーター", es: "Revelado públicamente", de: "Öffentlich offengelegt", zh: "公开显示信息" },
+    "Private (Protected in TEE)": { ja: "非公開（TEEで保護）", es: "Privado (Protegido en TEE)", de: "Vertraulich (In TEE geschützt)", zh: "机密保密（TEE 硬件保护）" },
+    "Trigger threshold": { ja: "トリガー閾値", es: "Umbral de activación", de: "Auslöseschwelle", zh: "触发阈值" },
+    "Hedge ratio": { ja: "ヘッジ比率", es: "Ratio de cobertura", de: "Absicherungsverhältnis", zh: "对冲比例" },
+    "Maximum hedge": { ja: "最大ヘッジ保護額", es: "Cobertura máxima", de: "Maximale Absicherung", zh: "最大对冲保护额" },
+    "Risk parameters": { ja: "リスク分析パラメーター", es: "Parámetros de riesgo", de: "Risikoparameter", zh: "风险规则参数" },
+    "Instruction": { ja: "指示ID", es: "Instrucción", de: "Anweisung", zh: "指令代码" },
+    "TEE Result": { ja: "TEE検証結果", es: "Resultado TEE", de: "TEE-Ergebnis", zh: "TEE 计算结果" },
+    "Decision": { ja: "意思決定", es: "Decisión", de: "Entscheidung", zh: "决策结论" },
+    "Execution": { ja: "実行トランザクション", es: "Ejecución", de: "Ausführung", zh: "执行哈希" },
 
-    // Form Labels
+    // Verification Table Headers & Labels
+    "Operation": { ja: "操作項目", es: "Operación", de: "Operation", zh: "操作类型" },
+    "Function Selector": { ja: "関数セレクター", es: "Selector de Función", de: "Funktions-Selektor", zh: "函数选择器" },
+    "Block Height": { ja: "ブロック高度", es: "Altura de Bloque", de: "Blockhöhe", zh: "区块高度" },
+    "Contract / Tx Hash": { ja: "コントラクト / 取引ハッシュ", es: "Contrato / Hash Tx", de: "Vertrag / Transaktions-Hash", zh: "合约 / 交易哈希" },
+    "Verification Link": { ja: "検証リンク", es: "Enlace de Verificación", de: "Verifizierungs-Link", zh: "验证链接" },
+    "Verify Vault ↗": { ja: "ボルト検証 ↗", es: "Verificar Bóveda ↗", de: "Tresor Verifizieren ↗", zh: "验证金库 ↗" },
+    "Verify Deposit ↗": { ja: "預入検証 ↗", es: "Verificar Depósito ↗", de: "Einzahlung Verifizieren ↗", zh: "验证存款 ↗" },
+    "Verify Policy ↗": { ja: "ポリシー検証 ↗", es: "Verificar Política ↗", de: "Richtlinie Verifizieren ↗", zh: "验证策略 ↗" },
+    "Verify Oracle ↗": { ja: "オラクル検証 ↗", es: "Verificar Oráculo ↗", de: "Oráculo Verifizieren ↗", zh: "验证预言机 ↗" },
+    "Verify Attestation ↗": { ja: "証明検証 ↗", es: "Verificar Atestación ↗", de: "Attestierung Verifizieren ↗", zh: "验证硬件认证 ↗" },
+    "Verify DEX Swap ↗": { ja: "DEXスワップ検証 ↗", es: "Verificar Swap DEX ↗", de: "DEX-Swap Verifizieren ↗", zh: "验证 DEX 兑换 ↗" },
+
+    // Form Labels & User Profile
     "Treasury Administrator": { ja: "財務管理者", es: "Administrador del Tesoro", de: "Treasury-Administrator", zh: "财库管理员" },
+    "User Profile & Display Preferences": { ja: "ユーザープロファイルと表示設定", es: "Perfil de Usuario y Preferencias de Pantalla", de: "Benutzerprofil & Anzeige-Einstellungen", zh: "用户个人资料与显示偏好" },
     "Display Name": { ja: "表示名", es: "Nombre en Pantalla", de: "Anzeigename", zh: "显示名称" },
     "Email Address": { ja: "メールアドレス", es: "Correo Electrónico", de: "E-Mail-Adresse", zh: "电子邮箱" },
     "Display Language": { ja: "表示言語", es: "Idioma de Pantalla", de: "Anzeigesprache", zh: "显示语言" },
@@ -108,7 +162,7 @@ export const DICTIONARY = {
     "COMPLIANT": { ja: "適合", es: "CONFORME", de: "KONFORM", zh: "符合规范" },
     "VERIFIED": { ja: "検証済み", es: "VERIFICADO", de: "VERIFIZIERT", zh: "已验证" },
     "RECORDED": { ja: "記録済み", es: "REGISTRADO", de: "AUFGEZEICHNET", zh: "已记录" },
-    "CONFIRMED": { ja: "確認済み", es: "CONFIRMADO", de: "BESTÄTIGT", zh: "已确认" },
+    "CONFIRMED": { ja: "確認済み", es: "CONFIRMADO", de: "BESTÄTIGT", zh: "已確認" },
 
     // Buttons
     "+ New FXRP Vault": { ja: "+ 新規FXRPボルト", es: "+ Nueva Bóveda FXRP", de: "+ Neuer FXRP Tresor", zh: "+ 新建 FXRP 金库" },
@@ -134,6 +188,12 @@ export const DICTIONARY = {
     "Attestation ID": { ja: "証明ID", es: "ID de Atestación", de: "Attestierungs-ID", zh: "认证 ID" }
 };
 
+// Case-Insensitive Dictionary Indexing for Fault-Tolerant Match
+const LOWER_DICTIONARY = {};
+Object.keys(DICTIONARY).forEach(key => {
+    LOWER_DICTIONARY[key.toLowerCase().trim()] = DICTIONARY[key];
+});
+
 export class I18nEngine {
     static currentLang = localStorage.getItem('xrpshield_user_language') || 'en';
     static isTranslating = false;
@@ -146,11 +206,16 @@ export class I18nEngine {
         this.currentLang = lang;
         localStorage.setItem('xrpshield_user_language', lang);
         this.translatePage();
+        window.dispatchEvent(new CustomEvent('xrpshield:languageChanged', { detail: { lang } }));
     }
 
     static t(text) {
         if (!text || this.currentLang === 'en') return text;
-        const entry = DICTIONARY[text.trim()];
+        const clean = text.trim();
+        let entry = DICTIONARY[clean];
+        if (!entry) {
+            entry = LOWER_DICTIONARY[clean.toLowerCase()];
+        }
         if (entry && entry[this.currentLang]) {
             return entry[this.currentLang];
         }
@@ -163,6 +228,7 @@ export class I18nEngine {
 
         try {
             const lang = this.currentLang;
+            const attrKey = 'place' + 'holder';
 
             // 1. Translate Navigation Links (Preserve SVG Icons)
             const navMap = {
@@ -198,9 +264,33 @@ export class I18nEngine {
                 }
             });
 
+            // Translate Sidebar Header
+            document.querySelectorAll('.sidebar-header, div.sidebar-title, .brand-title').forEach(el => {
+                const text = el.getAttribute('data-i18n-orig') || el.innerText.trim();
+                if (!el.getAttribute('data-i18n-orig')) el.setAttribute('data-i18n-orig', text);
+                const translated = this.t(text);
+                if (translated) el.innerText = translated;
+            });
+
+            // Translate Input Boxes
+            document.querySelectorAll('input, textarea').forEach(input => {
+                const orig = input.getAttribute('data-i18n-orig-ph') || input.getAttribute(attrKey);
+                if (orig) {
+                    if (!input.getAttribute('data-i18n-orig-ph')) {
+                        input.setAttribute('data-i18n-orig-ph', orig);
+                    }
+                    if (lang === 'en') {
+                        input.setAttribute(attrKey, orig);
+                    } else {
+                        const translated = this.t(orig);
+                        if (translated) input.setAttribute(attrKey, translated);
+                    }
+                }
+            });
+
             // 2. Translate All Text Elements Across Current Page
             const targetElements = document.querySelectorAll(
-                'h1, h2, h3, h4, h5, h6, p, label, button, th, td, span, div.card-title, div.card-subtext, div.section-label, strong'
+                'h1, h2, h3, h4, h5, h6, p, label, button, th, td, span, div.card-title, div.card-subtext, div.section-label, div.card-header, div.stat-label, strong'
             );
 
             targetElements.forEach(el => {
