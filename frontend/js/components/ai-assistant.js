@@ -91,83 +91,129 @@ function renderNaturalLanguageAnswer(query) {
     const walletAddr = WalletManager.connectedAddress || '0x71C7...39A1';
     const qLower = query.toLowerCase();
 
-    // 1. XRP & FXRP Asset & Utility Query
-    if (qLower.includes('xrp') || qLower.includes('fxrp') || qLower.includes('asset') || qLower.includes('token')) {
+    // 1. Decision Engine Query
+    if (qLower.includes('decision engine') || qLower.includes('decision') || qLower.includes('decisions')) {
         return `
             <div style="line-height: 1.6;">
-                <strong>💎 XRP & FXRP Treasury Protection on Flare Network:</strong><br>
-                <strong>XRP</strong> is the digital asset powering cross-border liquidity. On <strong>Flare Network</strong>, XRP is bridged 1:1 as <strong>FXRP</strong> via FAssets, bringing smart contract capabilities, decentralized finance (DeFi), and trustless yield generation to institutional XRP holders.
+                <strong>⚡ XRPShield Decision Engine:</strong><br>
+                The <strong>Decision Engine</strong> is the core automated risk evaluation module. It operates as follows:
                 <br><br>
-                <strong>How XRPShield Safeguards Your XRP / FXRP Reserves:</strong><br>
-                • <strong>Confidential Circuit Breakers:</strong> Automatically monitors FXRP price volatility & vault drawdowns.<br>
-                • <strong>Flare TEE Enclave Isolation:</strong> Evaluates rebalance decisions inside hardware-enclosed Intel SGX TEE enclaves to prevent strategy leakage.<br>
-                • <strong>Real Web3 Settlement:</strong> Settles position rebalances directly on Flare Coston2 Testnet (Chain ID 114) via MetaMask.
+                • <strong>1. Live Market Feed:</strong> Reads real-time price data from the <strong>Flare FTSOv2 Oracle</strong> (Feed ID <code>XRP/USD</code>: <strong>$0.84575</strong>).<br>
+                • <strong>2. Confidential TEE Evaluation:</strong> Passes market metrics and your confidential policy rules into a <strong>Flare Confidential Compute (FCC) TEE Enclave</strong> where rules (such as max 8% drawdown or 350,000 FXRP min liquidity) are evaluated in isolated memory.<br>
+                • <strong>3. Attestation Synthesis:</strong> Synthesizes a cryptographically signed <code>EIP-712</code> attestation result (<code>APPROVED</code> or <code>NO_ACTION</code>).<br>
+                • <strong>4. Gated Execution:</strong> Submits the verified decision on-chain to <code>XRPShieldVault.sol</code> (<code>0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9</code>) to authorize position rebalancing on SparkDEX Router V2.
             </div>
         `;
     }
 
-    // 2. Specific Query: What is XRPShield / What does XRPShield do?
-    if (qLower.includes('xrpshield') || qLower.includes('what is') || qLower.includes('does') || qLower.includes('do')) {
+    // 2. Audit Trail Query
+    if (qLower.includes('audit trail') || qLower.includes('10-stage') || qLower.includes('timeline')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>📜 10-Stage Real Execution Audit Trail:</strong><br>
+                Provides 100% cryptographic visibility into every stage of the treasury protection lifecycle:
+                <br><br>
+                1. Vault Deployment (<code>0xb7902ebd...</code>) → 2. FXRP Deposit → 3. Policy Commitment (<code>0x8f3c71a9...</code>) → 4. FCC Instruction Dispatch → 5. TEE Decision (<code>APPROVED</code>) → 6. EIP-712 Signature Verification → 7. Gated Authorization → 8. SparkDEX Route Submission → 9. Coston2 Block Receipt Confirmation → 10. Final Settlement.
+            </div>
+        `;
+    }
+
+    // 3. Privacy Proof Center Query
+    if (qLower.includes('privacy proof') || qLower.includes('proof center') || qLower.includes('proof')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>🔒 Privacy Proof Center:</strong><br>
+                Proves what was and wasn't revealed during execution. Displays the 32-byte <code>Keccak256</code> Policy Commitment hash registered on <code>VaultManager.sol</code> while keeping internal drawdown limits, hedge ratios, and exact vault reserve balances 100% confidential inside hardware TEE enclaves.
+            </div>
+        `;
+    }
+
+    // 4. Verification Hub Query
+    if (qLower.includes('verification hub') || qLower.includes('verifier') || qLower.includes('verify')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>🔍 Independent Verification Hub:</strong><br>
+                A zero-backend-trust portal that queries the <strong>Flare Coston2 EVM RPC</strong> directly to independently verify block receipts, EIP-712 TEE signatures, and token transfer events for any transaction hash without relying on central indexers.
+            </div>
+        `;
+    }
+
+    // 5. Vaults Query
+    if (qLower.includes('vault management') || qLower.includes('vault') || qLower.includes('vaults')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>🏦 Vault Management System:</strong><br>
+                Manages non-custodial FXRP & USD₮0 treasury vaults on Coston2 Testnet (<code>0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9</code>). Funds remain under user ownership at all times while allowing automated TEE-authorized hedging without giving third parties custody.
+            </div>
+        `;
+    }
+
+    // 6. Confidential Policies Query
+    if (qLower.includes('confidential policies') || qLower.includes('policy') || qLower.includes('policies')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>📜 Confidential Policies:</strong><br>
+                Treasury risk rules defined by managers (e.g. <em>"Protect 70% of treasury if drawdown > 8%"</em>). Policy directives are serialized into integer fixed-point commitments, hashed with Keccak256, registered on-chain, and evaluated in TEE memory without broadcasting rules to public nodes.
+            </div>
+        `;
+    }
+
+    // 7. Oracle / FTSOv2 Query
+    if (qLower.includes('ftso') || qLower.includes('oracle') || qLower.includes('price feed')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>🔮 Flare FTSOv2 Oracle:</strong><br>
+                Flare's native decentralized oracle providing real-time XRP/USD price updates (Feed ID <code>0x015852502f55534400000000000000000000000000</code>) updated every 1.8 seconds with sub-second latency for accurate drawdown detection.
+            </div>
+        `;
+    }
+
+    // 8. TEE / FCC Architecture Query
+    if (qLower.includes('tee') || qLower.includes('enclave') || qLower.includes('confidential compute')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>🛡️ Flare Confidential Compute (FCC) TEE Architecture:</strong><br>
+                Evaluates all treasury risk rules inside hardware-enclosed <strong>Intel SGX TEE enclaves</strong>. Guarantees zero strategy leakage prior to on-chain settlement on Flare Coston2 Testnet (Chain ID 114).
+                <br><br>
+                • <strong>Encrypted State:</strong> AES-256 GCM encrypted policies.<br>
+                • <strong>Hardware Attestation:</strong> Verifiable EIP-712 ECDSA enclave signature.
+            </div>
+        `;
+    }
+
+    // 9. XRP / FXRP Asset Query
+    if (qLower.includes('xrp') || qLower.includes('fxrp') || qLower.includes('fassets')) {
+        return `
+            <div style="line-height: 1.6;">
+                <strong>💎 XRP & FXRP Treasury Protection on Flare Network:</strong><br>
+                <strong>XRP</strong> is bridged 1:1 as <strong>FXRP</strong> via FAssets on Flare Network, bringing smart contract capabilities, decentralized finance (DeFi), and trustless yield generation to institutional XRP holders.
+            </div>
+        `;
+    }
+
+    // 10. Platform Overview Query (Only if explicitly asking about XRPShield as a whole)
+    if (qLower.includes('xrpshield') || qLower.includes('platform overview')) {
         return `
             <div style="line-height: 1.6;">
                 <strong>🛡️ What XRPShield Does:</strong><br>
                 XRPShield is an <strong>Institutional Confidential Treasury Protection & Risk Automation Platform</strong> built natively for the <strong>Flare Network (Coston2 Testnet)</strong>.
                 <br><br>
                 <strong>Core Features & Capabilities:</strong><br>
-                • <strong>Confidential Policy Evaluation:</strong> Evaluates risk policies (drawdown limits, liquidity reserves) inside hardware-enclosed <strong>Flare Confidential Compute (FCC) TEE Enclaves</strong> so proprietary strategies are never exposed on-chain.<br>
-                • <strong>Automated Circuit Breakers:</strong> Monitors FXRP & XRP treasury vaults in real-time, executing automated rebalancing or exposure reduction when market volatility spikes.<br>
-                • <strong>Verifiable Hardware Attestation:</strong> Issues cryptographically signed SGX quote attestations (e.g. <code>FCC-ATT-992184</code>) verified on-chain via smart contracts.<br>
-                • <strong>Real Web3 Settlement:</strong> Integrates directly with MetaMask for real on-chain vault protection and settlement receipts on BlockScout Explorer.
+                • <strong>Confidential Policy Evaluation:</strong> Evaluates risk policies inside Flare Confidential Compute (FCC) TEE Enclaves.<br>
+                • <strong>Automated Circuit Breakers:</strong> Real-time FXRP price monitoring & automated position rebalancing.<br>
+                • <strong>Verifiable Hardware Attestation:</strong> Cryptographically signed EIP-712 attestation signatures verified on-chain.<br>
+                • <strong>Real Web3 Settlement:</strong> Direct MetaMask integration for real Coston2 BlockScout settlement.
             </div>
         `;
     }
 
-    // 2. TEE Enclave & Flare Security Query
-    if (qLower.includes('tee') || qLower.includes('enclave') || qLower.includes('flare') || qLower.includes('attestation')) {
-        return `
-            <div style="line-height: 1.6;">
-                <strong>🛡️ Flare Confidential Compute (FCC) TEE Architecture:</strong><br>
-                XRPShield evaluates all treasury risk rules inside hardware-enclosed <strong>Intel SGX TEE enclaves</strong>. 
-                This guarantees zero strategy leakage prior to on-chain settlement on Flare Coston2 Testnet (Chain ID 114).
-                <br><br>
-                • <strong>Encrypted State:</strong> Policies are encrypted with AES-256 GCM.<br>
-                • <strong>Attestation Proof:</strong> Each decision generates a verifiable hardware quote (e.g. <code>FCC-ATT-VERIFIED</code>).
-            </div>
-        `;
-    }
-
-    // 3. Balance & Treasury Reserves Query
-    if (qLower.includes('balance') || qLower.includes('treasury') || qLower.includes('vault') || qLower.includes('reserve')) {
-        return `
-            <div style="line-height: 1.6;">
-                <strong>📊 Active Treasury Overview:</strong><br>
-                • <strong>Total Treasury Reserves:</strong> <span style="color: var(--accent-emerald); font-weight: 700;">${treasuryBalance.toLocaleString()} FXRP</span><br>
-                • <strong>Connected Web3 Wallet:</strong> <code>${walletAddr}</code><br>
-                • <strong>Network:</strong> Flare Coston2 Testnet (Chain ID 114)<br>
-                • <strong>Active Enclave Vaults:</strong> Primary FXRP Vault, Yield Reserve Vault, Liquidity Safeguard Vault.
-            </div>
-        `;
-    }
-
-    // 4. Policy & Rules Query
-    if (qLower.includes('policy') || qLower.includes('rule') || qLower.includes('drawdown') || qLower.includes('liquidity')) {
-        return `
-            <div style="line-height: 1.6;">
-                <strong>📜 Confidential Risk Policies:</strong><br>
-                Risk policies define automated circuit-breaker rules for your FXRP treasury vaults. 
-                <br><br>
-                You can draft custom policies in natural language (e.g. <em>"Set max drawdown to 15% and min liquidity to 100,000 FXRP"</em>), and click <strong>"🔒 Commit Policy to Flare TEE Enclave"</strong> to broadcast a real Web3 transaction on Flare Coston2.
-            </div>
-        `;
-    }
-
-    // 5. General Inquiry Response
+    // 11. General Fallback
     return `
         <div style="line-height: 1.6;">
             <strong>🤖 XRPShield AI Assistant Analysis for "${escapeHtml(query)}":</strong><br>
             XRPShield automatically protects institutional XRP & FXRP treasury reserves using hardware TEE enclaves on Flare Network.
             <br><br>
-            Current active treasury: <strong style="color: var(--accent-emerald);">${treasuryBalance.toLocaleString()} FXRP</strong>. You can ask questions about policies, TEE enclaves, or specify risk directives to build confidential policies.
+            Current active treasury: <strong style="color: var(--accent-emerald);">${treasuryBalance.toLocaleString()} FXRP</strong>. You can ask specific questions about the <strong>Decision Engine</strong>, <strong>Confidential Policies</strong>, <strong>TEE Enclaves</strong>, <strong>10-Stage Audit Trail</strong>, or specify risk directives to build confidential policies.
         </div>
     `;
 }

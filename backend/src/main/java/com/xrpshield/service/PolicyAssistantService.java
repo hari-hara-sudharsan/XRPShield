@@ -87,7 +87,14 @@ public class PolicyAssistantService {
         // Handle general questions about XRPShield, Flare, TEE, or Treasury Risk
         if (intentLower.contains("what is") || intentLower.contains("explain") || intentLower.contains("how does") || intentLower.contains("who is")) {
             String answer = "";
-            if (intentLower.contains("xrpshield")) {
+            if (intentLower.contains("decision engine") || intentLower.contains("decision")) {
+                answer = "### ⚡ XRPShield Decision Engine\n" +
+                        "The **Decision Engine** is the core automated risk evaluation module on Flare Network:\n\n" +
+                        "1. **Live FTSOv2 Oracle**: Reads real-time price feeds (`XRP/USD` $0.84575).\n" +
+                        "2. **Confidential TEE Evaluation**: Evaluates risk policies (max drawdown % and min liquidity reserve) inside isolated Flare Confidential Compute (FCC) TEE Enclaves.\n" +
+                        "3. **Attestation Synthesis**: Generates cryptographically signed `EIP-712` attestation decision quotes (`APPROVED`).\n" +
+                        "4. **Gated Execution**: Submits verified decisions on-chain to `XRPShieldVault.sol` (`0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9`) to authorize SparkDEX Router V2 position rebalancing.";
+            } else if (intentLower.contains("xrpshield")) {
                 answer = "### 🛡️ What is XRPShield?\n" +
                         "**XRPShield** is an enterprise privacy-preserving FXRP & XRP treasury risk management platform built on the **Flare Network** leveraging **Flare Confidential Compute (FCC)** TEE enclaves.\n\n" +
                         "**Core Capabilities:**\n" +
