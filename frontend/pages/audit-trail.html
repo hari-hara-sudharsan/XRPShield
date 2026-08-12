@@ -1,28 +1,8 @@
 <div style="margin-bottom: 24px;">
     <h2 style="font-size: 1.8rem; font-weight: 700;">10-Stage Real Execution Audit Trail</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Immutable lifecycle trajectory reconstructed directly from Flare Coston2 smart contract events upon page refresh</p>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">Immutable 10-stage lifecycle trajectory reconstructed directly from Flare Coston2 smart contract event evidence</p>
 </div>
 
 <div id="auditTimelineContainer">
     <p style="color:var(--text-secondary);">Reconstructing 10-Stage Lifecycle from Coston2 RPC...</p>
 </div>
-
-<script>
-(async () => {
-    const container = document.getElementById('auditTimelineContainer');
-    if (!container) return;
-    const timeline = await window.AuditTimeline.fetchTimelineData();
-    container.innerHTML = window.AuditTimeline.renderTimeline(timeline || [
-        { stage: "1. Vault Created", detail: "0xb7902ebd...", blockNumber: 33971000, txHash: "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "2. FXRP Deposited", detail: "10,000 FXRP", blockNumber: 33971200, txHash: "0x2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "3. Policy Committed", detail: "0x8f3c71a9...", blockNumber: 33971500, txHash: "0x3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "4. FCC Evaluation Requested", detail: "0x585250...", blockNumber: 33972000, txHash: "0x4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "5. TEE Result Received", detail: "Status: APPROVED", blockNumber: 33972500, txHash: "0x5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "6. FCC Result Verified", detail: "EIP-712 Verified", blockNumber: 33973000, txHash: "0x1c8b9d3e5f7a2c4e6b8d0f2a4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e", explorerUrl: "https://coston2-explorer.flare.network/tx/0x1c8b9d3e5f7a2c4e6b8d0f2a4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e" },
-        { stage: "7. Execution Authorized", detail: "TEE_APPROVED -> EXECUTING", blockNumber: 33973200, txHash: "0x6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "8. Swap Submitted", detail: "SparkDEX Router", blockNumber: 33973400, txHash: "0x7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "9. Swap Confirmed", detail: "Receipt Status: SUCCESS (1)", blockNumber: 33973480, txHash: "0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" },
-        { stage: "10. Hedge Executed", detail: "10 FXRP -> 8.4575 USDT0", blockNumber: 33973480, txHash: "0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3", explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" }
-    ]);
-})();
-</script>

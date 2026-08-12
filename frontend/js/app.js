@@ -16,6 +16,7 @@ const routes = {
     'policies': 'pages/policies.html',
     'privacy-proof': 'pages/privacy-proof.html',
     'verification': 'pages/verification.html',
+    'audit-trail': 'pages/audit-trail.html',
     'decisions': 'pages/decisions.html',
     'executions': 'pages/executions.html',
     'ai-assistant': 'pages/ai-assistant.html',
@@ -98,6 +99,9 @@ function dispatchComponentInit(routeKey) {
             break;
         case 'verification':
             import('./components/verification.js').then(m => m.initVerification()).catch(e => console.warn(e));
+            break;
+        case 'audit-trail':
+            import('./components/audit-timeline.js').then(m => m.initAuditTimeline()).catch(e => console.warn(e));
             break;
     }
 }
