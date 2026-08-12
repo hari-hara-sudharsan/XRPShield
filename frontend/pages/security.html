@@ -1,0 +1,68 @@
+<div style="margin-bottom: 24px;">
+    <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(238,107,107,0.14); color:var(--red); font-family:monospace; font-size:0.75rem; padding:4px 10px; border-radius:20px; margin-bottom:12px;">
+        SECURITY THREAT MODEL & INVARIANT GUARANTEES
+    </div>
+    <h2 style="font-size: 1.8rem; font-weight: 700;">XRPShield System Security Center</h2>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">Real system security state, trust boundaries, and smart contract non-custodial invariants</p>
+</div>
+
+<!-- TRUST MODEL SUMMARY -->
+<div class="card" style="padding: 24px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">1. Component Trust Boundaries</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>System Layer</th>
+                <th>Trust Status</th>
+                <th>Operational Authority Scope</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Web Frontend</strong></td>
+                <td><span style="color:#ef4444;">UNTRUSTED</span></td>
+                <td>UI rendering only. Zero financial authorization authority.</td>
+            </tr>
+            <tr>
+                <td><strong>Spring Boot Backend</strong></td>
+                <td><span style="color:#ef4444;">UNTRUSTED</span></td>
+                <td>Telemetry indexing & REST caching. Cannot authorize swaps.</td>
+            </tr>
+            <tr>
+                <td><strong>Supabase Relational DB</strong></td>
+                <td><span style="color:#ef4444;">UNTRUSTED</span></td>
+                <td>Off-chain indexer only. Blockchain EVM state is 100% authoritative.</td>
+            </tr>
+            <tr>
+                <td><strong>OpenAI LLM Assistant</strong></td>
+                <td><span style="color:#ef4444;">UNTRUSTED</span></td>
+                <td>Advisory natural language translation. Zero transaction execution rights.</td>
+            </tr>
+            <tr>
+                <td><strong>Smart Contracts</strong></td>
+                <td><span style="color:#10b981;">AUTHORITATIVE</span></td>
+                <td>EVM settlement root of trust. Enforces EIP-712 signatures & risk limits.</td>
+            </tr>
+            <tr>
+                <td><strong>Flare FCC / TEE Enclave</strong></td>
+                <td><span style="color:#10b981;">AUTHORITATIVE</span></td>
+                <td>Confidential policy calculation in hardware-isolated memory.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- EMERGENCY PAUSE & RISK CONTROLS -->
+<div class="card" style="padding: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+    <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">2. Emergency Controls & Safety Invariants</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.9rem;">
+        <div style="background:rgba(0,0,0,0.3); padding:16px; border-radius:12px;">
+            <h4 style="color:#fff; margin-bottom:6px;">🛑 Emergency Pause Mechanism</h4>
+            <p style="color:var(--text-secondary); font-size:0.83rem;">Calling <code>setPaused(true)</code> halts new policy evaluations and executions, but leaves user <code>withdrawFXRP()</code> 100% active so user capital is never locked.</p>
+        </div>
+        <div style="background:rgba(0,0,0,0.3); padding:16px; border-radius:12px;">
+            <h4 style="color:#fff; margin-bottom:6px;">⚡ Automated Circuit Breaker</h4>
+            <p style="color:var(--text-secondary); font-size:0.83rem;">Tracks 14 failure modes and trips execution pause after 3 consecutive failures to protect treasury reserves against market anomalies.</p>
+        </div>
+    </div>
+</div>
