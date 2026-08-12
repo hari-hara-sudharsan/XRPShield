@@ -1,0 +1,15 @@
+{
+  "contractName": "XRPShieldVault",
+  "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "transactionHash": "0x165a219cbe58ba514935cd2b3523cb210c25d0797aceb6dac4393fac2c331645",
+  "blockNumber": 1,
+  "gasUsed": "1117410",
+  "network": "Flare Coston2 Testnet",
+  "chainId": 114,
+  "compilerVersion": "solc 0.8.20",
+  "constructorArguments": [
+    "0xAD6740B4f817109e96238BA722880B91E92DeEC9",
+    "0x0D37e61A681dCf690FF33e7Fd2918809989f664A"
+  ],
+  "deployedAt": "2026-08-12T13:26:38.362Z"
+}
