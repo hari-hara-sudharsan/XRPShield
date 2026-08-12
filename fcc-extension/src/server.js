@@ -1,7 +1,13 @@
 const express = require('express');
-const { ethers } = require('ethers');
+let ethers;
+try {
+    ethers = require('ethers');
+} catch (e) {
+    ethers = require('../../contracts/node_modules/ethers');
+}
 const config = require('../config/extension-config.json');
 const { handleInstruction } = require('./handler');
+const { getPublicKeyFromPrivateKey } = require('./crypto-utils');
 
 const app = express();
 app.use(express.json());
@@ -11,6 +17,7 @@ const SIMULATED_TEE = process.env.SIMULATED_TEE !== 'false';
 const SIGNER_KEY = process.env.EXTENSION_SIGNER_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 
 const wallet = new ethers.Wallet(SIGNER_KEY);
+const teePublicKey = getPublicKeyFromPrivateKey(SIGNER_KEY);
 
 console.log('\n========================================================');
 console.log('  Starting XRPShield Flare Confidential Compute Server  ');
@@ -18,6 +25,7 @@ console.log('========================================================');
 console.log('Extension ID:', config.extensionId);
 console.log('Operation Type:', config.operationType);
 console.log('TEE Signer Address:', wallet.address);
+console.log('TEE Public Key (secp256k1):', teePublicKey);
 console.log('Development Mode SIMULATED_TEE:', SIMULATED_TEE);
 console.log('Target Chain ID:', config.coston2Network.chainId);
 console.log('========================================================\n');
@@ -28,7 +36,18 @@ app.get('/health', (req, res) => {
         simulatedTee: SIMULATED_TEE,
         extensionId: config.extensionId,
         signerAddress: wallet.address,
+        publicKey: teePublicKey,
         timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/public-key', (req, res) => {
+    res.json({
+        success: true,
+        extensionId: config.extensionId,
+        publicKey: teePublicKey,
+        algorithm: 'secp256k1-ECIES-GCM',
+        signerAddress: wallet.address
     });
 });
 

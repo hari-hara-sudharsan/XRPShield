@@ -4,10 +4,11 @@ try {
 } catch (e) {
     ethers = require('../../contracts/node_modules/ethers');
 }
+const { decryptECIES } = require('./crypto-utils');
 
 /**
  * Evaluates private hedge policy inside Flare TEE Enclave runner.
- * Evaluates trigger threshold, risk limits, vault balance, deadline, and price freshness.
+ * Handles encrypted ECIES ciphertext payloads and evaluates trigger threshold, risk limits, vault balance, deadline, and price freshness.
  */
 async function evaluatePrivateHedgePolicy(params, config, wallet) {
     const timestamp = Math.floor(Date.now() / 1000);
@@ -24,18 +25,35 @@ async function evaluatePrivateHedgePolicy(params, config, wallet) {
     const vaultBalance = parseFloat(params.vaultBalance || '100000');
     const vaultStatus = params.vaultStatus || 'ACTIVE';
 
-    const policy = params.policy || {
-        hedgeRatio: params.hedgeRatio || '1.0000',
-        triggerThreshold: params.triggerThreshold || '10.0',
-        maximumHedgeAmount: params.maximumHedgeAmount || params.maximumProtection || '100000.0',
-        deadline: params.deadline || (timestamp + 86400),
-        nonce: params.nonce !== undefined ? params.nonce : 9001,
-        policyVersion: params.policyVersion || 1
-    };
+    let policy = params.policy;
+
+    // Handle Encrypted ECIES Payload if encryptedCiphertext is provided
+    if (params.encryptedCiphertext || params.ciphertext) {
+        try {
+            const ciphertext = params.encryptedCiphertext || params.ciphertext;
+            const decryptedJsonStr = decryptECIES(wallet.privateKey, ciphertext);
+            policy = JSON.parse(decryptedJsonStr);
+            console.log('[FCC TEE Enclave] ECIES Ciphertext decrypted successfully inside TEE memory');
+        } catch (err) {
+            console.error('[FCC TEE Enclave] Decryption failed:', err.message);
+            policy = null;
+        }
+    }
+
+    if (!policy) {
+        policy = {
+            hedgeRatio: params.hedgeRatio || '1.0000',
+            triggerThreshold: params.triggerThreshold || '10.0',
+            maximumHedgeAmount: params.maximumHedgeAmount || params.maximumProtection || '100000.0',
+            deadline: params.deadline !== undefined ? params.deadline : (timestamp + 86400),
+            nonce: params.nonce !== undefined ? params.nonce : 9001,
+            policyVersion: params.policyVersion || 1
+        };
+    }
 
     const hedgeRatio = parseFloat(policy.hedgeRatio || '1.0');
     const triggerThreshold = parseFloat(policy.triggerThreshold || '10.0');
-    const maximumHedgeAmount = parseFloat(policy.maximumHedgeAmount || '100000.0');
+    const maximumHedgeAmount = parseFloat(policy.maximumHedgeAmount || policy.maximumProtection || '100000.0');
     const deadline = parseInt(policy.deadline !== undefined ? policy.deadline : (timestamp + 86400));
     const nonce = parseInt(policy.nonce !== undefined ? policy.nonce : 9001);
 
@@ -134,13 +152,13 @@ async function evaluatePrivateHedgePolicy(params, config, wallet) {
     }
 
     // 6. Validate Policy Commitment Match
-    if (committedPolicyHash && params.policy) {
+    if (committedPolicyHash) {
         const canonicalPayload = JSON.stringify({
             vaultAddress: vaultAddress ? vaultAddress.toLowerCase() : '0x0',
             asset: 'FXRP',
             hedgeRatio: policy.hedgeRatio || '1.0000',
             triggerThreshold: policy.triggerThreshold || '10.0',
-            maximumProtection: policy.maximumHedgeAmount || '100000.0',
+            maximumProtection: policy.maximumProtection || policy.maximumHedgeAmount || '100000.0',
             deadline: deadline,
             nonce: nonce,
             policyVersion: parseInt(policy.policyVersion || 1)
