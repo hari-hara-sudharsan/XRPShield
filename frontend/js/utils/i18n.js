@@ -142,9 +142,12 @@ export const DICTIONARY = {
     "💾 Save Preferences & Language": { ja: "💾 設定と言語を保存", es: "💾 Guardar Preferencias e Idioma", de: "💾 Einstellungen & Sprache Speichern", zh: "💾 保存偏好与语言设置" },
     "🔑 Refresh Real Web3 Session Signature Token": { ja: "🔑 Web3セッション署名トークンを更新", es: "🔑 Actualizar Token de Firma Web3", de: "🔑 Web3-Sitzungssignatur-Token Aktualisieren", zh: "🔑 刷新 Web3 会话签名令牌" },
     "+ Create New Vault": { ja: "+ 新規ボルト作成", es: "+ Crear Nueva Bóveda", de: "+ Neuen Tresor Erstellen", zh: "+ 创建新金库" },
-    "+ Create Risk Policy": { ja: "+ リスクポリシー作成", es: "+ Crear Política de Riesgo", de: "+ Risikorichtlinie Erstellen", zh: "+ 创建风险控制策略" },
     "🚀 Run Centerpiece Flow": { ja: "🚀 フルパイプライン実行", es: "🚀 Ejecutar Flujo Principal", de: "🚀 Haupt-Flow Ausführen", zh: "🚀 运行完整保密流程" },
-    "+ Execute Approved Decision": { ja: "+ 承認済み決定を実行", es: "+ Ejecutar Decisión Aprobada", de: "+ Genehmigte Entscheidung Ausführen", zh: "+ 执行已批准决策" }
+    "+ Execute Approved Decision": { ja: "+ 承認済み決定を実行", es: "+ Ejecutar Decisión Aprobada", de: "+ Genehmigte Entscheidung Ausführen", zh: "+ 执行已批准决策" },
+    "View Hash ↗": { ja: "ハッシュ検証 ↗", es: "Ver Hash ↗", de: "Hash Anzeigen ↗", zh: "查看哈希 ↗" },
+    "View Decision ↗": { ja: "決定検証 ↗", es: "Verificar Decisión ↗", de: "Entscheidung Verifizieren ↗", zh: "验证决策 ↗" },
+    "Inspect Proof ↗": { ja: "証明検証 ↗", es: "Inspeccionar Prueba ↗", de: "Beweis Prüfen ↗", zh: "审查证明 ↗" },
+    "View Swap ↗": { ja: "スワップ検証 ↗", es: "Ver Swap ↗", de: "Swap Anzeigen ↗", zh: "查看兑换 ↗" }
 };
 
 // Case-Insensitive Dictionary Indexing

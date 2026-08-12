@@ -63,10 +63,27 @@ export function initPrivacyProof() {
 
     // 3. View Policy Commitment Hash Button
     document.getElementById('proof-btn-view-commitment')?.addEventListener('click', () => {
-        alert(`📜 Dynamic On-Chain Policy Commitment Hash:\n\n${activePolicyHash}\n\nRegistered on VaultManager.sol at address:\n${CONFIG.CONTRACTS.VAULT_MANAGER}\n\nThis 32-byte Keccak256 hash proves the exact policy evaluated inside the TEE enclave without exposing drawdown rules or internal thresholds!`);
+        showExecutionSuccessModal({
+            title: 'On-Chain Policy Commitment Hash',
+            action: `Policy Hash: ${activePolicyHash.substring(0, 18)}...`,
+            txHash: activeTxHash,
+            attestationId: activeInstructionId,
+            callData: CONFIG.CONTRACTS.SELECTORS.REGISTER_POLICY_COMMITMENT_V2
+        });
     });
 
-    // 4. View Execution Receipt Button
+    // 4. View Decision Outcome Button
+    document.getElementById('proof-btn-view-decision')?.addEventListener('click', () => {
+        showExecutionSuccessModal({
+            title: 'Flare TEE Confidential Decision Outcome',
+            action: 'Automated Position Protection Decision: APPROVED',
+            txHash: activeTxHash,
+            attestationId: activeInstructionId,
+            callData: '0xd4c2b9f3'
+        });
+    });
+
+    // 5. View Execution Receipt Button
     document.getElementById('proof-btn-view-execution')?.addEventListener('click', () => {
         showExecutionSuccessModal({
             title: 'Flare Coston2 On-Chain DEX Execution Receipt',
