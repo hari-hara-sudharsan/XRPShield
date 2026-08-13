@@ -1,5 +1,14 @@
 const { expect } = require("chai");
-const { ethers } = require("../contracts/node_modules/ethers");
+let ethers;
+try {
+  ethers = require('ethers');
+} catch (e) {
+  try {
+    ethers = require('hardhat').ethers;
+  } catch (e2) {
+    ethers = require(require('path').resolve(__dirname, '../contracts/node_modules/ethers'));
+  }
+}
 const { evaluateHedgePolicy, getExtensionStatus } = require("../extension/src/evaluator");
 
 describe("Real Flare Confidential Compute (FCC) Extension Integration Tests", function () {

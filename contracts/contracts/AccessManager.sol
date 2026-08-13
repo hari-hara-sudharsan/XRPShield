@@ -29,4 +29,12 @@ contract AccessManager is AccessControl {
     function isPauser(address account) external view returns (bool) {
         return hasRole(PAUSER_ROLE, account);
     }
+
+    function grantPauserRole(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(PAUSER_ROLE, account);
+    }
+
+    function grantOperatorRole(address account) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(OPERATOR_ROLE, account);
+    }
 }

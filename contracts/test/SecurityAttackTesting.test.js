@@ -76,10 +76,11 @@ describe("XRPShield Phase 5 Sprint 2: Security Attack Testing & Adversarial Vect
 
     validAttestationHash = ethers.keccak256(ethers.toUtf8Bytes("valid-attestation-hash"));
 
+    const network = await ethers.provider.getNetwork();
     const domain = {
       name: "XRPShield FCC Extension",
       version: "1",
-      chainId: 114,
+      chainId: network.chainId,
       verifyingContract: await extensionAdapter.getAddress()
     };
 

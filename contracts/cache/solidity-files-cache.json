@@ -38,8 +38,8 @@
       ]
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\AccessManager.sol": {
-      "lastModificationDate": 1786015802735,
-      "contentHash": "31def02eaf5ec627ec9b0c40bcaa553a",
+      "lastModificationDate": 1786585035745,
+      "contentHash": "d9d4e0872d7d1cba70420e53722fef88",
       "sourceName": "contracts/AccessManager.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -797,8 +797,8 @@
       ]
     },
     "C:\\Users\\Windows\\XRPShield\\contracts\\contracts\\FCCExtensionAdapter.sol": {
-      "lastModificationDate": 1786548184309,
-      "contentHash": "37da328c30ba31465499747972548ef1",
+      "lastModificationDate": 1786585113509,
+      "contentHash": "6b650e41c286850e3d8bbab39312f72e",
       "sourceName": "contracts/FCCExtensionAdapter.sol",
       "solcConfig": {
         "version": "0.8.24",

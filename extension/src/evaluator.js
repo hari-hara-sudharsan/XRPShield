@@ -1,4 +1,13 @@
-const { ethers } = require('../../contracts/node_modules/ethers');
+let ethers;
+try {
+    ethers = require('ethers');
+} catch (e) {
+    try {
+        ethers = require('hardhat').ethers;
+    } catch (e2) {
+        ethers = require(require('path').resolve(__dirname, '../../contracts/node_modules/ethers'));
+    }
+}
 const config = require('./config');
 
 const wallet = new ethers.Wallet(config.SIGNER_PRIVATE_KEY);
@@ -99,9 +108,10 @@ async function evaluatePrivateHedgePolicy(params) {
     }
 
     // Generate cryptographic attestation proof hash
+    const approvedAmountBigInt = BigInt(Math.floor(approvedHedgeAmount)) * (10n ** 18n);
     const attestationPayload = ethers.solidityPacked(
         ['address', 'bytes32', 'string', 'uint256', 'uint256'],
-        [vaultAddress, candidateHash, decision, Math.floor(approvedHedgeAmount * 1e18), timestamp]
+        [vaultAddress, candidateHash, decision, approvedAmountBigInt, timestamp]
     );
     const attestationHash = ethers.keccak256(attestationPayload);
 

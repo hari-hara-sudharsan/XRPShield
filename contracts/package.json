@@ -5,7 +5,7 @@
   "main": "hardhat.config.js",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test",
+    "test": "hardhat test test/ActionResultVerification.test.js test/FCCInstructionRouting.test.js test/OnChainFCCVerification.test.js test/OnChainHedgeExecution.test.js test/FCCGatedExecution.test.js test/ExecutionSafety.test.js test/Phase3HostileAttacks.test.js test/EmergencyPauseAndHardening.test.js test/CircuitBreakerAndSafety.test.js test/DexQuoteEngine.test.js test/PrivatePolicyEngine.test.js test/AttestationVerification.test.js test/SecurityAttackTesting.test.js test/SafetyControls.test.js test/AIPolicyAssistant.test.js test/Coston2Vault.test.js test/PolicyCommitment.test.js test/Phase5EndToEnd.test.js test/VaultManager.test.js test/VaultSecurityAndInvariants.test.js test/XRPShieldHealth.test.js test/XRPShieldVault.test.js",
     "clean": "hardhat clean",
     "deploy:coston2": "hardhat run scripts/deploy.js --network coston2"
   },

@@ -99,7 +99,7 @@ contract FCCExtensionAdapter is Ownable {
     /**
      * @notice Pure read-only view method to verify an attestation without modifying state
      */
-    function isAttestationValid(address vaultAddress, ActionResult calldata result) external view returns (bool) {
+    function isAttestationValid(address vaultAddress, ActionResult calldata result) public view returns (bool) {
         if (block.chainid != REQUIRED_CHAIN_ID && block.chainid != 31337) return false;
         if (!result.success || result.signature.length != 65) return false;
         if (result.deadline > 0 && block.timestamp > result.deadline) return false;
@@ -143,5 +143,9 @@ contract FCCExtensionAdapter is Ownable {
         if (v < 27) v += 27;
         if (v != 27 && v != 28) return address(0);
         return ecrecover(_digest, v, r, s);
+    }
+
+    function verifyAttestationView(address vaultAddress, ActionResult calldata result) external view returns (bool) {
+        return isAttestationValid(vaultAddress, result);
     }
 }

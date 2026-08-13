@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { ethers } = require("../contracts/node_modules/ethers");
+const { ethers } = require("hardhat");
 const { evaluatePrivateHedgePolicy } = require("../../extension/src/evaluator");
 
 describe("XRPShield Private Policy Engine TEE Evaluation Test Suite", function () {

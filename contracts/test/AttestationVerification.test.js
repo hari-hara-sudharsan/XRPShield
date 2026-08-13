@@ -23,10 +23,11 @@ describe("XRPShield On-Chain EIP-712 Attestation Verification & Rejection Tests"
     const timestamp = Math.floor(Date.now() / 1000);
     const deadline = timestamp + 3600;
 
+    const network = await ethers.provider.getNetwork();
     const domain = {
       name: "XRPShield FCC Extension",
       version: "1",
-      chainId: 114,
+      chainId: network.chainId,
       verifyingContract: await adapter.getAddress()
     };
 
