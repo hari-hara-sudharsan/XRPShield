@@ -114,3 +114,22 @@ window.refreshSessionTokens = async function() {
         }
     }
 };
+
+window.switchSettingsTab = function(tabName) {
+    const settingsBtn = document.getElementById('tab-btn-settings');
+    const securityBtn = document.getElementById('tab-btn-security');
+    const settingsContent = document.getElementById('tab-content-settings');
+    const securityContent = document.getElementById('tab-content-security');
+
+    if (tabName === 'settings') {
+        if (settingsBtn) settingsBtn.classList.add('active');
+        if (securityBtn) securityBtn.classList.remove('active');
+        if (settingsContent) settingsContent.style.display = 'block';
+        if (securityContent) securityContent.style.display = 'none';
+    } else {
+        if (securityBtn) securityBtn.classList.add('active');
+        if (settingsBtn) settingsBtn.classList.remove('active');
+        if (securityContent) securityContent.style.display = 'block';
+        if (settingsContent) settingsContent.style.display = 'none';
+    }
+};
