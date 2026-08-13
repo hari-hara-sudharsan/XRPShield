@@ -213,20 +213,29 @@ export class I18nEngine {
                 const href = link.getAttribute('href');
                 if (href && navMap[href]) {
                     const originalLabel = navMap[href];
-                    const translatedText = lang === 'en' ? originalLabel : this.t(originalLabel);
-                    const svg = link.querySelector('svg');
-                    
-                    if (svg) {
-                        const textNode = Array.from(link.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-                        if (textNode) {
-                            textNode.nodeValue = ' ' + translatedText;
-                        } else {
+                    if (lang === 'en') {
+                        if (link._i18nModified) {
+                            const svg = link.querySelector('svg');
+                            if (svg) {
+                                link.innerHTML = '';
+                                link.appendChild(svg);
+                                link.appendChild(document.createTextNode(' ' + originalLabel));
+                            } else {
+                                link.textContent = originalLabel;
+                            }
+                            delete link._i18nModified;
+                        }
+                    } else {
+                        const translatedText = this.t(originalLabel);
+                        const svg = link.querySelector('svg');
+                        if (svg) {
                             link.innerHTML = '';
                             link.appendChild(svg);
                             link.appendChild(document.createTextNode(' ' + translatedText));
+                        } else {
+                            link.textContent = translatedText;
                         }
-                    } else {
-                        link.innerText = translatedText;
+                        link._i18nModified = true;
                     }
                 }
             });
