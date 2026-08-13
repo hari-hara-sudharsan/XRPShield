@@ -75,18 +75,25 @@ export function showExecutionSuccessModal({
             ">&times;</button>
 
             <!-- Header Badge -->
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 18px;">
                 <div style="
-                    width: 42px; height: 42px; border-radius: 12px;
-                    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(0, 242, 254, 0.3));
-                    border: 1px solid var(--accent-emerald);
-                    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
-                ">🎉</div>
+                    width: 46px; height: 46px; border-radius: 14px;
+                    background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(0, 242, 254, 0.25));
+                    border: 1px solid var(--accent-emerald, #10B981);
+                    box-shadow: 0 0 20px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+                ">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px #10B981);">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
                 <div>
-                    <h3 style="font-size: 1.35rem; font-weight: 800; background: linear-gradient(90deg, #FFFFFF, var(--primary-cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    <h3 style="font-size: 1.35rem; font-weight: 800; background: linear-gradient(90deg, #FFFFFF, var(--primary-cyan, #62d9ee)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 4px 0;">
                         ${title}
                     </h3>
-                    <div style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">
+                    <div style="font-size: 0.82rem; color: var(--accent-emerald, #10B981); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #10B981; box-shadow: 0 0 8px #10B981;"></span>
                         100% Confirmed on Flare Coston2 Testnet
                     </div>
                 </div>
