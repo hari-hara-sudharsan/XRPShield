@@ -362,8 +362,10 @@ async function loadVaults(container) {
                 <td><code>${escapeHtml(v.attestationId || 'FCC-ATT-VERIFIED')}</code></td>
                 <td><span style="color: ${statusColor}; font-weight: 700;">● ${escapeHtml(v.status)}</span></td>
                 <td>
-                    <button onclick="window.openFundVaultModal('${escapeHtml(v.vaultName)}')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
-                    <button onclick="window.openDeactivateVaultModal('${escapeHtml(v.vaultName)}', '${v.status}')" style="${toggleBtnStyle} padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer;">${toggleActionText}</button>
+                    <div class="xps-table-actions">
+                        <button onclick="window.openFundVaultModal('${escapeHtml(v.vaultName)}')" class="xps-action-btn xps-btn-deposit">Deposit / Fund</button>
+                        <button onclick="window.openDeactivateVaultModal('${escapeHtml(v.vaultName)}', '${v.status}')" class="xps-action-btn ${isActive ? 'xps-btn-deactivate' : 'xps-btn-activate'}">${toggleActionText}</button>
+                    </div>
                 </td>
             </tr>
         `;
