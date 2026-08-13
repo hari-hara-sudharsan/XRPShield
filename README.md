@@ -1,232 +1,1175 @@
-# XRPShield — Confidential Enterprise Treasury Hedging Engine on Flare Network
+# XRPShield
 
-> **Autonomous, Non-Custodial FXRP Treasury Hedging Powered by Flare Confidential Compute (FCC) TEE Enclaves, Real-Time FTSOv2 Oracles, and On-Chain Coston2 Settlement.**
+## The Confidential Treasury Infrastructure of Flare
 
-[![Flare Network](https://img.shields.io/badge/Network-Flare%20Coston2%20Testnet-FF495C?style=for-the-badge&logo=ethereum)](https://coston2-explorer.flare.network)
-[![Chain ID](https://img.shields.io/badge/Chain--ID-114-00F2FE?style=for-the-badge)](https://coston2-api.flare.network/ext/C/rpc)
-[![License](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Pipeline-100%25%20Verifiable%20On--Chain-8B5CF6?style=for-the-badge)](#-flare-coston2-on-chain-contract-registry)
+**Private Strategy. Verifiable Decision. On-Chain Protection.**
 
----
+> Protect the strategy. Verify the decision. Execute on-chain.
 
-## 📌 Executive Summary & Quick Links
+XRPShield is confidential treasury-policy infrastructure that allows XRP
+holders to define private protection policies, evaluate those policies
+through Flare Confidential Compute, cryptographically verify the
+resulting decision, and execute bounded on-chain protection without
+exposing the treasury's sensitive strategy.
 
-XRPShield is a production-grade enterprise treasury risk management platform built for institutional holders of **FXRP** (Flare Wrapped XRP). It enables corporations to automate price protection hedges against market drawdowns without exposing proprietary risk thresholds, liquidity limits, or internal strategies to front-running bots on public blockchains.
+------------------------------------------------------------------------
 
-* **GitHub Repository**: [https://github.com/hari-hara-sudharsan/XRPShield](https://github.com/hari-hara-sudharsan/XRPShield)
-* **Flare Coston2 Explorer**: [https://coston2-explorer.flare.network](https://coston2-explorer.flare.network)
-* **Independent Verification Hub**: Exposed directly in the application UI under `#verification`
-* **Privacy Proof Architecture**: Exposed directly in the application UI under `#privacy-proof`
+##  What XRPShield Does
 
----
+XRPShield separates **private treasury strategy** from **publicly
+verifiable execution**.
 
-## 🏗️ End-to-End Architecture Diagram
+The core lifecycle is:
 
-```mermaid
-flowchart TD
-    subgraph Client ["Client & Wallet Layer [REAL - COSTON2 TESTNET]"]
-        User[Corporate Treasurer / User]
-        MetaMask[MetaMask / Web3 Wallet]
-        UI[XRPShield Web3 Frontend SPA]
-    end
-
-    subgraph FlareOracle ["Flare FTSOv2 Decentralized Oracle [REAL - COSTON2 TESTNET]"]
-        FTSO[Flare FTSOv2 Contract 0xC4e9...304d]
-        Feed[XRP/USD Feed ID 0x015852502f...]
-    end
-
-    subgraph FCC ["Flare Confidential Compute TEE Enclave [REAL - COSTON2 TESTNET]"]
-        Runner[FCC Extension Server Port 8090]
-        Enclave[Hardware TEE Enclave Enclosed Policy Evaluator]
-        PolicyRules[Encrypted Private Policy Rules: hedgeRatio, triggerThreshold]
-        Signer[EIP-712 ECDSA Enclave Signer]
-    end
-
-    subgraph OnChain ["Flare Coston2 Smart Contracts [REAL - COSTON2 TESTNET]"]
-        VM[VaultManager.sol Gatekeeper]
-        TS[TreasuryStorage.sol Commitment Registry]
-        Adapter[FCCExtensionAdapter.sol Signature Verifier]
-        FXRP[TestFXRPToken.sol ERC-20]
-        USDT[TestUSDT0Token.sol ERC-20]
-        Router[DEXRouterAdapter.sol Uniswap V2 Interface]
-    end
-
-    subgraph Backend ["Spring Boot Indexer & Pipeline Service [REAL - COSTON2 TESTNET]"]
-        SpringBoot[Spring Boot REST API]
-        Indexer[Idempotent Web3j Blockchain Event Indexer]
-        DB[(PostgreSQL Database)]
-    end
-
-    User -->|1. Connect Wallet| MetaMask
-    MetaMask -->|2. Deposit FXRP| VM
-    User -->|3. Input Intent| UI
-    UI -->|4. Generate Draft| SpringBoot
-    User -->|5. Approve & Commit| VM
-    VM -->|6. Record Keccak256 Hash| TS
-
-    SpringBoot -->|7. Query Price| FTSO
-    FTSO -->|8. Return XRP/USD Price| Feed
-
-    SpringBoot -->|9. Dispatch Request| Runner
-    Runner -->|10. Evaluate Privately| Enclave
-    PolicyRules --> Enclave
-    Enclave -->|11. Produce Signed ActionResult| Signer
-    Signer -->|12. Return EIP-712 Proof| SpringBoot
-
-    SpringBoot -->|13. Submit Verified Decision| VM
-    VM -->|14. Verify Domain & Signature| Adapter
-    VM -->|15. Execute Swap FXRP -> USDT0| Router
-    Router -->|16. Transfer Tokens| USDT
-    VM -->|17. Emit Event Logs| Indexer
-    Indexer -->|18. Store Idempotent Log| DB
-    UI -->|19. Query Verified Events| SpringBoot
+``` text
+PRIVATE POLICY
+      ↓
+POLICY COMMITMENT
+      ↓
+CONFIDENTIAL COMPUTE
+      ↓
+AUTHENTICATED ACTIONRESULT
+      ↓
+SMART-CONTRACT VERIFICATION
+      ↓
+RISK-BOUNDED EXECUTION
+      ↓
+FXRP → USDT0
+      ↓
+SETTLEMENT PROOF
 ```
 
----
+The strategy remains confidential while the resulting financial action
+remains independently verifiable.
 
-## 📜 Flare Coston2 On-Chain Contract Registry
+------------------------------------------------------------------------
 
-All core smart contracts are deployed and operational on **Flare Coston2 Testnet (Chain ID 114)**:
+##  The Problem
 
-| Contract / Oracle Feed Component | Network | On-Chain Address / Identifier | Explorer Link | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **Vault Manager Gatekeeper** | Coston2 | `0x5bb8082987515f40398fb9893d90616b47c04208` | [Verify on BlockScout ↗](https://coston2-explorer.flare.network/address/0x5bb8082987515f40398fb9893d90616b47c04208) | `[REAL - COSTON2 TESTNET]` |
-| **Treasury Storage Contract** | Coston2 | `0x0165878A594ca255338adfa4d48449f69242Eb8F` | [Verify on BlockScout ↗](https://coston2-explorer.flare.network/address/0x0165878A594ca255338adfa4d48449f69242Eb8F) | `[REAL - COSTON2 TESTNET]` |
-| **FCC Extension Adapter** | Coston2 | `0x8A791620dd6260079BF849Dc5567aDC3F2FdC318` | [Verify on BlockScout ↗](https://coston2-explorer.flare.network/address/0x8A791620dd6260079BF849Dc5567aDC3F2FdC318) | `[REAL - COSTON2 TESTNET]` |
-| **Coston2 FXRP Token (ERC-20)** | Coston2 | `0x0d37e61a681dcf690ff33e7fd2918809989f664a` | [Verify on BlockScout ↗](https://coston2-explorer.flare.network/address/0x0d37e61a681dcf690ff33e7fd2918809989f664a) | `[REAL - COSTON2 TESTNET]` |
-| **Coston2 USD₮0 Token (ERC-20)**| Coston2 | `0x3a48e71b56312a02bcf1b78297cd00994d2c88fc` | [Verify on BlockScout ↗](https://coston2-explorer.flare.network/address/0x3a48e71b56312a02bcf1b78297cd00994d2c88fc) | `[REAL - COSTON2 TESTNET]` |
-| **Flare FTSOv2 Oracle Contract**| Coston2 | `0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d` | [Verify Oracle ↗](https://coston2-explorer.flare.network/address/0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d) | `[REAL - COSTON2 TESTNET]` |
-| **FTSOv2 XRP/USD Feed ID** | Coston2 | `0x015852502f55534400000000000000000000000000` | [Verify Feed ID ↗](https://coston2-explorer.flare.network) | `[REAL - COSTON2 TESTNET]` |
-| **DEX Router Adapter Contract** | Coston2 | `0x6a47070ae8326fb2b86712d6f05296f1e9bf859e0e22cce1` | [Verify Router ↗](https://coston2-explorer.flare.network) | `[REAL - COSTON2 TESTNET]` |
+XRP-linked treasury value can change rapidly. A treasury may want
+predefined protection rules such as:
 
----
+-   protect a defined portion of XRP exposure after a downside
+    threshold;
+-   never exceed an approved protection limit;
+-   never execute after a policy deadline;
+-   never execute against stale market data.
 
-## 🔒 Flare Confidential Compute (FCC) Extension Architecture
+Publishing those rules directly on a transparent blockchain can expose:
 
-The Flare Confidential Compute extension runner operates in `extension/` on port `8090`. It receives confidential policy parameters, queries live FTSOv2 oracle prices, evaluates rule triggers inside hardware TEE enclaves, and produces cryptographically signed **EIP-712 ActionResult** payloads.
+-   treasury thresholds;
+-   hedge ratios;
+-   maximum protection limits;
+-   execution timing;
+-   risk strategy;
+-   sensitive policy inputs and evaluation logic.
 
-### EIP-712 Domain Separator & Type Hash
-* **Domain Name**: `"XRPShield FCC Extension"`
-* **Domain Version**: `"1"`
-* **Chain ID**: `114` (Flare Coston2 Testnet)
-* **Verifying Contract**: `0x8A791620dd6260079BF849Dc5567aDC3F2FdC318`
-* **EIP-712 Struct Typehash**:
-  ```solidity
-  keccak256("ActionResult(address vaultAddress,bytes32 policyHash,string status,bytes32 attestationHash,uint256 nonce,uint256 timestamp,uint256 deadline)")
-  ```
+This creates a fundamental trade-off:
 
----
-
-## 📊 Real vs. Simulated System Audit Comparison
-
-| Feature / Component | XRPShield Implementation | Status | Audit Proof |
-| :--- | :--- | :--- | :--- |
-| **Blockchain Transactions** | 100% Real Coston2 Web3 Transactions | `[REAL - COSTON2 TESTNET]` | Verified on BlockScout Explorer |
-| **Price Data Source** | Live Flare FTSOv2 Oracle Contract (`0xC4e9...304d`) | `[REAL - COSTON2 TESTNET]` | 0 Hardcoded Prices (Fails explicitly on outage) |
-| **Vault Reserves** | Real ERC-20 `transfer` & `transferFrom` Accounting | `[REAL - COSTON2 TESTNET]` | Balances read live from smart contract |
-| **Policy Commitment** | Canonical `keccak256` Hash Registered On-Chain | `[REAL - COSTON2 TESTNET]` | Verified on `VaultManager.sol` |
-| **TEE Enclave Engine** | Real Node.js/Express FCC Extension (Port 8090) | `[REAL - COSTON2 TESTNET]` | Evaluates private rules inside TEE runner |
-| **Attestation Verifier** | On-Chain EIP-712 Signature Verification | `[REAL - COSTON2 TESTNET]` | Validated by `FCCExtensionAdapter.sol` |
-| **DEX Execution** | Real Coston2 `swapExactTokensForTokens` Swap | `[REAL - COSTON2 TESTNET]` | FXRP -> USD₮0 token swap |
-| **Event Indexing** | Idempotent Spring Boot Web3j Event Indexer | `[REAL - COSTON2 TESTNET]` | Composite unique index `(tx_hash, log_index)` |
-| **AI Assistant** | Non-Custodial Advisory (Zero Financial Authority) | `[REAL - COSTON2 TESTNET]` | Draft review modal + mandatory Web3 sign |
-
----
-
-## 🔐 Security & Privacy Models
-
-### 1. Two-Column Cryptographic Privacy Model
-* **🔒 STRICTLY PRIVATE (Sealed inside Flare TEE Enclave)**:
-  - Exact policy parameters (`hedgeRatio`, `maximumProtection`)
-  - Drawdown trigger thresholds (`triggerThreshold`)
-  - Internal vault balance allocations & proprietary trading logic
-* **⚡ PUBLICLY VERIFIABLE (On-Chain Flare Coston2 Testnet)**:
-  - Policy commitment hash (`keccak256`)
-  - Decision outcome string (`APPROVED` / `NO_ACTION`)
-  - EIP-712 ECDSA attestation signature & quote hash
-  - DEX swap transaction receipts & BlockScout links
-
-### 2. Safeguards & Circuit Breakers
-- **Emergency Circuit Breaker**: `pauseExecution()` / `unpauseExecution()` restricted to `PAUSER` role.
-- **Emergency Reserve Withdrawal**: `emergencyWithdrawFXRP` enables vault owners to retrieve funds when paused.
-- **Execution Cooldown**: Enforces 5-minute (300s) cooldown per vault (`lastExecutionTimestamp`).
-- **Daily Volume Protection Cap**: Enforces 500,000 FXRP daily limit per vault (`dailyProtectedAmountFXRP`).
-- **Replay Protection**: `executedDecisions[attestationHash]` prevents double execution.
-
----
-
-## 📋 Feature Taxonomy & Status Breakdown
-
-### `[REAL - COSTON2 TESTNET]` (Fully Implemented & Verifiable)
-- [x] ERC-20 FXRP Vault Management (`depositFXRP`, `withdrawFXRP`).
-- [x] Live Flare FTSOv2 XRP/USD Price Feed Integration (`fetchLiveXRPUSDPrice`).
-- [x] Canonical `keccak256` Cryptographic Policy Commitments (`registerPolicyCommitmentV2`).
-- [x] Flare Confidential Compute (FCC) Extension Evaluation (`evaluator.js`).
-- [x] On-Chain EIP-712 TEE Attestation Verification (`verifyAndRecordAttestation`).
-- [x] Coston2 DEX Hedge Router Execution (`executeHedge`).
-- [x] Production Safety Controls, Cooldowns, Daily Caps, & Emergency Circuit Breaker.
-- [x] Idempotent Spring Boot Web3j Event Indexer & Database Reconstruction.
-- [x] Non-Custodial Advisory AI Policy Assistant with User Review Confirmation.
-- [x] Independent Verification Hub UI (`#verification`) & Privacy Proof UI (`#privacy-proof`).
-
-### `[TESTNET DEPLOYMENT]` (Operating Parameters)
-- [x] Deployed on Flare Coston2 Testnet (Chain ID 114 / `0x72`).
-- [x] Testnet RPC Endpoint: `https://coston2-api.flare.network/ext/C/rpc`.
-- [x] Testnet BlockScout Explorer: `https://coston2-explorer.flare.network`.
-
-### `[FUTURE ROADMAP]` (Explicitly Marked Future Scope — NOT Claimed as Implemented)
-- [ ] **Mainnet Hardware SGX Enclave Production**: Deployment to physical Intel SGX / AMD SEV production hardware enclaves on Flare Mainnet.
-- [ ] **Multi-Asset FXRP/FLR/BTC Treasury Pools**: Expanding hedging strategy support to cross-chain native assets.
-- [ ] **Institutional Multi-Sig Authorization**: Integrating Gnosis Safe multi-signature approval flows for enterprise treasury boards.
-
----
-
-## 🧪 Independent Judge Reproduction & Verification Guide
-
-Hackathon judges and technical auditors can independently reproduce and verify the entire XRPShield suite on Coston2 using the following steps:
-
-### Prerequisites
-- Node.js >= v18
-- OpenJDK Java >= 17 & Maven >= 3.8
-
-### 1. Clone Repository & Install Dependencies
-```bash
-git clone https://github.com/hari-hara-sudharsan/XRPShield.git
-cd XRPShield
-
-# Install contract & extension dependencies
-cd contracts && npm install
-cd ../extension && npm install
-cd ..
+``` text
+Privacy
+   vs
+Verifiability
 ```
 
-### 2. Run Complete 14-Step Real E2E Workflow Test
-```bash
-cd contracts
-npx hardhat test test/Phase5EndToEnd.test.js
+XRPShield is designed to remove that trade-off.
+
+------------------------------------------------------------------------
+
+##  Why XRPShield Is Different
+
+A conventional dashboard is:
+
+``` text
+Price
+ ↓
+Button
+ ↓
+Swap
 ```
-*Expected Output*: `√ Executes 14-Step Workflow Sequentially Without Simulation (138ms)` and prints the complete 9-field audit record.
 
-### 3. Run 10-Run Real Coston2 Reliability Execution Test
-```bash
-npx hardhat run scripts/execute-10-run-reliability.js
+XRPShield is:
+
+``` text
+PRIVATE TREASURY INTENT
+        ↓
+POLICY BINDING
+        ↓
+CONFIDENTIAL EVALUATION
+        ↓
+CRYPTOGRAPHIC DECISION
+        ↓
+ON-CHAIN AUTHORIZATION
+        ↓
+BOUNDED EXECUTION
+        ↓
+SETTLEMENT PROOF
 ```
-*Expected Output*: `XRPShield 10-RUN REAL DEMO RELIABILITY REPORT (10/10 SUCCESS - 100%)`.
 
-### 4. Run Security Attack Vector Test Suite (16 Attack Paths)
-```bash
-npx hardhat test test/SecurityAttackTesting.test.js
+
+##  The XRPShield Solution
+
+XRPShield separates the system into two trust domains.
+
+### Private
+
+``` text
+Treasury Strategy
+      ↓
+Policy Commitment
+      ↓
+Confidential Evaluation
+      ↓
+ActionResult
 ```
-*Expected Output*: `10 passing (2s)` returning `INVALID → REJECT` across all attack vectors.
 
-### 5. Run Simulation Elimination Audit Scanner
-```bash
-node scripts/audit-simulation-elimination.js
+### Verifiable
+
+``` text
+Cryptographic Verification
+      ↓
+Smart Contract Authorization
+      ↓
+DEX Execution
+      ↓
+FXRP → USDT0
+      ↓
+Transaction Receipt
+      ↓
+Independent Verification
 ```
-*Expected Output*: `✅ AUDIT PASSED: 0 simulation / mock occurrences found in primary demo path!`.
 
----
+### Core boundary
 
-## 📄 License
+**The strategy remains confidential. The financial action remains
+independently verifiable.**
 
-This repository is released under the **MIT License**. See [LICENSE](LICENSE) for details.
+------------------------------------------------------------------------
+
+##  Why Flare Is Fundamental
+
+XRPShield depends on Flare for multiple parts of its trust and execution
+model.
+
+  Flare capability             XRPShield role
+  ---------------------------- ------------------------------------
+  FXRP                         XRP-linked treasury asset
+  FTSOv2                       XRP/USD market-data input
+  Flare Confidential Compute   Private policy evaluation
+  Smart contracts              Authorization and enforcement
+  Coston2                      Demonstrated execution environment
+  DEX infrastructure           FXRP → USDT0 settlement
+
+``` text
+                    FLARE
+                      │
+          ┌───────────┼───────────┐
+          ▼           ▼           ▼
+        FXRP        FTSOv2        FCC
+          │        XRP/USD        │
+          │           │           │
+          └───────────┼───────────┘
+                      ▼
+                Smart Contracts
+                      │
+                      ▼
+                  DEX Execution
+                      │
+                      ▼
+                    Coston2
+```
+
+------------------------------------------------------------------------
+
+##  Trust and Authority Model
+
+The financial authority is deliberately constrained.
+
+> **AI does not authorize. Backend does not authorize. Database does not
+> authorize. Frontend does not authorize.**
+
+Authorization exists only after the required cryptographic and
+smart-contract checks succeed.
+
+``` text
+User
+ ↓
+Policy
+ ↓
+Commitment
+ ↓
+Confidential Evaluation
+ ↓
+Authenticated Result
+ ↓
+Smart Contract
+ ↓
+Execution Controls
+ ↓
+Settlement
+```
+
+### Evidence hierarchy
+
+``` text
+FLARE BLOCKCHAIN
+       ↓
+SMART CONTRACT STATE
+       ↓
+VERIFIED ACTIONRESULT
+       ↓
+TRANSACTION RECEIPT
+       ↓
+BACKEND INDEX
+       ↓
+FRONTEND
+```
+
+Lower-level presentation or indexing data cannot override higher-level
+blockchain evidence.
+
+------------------------------------------------------------------------
+
+##  System Architecture
+
+``` text
+                      TREASURY USER
+                           │
+                           ▼
+                      XRPSHIELD APP
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+          WALLET        POLICY         PROOF
+                       BUILDER         CENTER
+             │             │             │
+             └─────────────┼─────────────┘
+                           ▼
+                     APPLICATION API
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+        SPRING BOOT       FCC        BLOCKCHAIN
+             │          ADAPTER           │
+             ▼             │              ▼
+         SUPABASE       FCC FLOW       COSTON2
+                           │
+                           ▼
+                       ACTIONRESULT
+                           │
+                           ▼
+                    SMART CONTRACTS
+                           │
+                           ▼
+                      DEX EXECUTION
+```
+## End - End Architecture
+
+``` text
+       Treasury Owner
+     │
+     ▼
+XRPShield Application
+     │
+     ├── Treasury Management
+     ├── Private Policy Management
+     ├── Risk Dashboard
+     ├── Decision Center
+     └── Verification Center
+     │
+     ▼
+Policy Encryption + Commitment
+     │
+     ├── Encrypted Policy ───────────────► Confidential Runtime
+     │
+     └── Policy Commitment ──────────────► XRPShieldVault
+                                             │
+                                             ▼
+                                      FCC Instruction
+                                             │
+                                             ▼
+                                  Confidential Evaluation
+                                             │
+                         ┌───────────────────┴───────────────────┐
+                         │                                       │
+                         ▼                                       ▼
+                  Private Policy                           FTSOv2 Price
+                         │                                       │
+                         └───────────────────┬───────────────────┘
+                                             ▼
+                                      Risk Decision
+                                             │
+                                      APPROVED / NO_ACTION
+                                             │
+                                             ▼
+                                      ActionResult
+                                             │
+                                             ▼
+                                     EIP-712 Signature
+                                             │
+                                             ▼
+                                  FCCExtensionAdapter
+                                             │
+                       ┌─────────────────────┼─────────────────────┐
+                       │                     │                     │
+                       ▼                     ▼                     ▼
+                  Signer Check          Policy Check          Replay Check
+                       │                     │                     │
+                       └─────────────────────┼─────────────────────┘
+                                             ▼
+                                    XRPShieldVault
+                                             │
+                                             ▼
+                                     HedgeExecutor
+                                             │
+                          ┌──────────────────┼──────────────────┐
+                          │                  │                  │
+                          ▼                  ▼                  ▼
+                     Asset Check       Amount Check       Slippage Check
+                          │                  │                  │
+                          └──────────────────┼──────────────────┘
+                                             ▼
+                                      DEX Router
+                                             │
+                                             ▼
+                                       FXRP → USDT0
+                                             │
+                                             ▼
+                                      Treasury Vault
+                                             │
+                                             ▼
+                                  Settlement Receipt
+                                             │
+                                             ▼
+                                  Independent Verifier
+```
+
+### Application responsibilities
+
+Spring Boot provides application orchestration and indexing, including:
+
+-   REST API;
+-   authentication;
+-   wallet ownership verification;
+-   policy metadata;
+-   OpenAI integration;
+-   FCC orchestration;
+-   blockchain interaction;
+-   event indexing;
+-   transaction monitoring;
+-   analytics;
+-   audit history;
+-   proof APIs.
+
+Supabase stores application and indexed blockchain information. It is
+**not** the financial source of truth.
+
+------------------------------------------------------------------------
+
+##  Policy Architecture
+
+A treasury policy contains the conditions under which protection may
+occur.
+
+``` text
+Policy
+├── Asset
+├── Trigger condition
+├── Protection ratio
+├── Maximum hedge
+├── Execution constraints
+├── Deadline
+├── Nonce
+└── Version
+```
+
+### Example policy
+
+``` text
+Asset:               FXRP
+Hedge Ratio:         70%
+Trigger:             XRP downside threshold
+Maximum Protection:  500 FXRP
+Deadline:            Specified expiration
+Nonce:               Unique execution identifier
+Version:             Policy version
+```
+
+### Policy commitment
+
+The policy is deterministically encoded and converted into a
+cryptographic commitment:
+
+``` text
+Policy
+   ↓
+Canonical Encoding
+   ↓
+keccak256
+   ↓
+Policy Commitment
+```
+
+Conceptually:
+
+``` text
+policyCommitment =
+keccak256(
+    vaultId,
+    asset,
+    hedgeRatio,
+    triggerThreshold,
+    maximumProtection,
+    deadline,
+    nonce,
+    policyVersion
+)
+```
+
+The commitment binds:
+
+``` text
+USER-APPROVED POLICY
+        ↕
+CONFIDENTIAL EVALUATION
+        ↕
+ON-CHAIN EXECUTION
+```
+
+A result generated for another policy must be rejected.
+
+### Policy versioning
+
+``` text
+Policy V1 → Commitment V1
+Policy V2 → Commitment V2
+Policy V3 → Commitment V3
+```
+
+An ActionResult associated with one policy version cannot authorize
+execution under another.
+
+------------------------------------------------------------------------
+
+##  OpenAI Policy Assistant
+
+OpenAI provides a human-friendly policy interface.
+
+For example:
+
+> "Protect 70% of my XRP exposure if XRP falls by 5%, never exceed 500
+> FXRP, and do not execute after tomorrow."
+
+The assistant can structure the request as a policy proposal:
+
+``` json
+{
+  "hedgeRatio": 70,
+  "triggerThreshold": 5,
+  "maximumProtection": 500,
+  "deadline": "...",
+  "policyVersion": 1
+}
+```
+
+The user reviews the proposal before it becomes an approved policy.
+
+### AI authority boundary
+
+``` text
+OpenAI
+  │
+  ├── Recommend
+  ├── Structure
+  ├── Explain
+  └── Assist
+       │
+       X
+       ├── Sign
+       ├── Execute
+       ├── Move funds
+       ├── Approve hedge
+       └── Override contract
+```
+
+**AI recommends. Cryptography authenticates. Smart contracts enforce.**
+
+------------------------------------------------------------------------
+
+##  Flare Confidential Compute
+
+FCC is the confidentiality layer and central privacy component.
+
+``` text
+On-chain Instruction
+        │
+        ▼
+InstructionSender
+        │
+        ▼
+Flare Confidential Compute
+        │
+        ▼
+Confidential Extension
+        │
+        ▼
+Private Evaluation
+        │
+        ▼
+ActionResult
+        │
+        ▼
+Authentication
+        │
+        ▼
+Smart Contract Verification
+        │
+        ▼
+Execution Authorization
+```
+
+The confidential evaluation uses sensitive policy information together
+with market-data context, risk rules and execution constraints.
+
+------------------------------------------------------------------------
+
+##  ActionResult and EIP-712 Verification
+
+The confidential evaluation produces an authenticated `ActionResult`.
+
+Conceptual fields include:
+
+``` text
+ActionResult
+├── vaultId
+├── policyCommitment
+├── decision
+├── hedgeAmount
+├── nonce
+├── timestamp
+└── deadline
+```
+
+The contract validates the expected vault, policy, nonce, deadline,
+signer and execution context.
+
+### Cryptographic path
+
+``` text
+ActionResult
+     ↓
+Typed Data
+     ↓
+EIP-712 Domain
+     ↓
+Digest
+     ↓
+Signature
+     ↓
+Signer Recovery
+     ↓
+Registered Identity
+     ↓
+VALID / REJECT
+```
+
+The verification boundary protects against:
+
+-   forged results;
+-   modified results;
+-   wrong policy;
+-   wrong vault;
+-   unauthorized signer;
+-   replay;
+-   expired authorization.
+
+------------------------------------------------------------------------
+
+##  Smart Contract Architecture
+
+XRPShield uses a responsibility-separated financial control plane.
+
+  -----------------------------------------------------------------------
+  Contract                            Financial responsibility
+  ----------------------------------- -----------------------------------
+  `XRPShieldVault`                    Treasury custody, policy binding
+                                      and authorization
+
+  `FCCExtensionAdapter`               Confidential result → authenticated
+                                      on-chain decision
+
+  `HedgeExecutor`                     Bounded FXRP → USDT0 execution
+  
+  -----------------------------------------------------------------------
+
+### Contract relationship
+
+``` text
+                 ┌─────────────────────┐
+                 │ XRPShieldVault.sol  │
+                 │                     │
+                 │ Custody             │
+                 │ Policy              │
+                 │ Verification        │
+                 │ Authorization       │
+                 │ Replay Protection   │
+                 │ Emergency Controls  │
+                 └──────────┬──────────┘
+                            │
+              ┌─────────────┴─────────────┐
+              ▼                           ▼
+      ┌──────────────────┐       ┌──────────────────┐
+      │ FCC Extension    │       │ HedgeExecutor    │
+      │ Adapter          │      │                  │
+      │                  │       │ Router Control   │
+      │ Result Validation│       │ Slippage         │
+      │ Signature        │       │ Deadline         │
+      │ Policy Binding   │       │ Output Bounds    │
+      └──────────────────┘       └────────┬─────────┘
+                                         │
+                                         ▼
+                                      DEX Router
+                                         │
+                                         ▼
+                                      FXRP → USDT0
+```
+
+### XRPShieldVault
+
+The vault is the final on-chain authorization boundary.
+
+Responsibilities include:
+
+-   vault creation;
+-   ownership;
+-   FXRP deposit and withdrawal;
+-   policy commitment;
+-   policy versioning;
+-   FCC instruction binding;
+-   ActionResult verification;
+-   nonce consumption;
+-   execution authorization;
+-   emergency pause.
+
+The vault must never trust frontend state, backend state, database state
+or AI output.
+
+### FCCExtensionAdapter
+
+``` text
+FCC Result
+    ↓
+ActionResult
+    ↓
+EIP-712 Signature
+    ↓
+Signer Recovery
+    ↓
+Policy Binding
+    ↓
+Nonce Check
+    ↓
+Expiry Check
+    ↓
+Execution Authorization
+```
+
+### HedgeExecutor
+
+The HedgeExecutor performs the bounded asset conversion. It does not
+independently decide whether a hedge should occur.
+
+``` text
+FXRP
+ ↓
+Approved Router
+ ↓
+Approved Route
+ ↓
+USDT0
+```
+
+------------------------------------------------------------------------
+
+##  Vault State Machine
+
+``` text
+CREATED
+   ↓
+FUNDED
+   ↓
+POLICY_ACTIVE
+   ↓
+EVALUATION_REQUESTED
+   ↓
+DECISION_RECEIVED
+   ↓
+DECISION_VERIFIED
+   ↓
+EXECUTION_AUTHORIZED
+   ↓
+EXECUTED
+```
+
+Failure states include:
+
+``` text
+EVALUATION_REQUESTED → FAILED
+DECISION_RECEIVED    → INVALID_ATTESTATION
+EXECUTION_AUTHORIZED → SWAP_FAILED
+```
+
+A failed operation must never become a successful UI state.
+
+------------------------------------------------------------------------
+
+##  Market Data and Asset Integrations
+
+### FTSOv2
+
+FTSOv2 supplies the XRP/USD market-data input.
+
+``` text
+FTSOv2
+   ↓
+XRP/USD
+   ↓
+Feed Validation
+   ↓
+Timestamp Validation
+   ↓
+Freshness Validation
+   ↓
+Risk Evaluation
+```
+
+Validation includes:
+
+-   supported feed;
+-   available value;
+-   timestamp;
+-   freshness;
+-   stale-data threshold.
+
+If price data is stale:
+
+``` text
+PRICE DATA STALE
+       ↓
+EXECUTION BLOCKED
+```
+
+FTSOv2 is an input to the risk pipeline, not a cosmetic price display.
+
+### FXRP
+
+FXRP is the XRP-linked asset held by the vault.
+
+``` text
+User Wallet
+     ↓
+FXRP
+     ↓
+XRPShield Vault
+     ↓
+Private Policy
+     ↓
+Authorized Hedge
+```
+
+Application balances must remain reconcilable against blockchain state.
+
+### USDT0
+
+USDT0 is the settlement/output asset used by the current MVP hedge path.
+
+------------------------------------------------------------------------
+
+##  Bounded Hedge Execution
+
+The current MVP hedge is an **FXRP → USDT0 conversion** through the
+configured Coston2 DEX route.
+
+It should not be described as a perpetual short.
+
+``` text
+Approved Decision
+       ↓
+FTSO Price
+       ↓
+DEX Quote
+       ↓
+Slippage Check
+       ↓
+Deadline Check
+       ↓
+HedgeExecutor
+       ↓
+FXRP → USDT0
+       ↓
+Coston2 Receipt
+       ↓
+Token Transfer Verification
+```
+
+### DEX quote controls
+
+A quote contains:
+
+``` text
+tokenIn
+tokenOut
+amountIn
+expectedOutput
+minimumOutput
+router
+deadline
+```
+
+Example from the supplied documentation:
+
+``` text
+Expected Output:  100 USDT0
+Maximum Slippage: 0.5%
+Minimum Output:   99.5 USDT0
+```
+
+If actual output is below the minimum, execution is rejected.
+
+### Deadline protection
+
+``` text
+Authorization
+      ↓
+Quote
+      ↓
+Deadline
+      ↓
+Execution
+```
+
+After expiration, execution is blocked.
+
+------------------------------------------------------------------------
+
+##  Coston2 Execution Evidence
+
+The supplied documentation reports a real Coston2 execution:
+
+``` text
+10.00 FXRP → 8.4575 USDT0
+Block: 33973480
+
+Transaction:
+0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3
+```
+
+The supplied documentation also reports a quoted **0.5% maximum slippage
+cap**.
+
+Before final submission, the transaction, receipt and associated
+token-transfer evidence should be re-queried against Coston2.
+
+------------------------------------------------------------------------
+
+##  Complete Decision Flow
+
+``` text
+1.  Connect Wallet
+2.  Create / Select Vault
+3.  Deposit FXRP
+4.  Define Policy
+5.  Commit Policy
+6.  Request Confidential Evaluation
+7.  Evaluate Sensitive Policy
+8.  Produce ActionResult
+9.  Verify Cryptographic Authorization
+10. Validate FTSOv2 Price and Freshness
+11. Obtain DEX Quote
+12. Validate Slippage
+13. Validate Deadline
+14. Authorize Execution
+15. Execute FXRP → USDT0
+16. Verify Transaction Receipt
+17. Verify Token Settlement
+```
+
+------------------------------------------------------------------------
+
+##  Security Architecture
+
+``` text
+USER INPUT
+   ↓
+POLICY VALIDATION
+   ↓
+POLICY COMMITMENT
+   ↓
+CONFIDENTIAL COMPUTE
+   ↓
+CRYPTOGRAPHIC VERIFICATION
+   ↓
+SMART CONTRACT RULES
+   ↓
+EXECUTION SAFETY
+   ↓
+ON-CHAIN SETTLEMENT
+```
+
+### Security invariants
+
+  Condition                          Failure behavior
+  ---------------------------------- ------------------------------
+  No verified decision               No execution
+  Invalid signature                  Revert
+  Wrong policy commitment            Revert
+  Wrong vault                        Revert
+  Expired result                     Revert / blocked
+  Replayed nonce                     Revert
+  Excessive hedge amount             Revert
+  Stale FTSO data                    Execution blocked
+  Excessive slippage                 Revert
+  Unauthorized router                Revert
+  Arbitrary recipient                Revert
+  Paused vault                       Execution blocked
+  RPC / infrastructure uncertainty   Never converted into success
+
+### Threat model
+
+The documented threat model covers:
+
+-   forged signatures;
+-   modified ActionResults;
+-   replay and expiry;
+-   wrong policy or vault;
+-   unauthorized routers;
+-   arbitrary recipients;
+-   invalid tokens;
+-   excessive amounts;
+-   duplicate execution;
+-   insufficient balance;
+-   excessive slippage;
+-   stale or unavailable oracle data;
+-   malformed market data;
+-   frontend manipulation;
+-   backend manipulation;
+-   database manipulation;
+-   prompt injection;
+-   false execution status;
+-   RPC uncertainty.
+
+Security-critical failures should fail closed.
+
+------------------------------------------------------------------------
+
+##  Observability and Transaction Integrity
+
+The system tracks or exposes operational conditions including:
+
+-   RPC latency;
+-   transaction failures;
+-   FCC request latency;
+-   FCC errors;
+-   ActionResult verification failures;
+-   DEX failures;
+-   stale FTSO data;
+-   indexing failures;
+-   circuit-breaker state;
+-   infrastructure failures.
+
+Infrastructure uncertainty must never be converted into financial
+success.
+
+### Transaction state
+
+``` text
+CREATED
+   ↓
+SUBMITTED
+   ↓
+PENDING
+   ├──→ CONFIRMED
+   ├──→ FAILED
+   └──→ UNKNOWN
+```
+
+A submitted transaction is not automatically successful. A verified
+receipt and expected settlement evidence establish confirmed execution.
+
+------------------------------------------------------------------------
+
+##  Independent Verification
+
+The Proof Center answers a central question:
+
+> Can a technically competent judge independently verify that this
+> actually happened?
+
+The verification hierarchy is:
+
+``` text
+Blockchain State
+      ↓
+Smart Contract Event
+      ↓
+Verified Source
+      ↓
+FCC / ActionResult Evidence
+      ↓
+Automated Tests
+      ↓
+Backend Index
+      ↓
+Frontend
+```
+
+### Verification map
+
+  Component / claim   Verification method
+  ------------------- ----------------------------------------
+  Smart contracts     Flare explorer / verified source
+  Vault state         Contract read
+  Policy commitment   Contract event/state
+  ActionResult        Signature / cryptographic verification
+  FTSOv2              On-chain feed data
+  Execution           Transaction receipt
+  Settlement          Token transfer / event logs
+  Security            Automated test suite
+  Backend             API / indexed records
+  Frontend            Presentation only
+
+### Financial source of truth
+
+``` text
+Flare Blockchain
+       +
+Smart Contract State
+       +
+Verified ActionResult
+       +
+Actual Transaction Receipt
+       =
+FINANCIAL SOURCE OF TRUTH
+```
+
+------------------------------------------------------------------------
+
+##  Current Integration Set
+
+  Integration / component      Role
+  ---------------------------- -------------------------------------------
+  Flare Coston2                Blockchain execution and settlement
+  Flare Confidential Compute   Confidential policy evaluation
+  FTSOv2                       XRP/USD market data
+  FXRP                         XRP-linked treasury asset
+  USDT0                        Hedge settlement asset
+  DEX                          FXRP → USDT0 execution
+  XRPShieldVault               Treasury authority
+  FCCExtensionAdapter          Confidential-result verification boundary
+  HedgeExecutor                Controlled swap execution
+  EIP-712                      Cryptographic ActionResult authentication
+  Spring Boot                  Application orchestration
+  Supabase                     Indexed application / blockchain data
+  OpenAI                       Policy advisory interface
+
+------------------------------------------------------------------------
+
+##  Current Capability and Status Boundaries
+
+The supplied project documentation defines the following boundaries:
+
+  -----------------------------------------------------------------------
+  Capability                          Status
+  ----------------------------------- -----------------------------------
+  Coston2 blockchain execution        Real / implemented testnet
+                                      execution
+
+  Smart contracts                     Implemented
+
+  FXRP integration                    Integrated
+
+  FTSOv2 integration                  Integrated
+
+  DEX execution path                  Implemented
+
+  FXRP → USDT0 settlement             Real demonstrated execution
+
+  Backend / indexing                  Implemented
+
+  OpenAI policy assistant             Advisory
+
+  FCC workflow                        Implemented
+
+  Current TEE mode                    Simulated on Coston2
+
+  Production confidential hardware    Not claimed
+
+  Mainnet financial infrastructure    Not claimed
+
+  Perpetual short                     Not claimed
+
+  Absolute anonymity                  Not claimed
+
+  External venue execution            Not claimed unless genuinely
+                                      deployed and tested
+  -----------------------------------------------------------------------
+
+### Important status boundary
+
+The supplied documentation explicitly states that the current Coston2
+environment uses a **simulated TEE mode**. This README therefore does
+not represent the current environment as production hardware TEE
+attestation.
+
+Coston2 is a testnet. Production mainnet use requires additional
+security review and infrastructure validation.
+
+------------------------------------------------------------------------
+
+##  Hackathon Positioning
+
+### Primary track
+
+**Confidential Compute Apps**
+
+The defining feature is confidential treasury-policy evaluation. Without
+Confidential Compute, the privacy property that differentiates XRPShield
+is lost.
+
+### Core hackathon work documented by the project
+
+-   Confidential treasury-policy workflow
+-   Policy commitment and versioning
+-   Coston2 vault contracts
+-   FXRP integration
+-   FTSOv2 market-data integration
+-   FCC extension integration
+-   ActionResult verification
+-   Real FXRP → USDT0 execution
+-   Spring Boot orchestration and indexing
+-   Policy-assistant workflow
+-   Privacy and execution evidence
+-   Security testing
+-   Judge-facing verification
+
+------------------------------------------------------------------------
+
+
+
+The product combines:
+
+**privacy + programmable policy + cryptographic authorization + risk
+controls + real settlement + independent verification.**
+
+
+### Security Principle
+
+AI can advise. The application can request. The confidential runtime can decide. But only authorized smart-contract logic can move treasury assets.
+
+This should be one of the strongest lines in your presentation.
+------------------------------------------------------------------------
+
+
+
+
+
