@@ -217,29 +217,21 @@ export class I18nEngine {
                     const svg = link.querySelector('svg');
                     
                     if (svg) {
-                        link.innerHTML = '';
-                        link.appendChild(svg);
-                        link.appendChild(document.createTextNode(' ' + translatedText));
+                        const textNode = Array.from(link.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
+                        if (textNode) {
+                            textNode.nodeValue = ' ' + translatedText;
+                        } else {
+                            link.innerHTML = '';
+                            link.appendChild(svg);
+                            link.appendChild(document.createTextNode(' ' + translatedText));
+                        }
                     } else {
                         link.innerText = translatedText;
                     }
                 }
             });
 
-            // 2. Sidebar Header Tag
-            document.querySelectorAll('.sidebar-header, div.sidebar-title, .brand-title, .sidebar-tag').forEach(el => {
-                const orig = el.getAttribute('data-i18n-orig') || el.innerText.trim();
-                if (!el.getAttribute('data-i18n-orig')) el.setAttribute('data-i18n-orig', orig);
-                
-                if (lang === 'en') {
-                    el.innerText = orig;
-                } else {
-                    const translated = this.t(orig);
-                    if (translated) el.innerText = translated;
-                }
-            });
-
-            // 3. Input Attributes
+            // 2. Input Attributes
             document.querySelectorAll('input, textarea').forEach(input => {
                 const orig = input.getAttribute('data-i18n-orig-ph') || input.getAttribute(attrKey);
                 if (orig) {
@@ -255,7 +247,7 @@ export class I18nEngine {
                 }
             });
 
-            // 4. All Page Text Elements
+            // 3. Page Text Elements
             const targetElements = document.querySelectorAll(
                 'h1, h2, h3, h4, h5, h6, p, label, button, th, td, span, div.card-title, div.card-subtext, div.section-label, div.card-header, div.stat-label, strong'
             );
@@ -265,6 +257,8 @@ export class I18nEngine {
                     el.tagName === 'CODE' || 
                     el.tagName === 'INPUT' || 
                     el.tagName === 'SCRIPT' || 
+                    el.tagName === 'STYLE' || 
+                    el.tagName === 'SVG' || 
                     el.id === 'wallet-connect-btn' || 
                     el.closest('#wallet-connect-btn') ||
                     el.closest('.sidebar-logo') ||
@@ -272,27 +266,45 @@ export class I18nEngine {
                     el.closest('[data-no-i18n="true"]')
                 ) return;
 
-                const origText = el.getAttribute('data-i18n-orig') || el.innerText.trim();
-                if (!el.getAttribute('data-i18n-orig')) {
-                    el.setAttribute('data-i18n-orig', origText);
-                }
-
                 if (lang === 'en') {
-                    if (el.children.length === 0) {
-                        el.innerText = origText;
-                    } else {
-                        const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-                        if (textNode) textNode.nodeValue = origText;
+                    // Restore original English text if element was previously translated to another language
+                    if (el.hasAttribute('data-i18n-orig') && el.children.length === 0) {
+                        el.textContent = el.getAttribute('data-i18n-orig');
+                        el.removeAttribute('data-i18n-orig');
                     }
-                } else {
-                    const translated = this.t(origText);
-                    if (translated && translated !== origText) {
-                        if (el.children.length === 0) {
-                            el.innerText = translated;
-                        } else {
-                            const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-                            if (textNode) textNode.nodeValue = translated;
+                    Array.from(el.childNodes).forEach(node => {
+                        if (node.nodeType === Node.TEXT_NODE && node._i18nOrig !== undefined) {
+                            node.nodeValue = node._i18nOrig;
+                            delete node._i18nOrig;
                         }
+                    });
+                } else {
+                    // Translate to non-English language
+                    if (el.children.length === 0) {
+                        const origText = el.getAttribute('data-i18n-orig') || el.textContent.trim();
+                        if (!origText) return;
+                        if (!el.hasAttribute('data-i18n-orig')) {
+                            el.setAttribute('data-i18n-orig', origText);
+                        }
+                        const translated = this.t(origText);
+                        if (translated && translated !== origText) {
+                            el.textContent = translated;
+                        }
+                    } else {
+                        Array.from(el.childNodes).forEach(node => {
+                            if (node.nodeType === Node.TEXT_NODE) {
+                                const rawText = node.nodeValue.trim();
+                                if (!rawText) return;
+
+                                if (node._i18nOrig === undefined) {
+                                    node._i18nOrig = node.nodeValue;
+                                }
+                                const translated = this.t(rawText);
+                                if (translated && translated !== rawText) {
+                                    node.nodeValue = node.nodeValue.replace(rawText, translated);
+                                }
+                            }
+                        });
                     }
                 }
             });

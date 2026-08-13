@@ -128,7 +128,7 @@ export async function initDashboard() {
         if (vaultsVal) vaultsVal.innerText = Math.max(activeVaultsCount, vaults.length);
         if (policiesVal) policiesVal.innerText = Math.max(activePoliciesCount, policies.length);
         if (volumeVal) volumeVal.innerText = `${Number(totalReserveFXRP).toLocaleString()} FXRP`;
-        if (fccVal) fccVal.innerText = 'SEALED & ATTESTED';
+        if (fccVal) fccVal.innerHTML = '<i></i> SEALED & ATTESTED';
 
         renderActivityFeed(activityBody, uniqueDecisions);
 
