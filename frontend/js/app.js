@@ -2,7 +2,19 @@ import { WalletManager } from './utils/wallet.js';
 import { updateActiveTreasury } from './utils/execution-modal.js';
 import { initGlobalSearch } from './components/search.js';
 import { renderHeaderNotifications } from './components/notifications.js';
-import { I18nEngine } from './utils/i18n.js?v=7';
+import { I18nEngine } from './utils/i18n.js?v=8';
+
+window.copyAddressWithToast = function(addr) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(addr);
+    }
+    const toastMsg = `Contract Address Copied: ${addr.substring(0, 8)}...${addr.substring(addr.length - 6)}`;
+    if (typeof window.showToast === 'function') {
+        window.showToast(toastMsg, 'success');
+    } else {
+        alert('📋 ' + toastMsg);
+    }
+};
 
 /* ===========================================================
    XRPShield — Main Frontend Single Page Application Router
