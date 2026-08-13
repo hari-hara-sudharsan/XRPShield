@@ -7,6 +7,7 @@ export async function initExecutions() {
     const tableBody = document.getElementById('executions-table-body');
     const startForm = document.getElementById('start-execution-form');
 
+    populateDecisionSelect();
     await loadExecutions(tableBody);
 
     if (startForm && !startForm.dataset.initialized) {
@@ -188,4 +189,44 @@ window.viewTxReceipt = function(txHash, blockNum) {
 function escapeHtml(text) {
     if (!text) return '';
     return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function populateDecisionSelect() {
+    const selectEl = document.getElementById('exec-decision-select');
+    if (!selectEl) return;
+
+    let customDecisions = [];
+    try {
+        const raw = localStorage.getItem('xrpshield_user_decisions');
+        if (raw) customDecisions = JSON.parse(raw);
+    } catch(e) {}
+
+    const defaultDecisions = [
+        {
+            id: 'dec-fcc-9921',
+            decisionType: 'DRAWDOWN_CIRCUIT_BREAKER',
+            vaultName: 'Primary FXRP Treasury Vault',
+            attestationId: 'FCC-ATT-992184'
+        },
+        {
+            id: 'dec-fcc-77b1',
+            decisionType: 'AUTOMATED_REBALANCE',
+            vaultName: 'Yield Reserve Vault',
+            attestationId: 'FCC-ATT-77B10C'
+        },
+        {
+            id: 'dec-fcc-33f4',
+            decisionType: 'REDUCE_EXPOSURE',
+            vaultName: 'Liquidity Safeguard Vault',
+            attestationId: 'FCC-ATT-33F49A'
+        }
+    ];
+
+    const allDecisions = [...customDecisions, ...defaultDecisions];
+
+    selectEl.innerHTML = allDecisions.map((d, idx) => `
+        <option value="${d.id || ('dec-' + idx)}" style="background: #0e1728; color: #f4f2ed; padding: 10px;">
+            ${escapeHtml(d.decisionType)} — ${escapeHtml(d.vaultName || 'Primary FXRP Treasury Vault')} (${escapeHtml(d.attestationId || 'FCC-ATT-APPROVED')})
+        </option>
+    `).join('');
 }

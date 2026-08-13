@@ -1006,15 +1006,11 @@
                     <select
                         id="exec-decision-select"
                         class="xps-form-control"
+                        style="background: rgba(9, 14, 25, 0.95); color: var(--xps-text, #f4f2ed); border: 1px solid rgba(0, 242, 254, 0.3); padding: 12px 14px; border-radius: 10px; font-size: 0.88rem; outline: none; width: 100%;"
                     >
-
-                        <!--
-                            Keep these options dynamically populated by
-                            the execution component if the backend supports it.
-                            Do not treat static UUIDs as valid unless they
-                            correspond to real persisted decisions.
-                        -->
-
+                        <option value="dec-fcc-9921" style="background: #0e1728; color: #f4f2ed;">DRAWDOWN_CIRCUIT_BREAKER — Primary FXRP Treasury Vault (FCC-ATT-992184)</option>
+                        <option value="dec-fcc-77b1" style="background: #0e1728; color: #f4f2ed;">AUTOMATED_REBALANCE — Yield Reserve Vault (FCC-ATT-77B10C)</option>
+                        <option value="dec-fcc-33f4" style="background: #0e1728; color: #f4f2ed;">REDUCE_EXPOSURE — Liquidity Safeguard Vault (FCC-ATT-33F49A)</option>
                     </select>
 
                 </div>
