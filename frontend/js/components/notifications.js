@@ -97,41 +97,44 @@ export function renderHeaderNotifications() {
 
     if (badge) {
         badge.innerText = list.length;
-        badge.style.display = list.length > 0 ? 'inline-block' : 'none';
+        badge.style.display = list.length > 0 ? 'flex' : 'none';
+        badge.removeAttribute('hidden');
     }
 
-    const drawerHead = `<div class="notif-drawer-head" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
-        <span style="font-weight: 700; font-size: 0.85rem; color: var(--primary-cyan);">REAL ON-CHAIN NOTIFICATIONS</span>
-        <button onclick="window.clearNotifications()" style="background: none; border: none; color: var(--text-muted); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">Clear All</button>
-    </div>`;
+    const drawerHead = `
+        <div class="notif-drawer-head" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 9px; margin-bottom: 6px; border-bottom: 1px solid var(--xps-border);">
+            <span style="font-weight: 700; font-size: 0.72rem; color: var(--xps-cyan, #62d9ee); letter-spacing: 0.08em; font-family: var(--xps-mono);">REAL ON-CHAIN NOTIFICATIONS</span>
+            <button onclick="window.clearNotifications()" style="background: none; border: none; color: var(--xps-text-3, #5f6778); font-size: 0.7rem; cursor: pointer; text-decoration: underline;">Clear All</button>
+        </div>
+    `;
 
     if (list.length === 0) {
-        drawer.innerHTML = drawerHead + `<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.82rem;">No active notifications</div>`;
+        drawer.innerHTML = drawerHead + `<div style="padding: 24px; text-align: center; color: var(--xps-text-3, #5f6778); font-size: 0.8rem;">No active notifications</div>`;
         return;
     }
 
     const explorer = CONFIG.FLARE_NETWORK.EXPLORER || 'https://coston2-explorer.flare.network';
 
     const rows = list.map(n => {
-        let dotColor = 'var(--jade)';
-        if (n.type === 'warning' || n.type === 'policy') dotColor = 'var(--gold)';
-        if (n.type === 'wallet' || n.type === 'execution') dotColor = 'var(--indigo)';
+        let dotColor = 'var(--xps-green, #49d28f)';
+        if (n.type === 'warning' || n.type === 'policy') dotColor = 'var(--xps-gold, #c9a96a)';
+        if (n.type === 'wallet' || n.type === 'execution') dotColor = 'var(--xps-indigo, #7180ff)';
 
-        const txLink = n.txHash ? `<br><a href="${explorer}/tx/${n.txHash}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-cyan); font-size: 0.72rem; text-decoration: none;">Explorer Receipt ↗</a>` : '';
+        const txLink = n.txHash ? `<br><a href="${explorer}/tx/${n.txHash}" target="_blank" rel="noopener noreferrer" style="color: var(--xps-cyan, #62d9ee); font-size: 0.72rem; text-decoration: none; display: inline-block; margin-top: 3px;">Explorer Receipt ↗</a>` : '';
 
         return `
-            <div class="notif-row" style="padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; gap: 10px;">
-                <div class="notif-dot" style="width: 8px; height: 8px; border-radius: 50%; background:${dotColor}; margin-top: 4px; flex-shrink: 0;"></div>
+            <div class="notif-row" style="padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; gap: 10px; align-items: flex-start;">
+                <div class="notif-dot" style="width: 8px; height: 8px; border-radius: 50%; background:${dotColor}; margin-top: 4px; flex-shrink: 0; box-shadow: 0 0 8px ${dotColor};"></div>
                 <div style="flex: 1; min-width: 0;">
-                    <p style="font-weight: 600; font-size: 0.8rem; margin-bottom: 2px; color: var(--text-primary);">${escapeHtml(n.title)}</p>
-                    <p style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 4px;">${escapeHtml(n.message)}${txLink}</p>
-                    <span style="font-size: 0.7rem; color: var(--text-muted);">${new Date(n.timestamp).toLocaleTimeString()}</span>
+                    <p style="font-weight: 600; font-size: 0.8rem; margin: 0 0 3px 0; color: var(--xps-text, #f4f2ed); line-height: 1.35;">${escapeHtml(n.title)}</p>
+                    <p style="font-size: 0.76rem; color: var(--xps-text-2, #9ca3b2); line-height: 1.4; margin: 0 0 4px 0;">${escapeHtml(n.message)}${txLink}</p>
+                    <span style="font-size: 0.68rem; color: var(--xps-text-3, #5f6778); font-family: var(--xps-mono);">${new Date(n.timestamp).toLocaleTimeString()}</span>
                 </div>
             </div>
         `;
     }).join('');
 
-    const scrollContainer = `<div style="max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px;">${rows}</div>`;
+    const scrollContainer = `<div style="max-height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px;">${rows}</div>`;
 
     drawer.innerHTML = drawerHead + scrollContainer;
 }

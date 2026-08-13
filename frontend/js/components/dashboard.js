@@ -151,9 +151,8 @@ function renderActivityFeed(container, decisions) {
                 <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono, monospace);">${new Date(d.createdAt || Date.now()).toLocaleTimeString()}</div>
             </div>
         </div>
-    `).join('');
 }
-}
+
 
 function escapeHtml(text) {
     if (!text) return '';
