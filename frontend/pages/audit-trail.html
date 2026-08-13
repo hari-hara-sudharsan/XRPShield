@@ -1,8 +1,1358 @@
-<div style="margin-bottom: 24px;">
-    <h2 style="font-size: 1.8rem; font-weight: 700;">10-Stage Real Execution Audit Trail</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Immutable 10-stage lifecycle trajectory reconstructed directly from Flare Coston2 smart contract event evidence</p>
-</div>
+<!-- ═══════════════════════════════════════════════════════════════
+     REAL EXECUTION AUDIT TRAIL
+════════════════════════════════════════════════════════════════ -->
 
-<div id="auditTimelineContainer">
-    <p style="color:var(--text-secondary);">Reconstructing 10-Stage Lifecycle from Coston2 RPC...</p>
-</div>
+<section class="execution-audit-section">
+
+    <div class="audit-header">
+
+        <div class="audit-title-wrap">
+
+            <div class="audit-eyebrow">
+                <span class="eyebrow-dot"></span>
+                ON-CHAIN FORENSIC TRACE
+            </div>
+
+            <h2>
+                10-Stage
+                <span>Real Execution</span>
+                Audit Trail
+            </h2>
+
+            <p>
+                Immutable lifecycle trajectory reconstructed directly from
+                <strong>Flare Coston2 smart-contract event evidence</strong>.
+                Every stage is independently verifiable on-chain.
+            </p>
+
+        </div>
+
+        <div class="audit-live-status">
+            <span class="live-pulse"></span>
+            <div>
+                <strong>LIVE RPC RECONSTRUCTION</strong>
+                <small>Coston2 • Chain ID 114</small>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Audit statistics -->
+    <div class="audit-stats">
+
+        <div class="audit-stat-card">
+            <div class="stat-icon">◈</div>
+            <div>
+                <span class="stat-label">LIFECYCLE STAGES</span>
+                <strong id="auditStageCount">10</strong>
+            </div>
+        </div>
+
+        <div class="audit-stat-card">
+            <div class="stat-icon">◆</div>
+            <div>
+                <span class="stat-label">CHAIN</span>
+                <strong>COSTON2</strong>
+            </div>
+        </div>
+
+        <div class="audit-stat-card">
+            <div class="stat-icon">⌁</div>
+            <div>
+                <span class="stat-label">EVIDENCE SOURCE</span>
+                <strong>RPC EVENTS</strong>
+            </div>
+        </div>
+
+        <div class="audit-stat-card verified-stat">
+            <div class="stat-icon">✓</div>
+            <div>
+                <span class="stat-label">VERIFICATION</span>
+                <strong>ON-CHAIN</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Main audit console -->
+    <div class="audit-console">
+
+        <!-- Console top bar -->
+        <div class="audit-console-bar">
+
+            <div class="console-left">
+
+                <div class="console-terminal-icon">
+                    &gt;_
+                </div>
+
+                <div>
+                    <strong>EXECUTION TRAJECTORY</strong>
+                    <span>Smart-contract event reconstruction</span>
+                </div>
+
+            </div>
+
+            <div class="console-right">
+
+                <span class="rpc-indicator">
+                    <i></i>
+                    RPC CONNECTED
+                </span>
+
+                <span class="block-indicator" id="auditBlockIndicator">
+                    BLOCK ——
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Timeline -->
+        <div id="auditTimelineContainer" class="audit-timeline-container">
+
+            <!-- Initial loading state -->
+            <div class="audit-loading">
+
+                <div class="loading-orbit">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="loading-content">
+
+                    <strong>
+                        Reconstructing execution lifecycle
+                    </strong>
+
+                    <p>
+                        Querying Flare Coston2 RPC for verified smart-contract
+                        event evidence...
+                    </p>
+
+                    <div class="loading-progress">
+                        <span></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Verification footer -->
+    <div class="audit-verification-footer">
+
+        <div class="verification-shield">
+            ✓
+        </div>
+
+        <div class="verification-text">
+            <strong>Evidence-first verification</strong>
+            <span>
+                Timeline states are derived from blockchain events,
+                not simulated frontend state.
+            </span>
+        </div>
+
+        <div class="verification-badge">
+            <span></span>
+            Coston2 Verified
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════
+   EXECUTION AUDIT — MAIN
+════════════════════════════════════════════════════════════════ */
+
+.execution-audit-section {
+    position: relative;
+    margin: 42px 0;
+    padding: 34px;
+    border-radius: 28px;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 8% 0%,
+            rgba(99, 102, 241, 0.14),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 92% 100%,
+            rgba(14, 165, 233, 0.10),
+            transparent 30%
+        ),
+        rgba(10, 15, 30, 0.88);
+
+    border: 1px solid rgba(148, 163, 184, 0.13);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+
+    backdrop-filter: blur(24px);
+}
+
+
+/* subtle grid */
+
+.execution-audit-section::before {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(148,163,184,0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(148,163,184,0.035) 1px,
+            transparent 1px
+        );
+
+    background-size: 32px 32px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent 90%
+    );
+
+    pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════════ */
+
+.audit-header {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+
+    margin-bottom: 28px;
+}
+
+
+.audit-eyebrow {
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 12px;
+
+    font-size: 0.70rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+
+    color: #94a3b8;
+}
+
+
+.eyebrow-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 8px rgba(34,197,94,0.9),
+        0 0 18px rgba(34,197,94,0.35);
+
+    animation: auditPulse 2s infinite;
+}
+
+
+.audit-title-wrap h2 {
+
+    margin: 0;
+
+    font-size: clamp(1.8rem, 3vw, 2.55rem);
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -0.04em;
+
+    color: #f8fafc;
+}
+
+
+.audit-title-wrap h2 span {
+
+    background: linear-gradient(
+        110deg,
+        #818cf8,
+        #38bdf8,
+        #a78bfa
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+}
+
+
+.audit-title-wrap p {
+
+    max-width: 760px;
+
+    margin: 13px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 0.94rem;
+
+    line-height: 1.7;
+}
+
+
+.audit-title-wrap p strong {
+
+    color: #cbd5e1;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LIVE STATUS
+══════════════════════════════════════════════════════════════ */
+
+.audit-live-status {
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px 15px;
+
+    border-radius: 14px;
+
+    background: rgba(15,23,42,0.72);
+
+    border: 1px solid rgba(34,197,94,0.16);
+
+    white-space: nowrap;
+}
+
+
+.live-pulse {
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow: 0 0 14px rgba(34,197,94,0.8);
+
+    animation: auditPulse 1.8s infinite;
+}
+
+
+.audit-live-status strong {
+
+    display: block;
+
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+
+    color: #bbf7d0;
+}
+
+
+.audit-live-status small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 0.68rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   STAT CARDS
+══════════════════════════════════════════════════════════════ */
+
+.audit-stats {
+
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+}
+
+
+.audit-stat-card {
+
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    padding: 15px 16px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,0.65),
+            rgba(15,23,42,0.48)
+        );
+
+    border: 1px solid rgba(148,163,184,0.09);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.audit-stat-card:hover {
+
+    transform: translateY(-3px);
+
+    border-color: rgba(129,140,248,0.25);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.22),
+        0 0 25px rgba(99,102,241,0.06);
+}
+
+
+.stat-icon {
+
+    display: grid;
+    place-items: center;
+
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    color: #a5b4fc;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,0.16),
+            rgba(56,189,248,0.08)
+        );
+
+    border: 1px solid rgba(129,140,248,0.13);
+
+    font-size: 1rem;
+}
+
+
+.stat-label {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #64748b;
+
+    font-size: 0.61rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.1em;
+}
+
+
+.audit-stat-card strong {
+
+    color: #e2e8f0;
+
+    font-size: 0.86rem;
+
+    letter-spacing: 0.02em;
+}
+
+
+.verified-stat strong {
+
+    color: #86efac;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CONSOLE
+══════════════════════════════════════════════════════════════ */
+
+.audit-console {
+
+    position: relative;
+    z-index: 1;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(2,6,23,0.92),
+            rgba(15,23,42,0.82)
+        );
+
+    border: 1px solid rgba(148,163,184,0.12);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.025),
+        0 20px 50px rgba(0,0,0,0.22);
+}
+
+
+/* Console bar */
+
+.audit-console-bar {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 68px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid rgba(148,163,184,0.09);
+
+    background: rgba(15,23,42,0.56);
+}
+
+
+.console-left {
+
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+
+.console-terminal-icon {
+
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    color: #67e8f9;
+
+    background: rgba(6,182,212,0.08);
+
+    border: 1px solid rgba(34,211,238,0.12);
+
+    font-family: monospace;
+
+    font-size: 0.76rem;
+}
+
+
+.console-left strong {
+
+    display: block;
+
+    color: #e2e8f0;
+
+    font-size: 0.72rem;
+
+    letter-spacing: 0.08em;
+}
+
+
+.console-left span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 0.68rem;
+}
+
+
+.console-right {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.rpc-indicator,
+.block-indicator {
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    font-size: 0.60rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.06em;
+}
+
+
+.rpc-indicator {
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.07);
+
+    border: 1px solid rgba(34,197,94,0.12);
+}
+
+
+.rpc-indicator i {
+
+    display: inline-block;
+
+    width: 5px;
+    height: 5px;
+
+    margin-right: 5px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow: 0 0 7px rgba(34,197,94,0.8);
+}
+
+
+.block-indicator {
+
+    color: #94a3b8;
+
+    background: rgba(148,163,184,0.05);
+
+    border: 1px solid rgba(148,163,184,0.08);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TIMELINE CONTAINER
+══════════════════════════════════════════════════════════════ */
+
+.audit-timeline-container {
+
+    position: relative;
+
+    padding: 30px 28px 35px;
+
+    min-height: 260px;
+}
+
+
+/*
+   Your existing JS can inject the real 10 stages into
+   #auditTimelineContainer.
+
+   The CSS below automatically styles common timeline
+   structures.
+*/
+
+
+.audit-timeline-container .audit-stage {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 58px minmax(0, 1fr);
+
+    gap: 18px;
+
+    padding-bottom: 24px;
+}
+
+
+.audit-timeline-container .audit-stage:last-child {
+
+    padding-bottom: 0;
+}
+
+
+/* connecting line */
+
+.audit-timeline-container .audit-stage::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 28px;
+    top: 56px;
+    bottom: 0;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(99,102,241,0.48),
+            rgba(56,189,248,0.08)
+        );
+}
+
+
+.audit-timeline-container .audit-stage:last-child::before {
+    display: none;
+}
+
+
+/* timeline node */
+
+.audit-stage-node {
+
+    position: relative;
+    z-index: 2;
+
+    width: 56px;
+    height: 56px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    color: #c7d2fe;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(99,102,241,0.26),
+            rgba(15,23,42,0.95) 66%
+        );
+
+    border: 1px solid rgba(129,140,248,0.28);
+
+    box-shadow:
+        0 0 0 6px rgba(99,102,241,0.025),
+        0 0 25px rgba(99,102,241,0.10);
+
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+
+.audit-stage-node::after {
+
+    content: "";
+
+    position: absolute;
+    inset: -5px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(129,140,248,0.07);
+}
+
+
+/* completed stage */
+
+.audit-stage.completed .audit-stage-node {
+
+    color: #bbf7d0;
+
+    border-color: rgba(34,197,94,0.30);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34,197,94,0.20),
+            rgba(15,23,42,0.95) 68%
+        );
+
+    box-shadow:
+        0 0 0 6px rgba(34,197,94,0.025),
+        0 0 28px rgba(34,197,94,0.13);
+}
+
+
+/* active stage */
+
+.audit-stage.active .audit-stage-node {
+
+    color: #67e8f9;
+
+    border-color: rgba(34,211,238,0.42);
+
+    box-shadow:
+        0 0 0 6px rgba(34,211,238,0.04),
+        0 0 35px rgba(34,211,238,0.20);
+
+    animation: activeNodeGlow 2.4s infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   STAGE CARD
+══════════════════════════════════════════════════════════════ */
+
+.audit-stage-card {
+
+    position: relative;
+
+    padding: 18px 19px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,0.54),
+            rgba(15,23,42,0.36)
+        );
+
+    border: 1px solid rgba(148,163,184,0.09);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+
+.audit-stage-card:hover {
+
+    transform: translateX(4px);
+
+    border-color: rgba(129,140,248,0.22);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,0.70),
+            rgba(15,23,42,0.48)
+        );
+}
+
+
+.audit-stage-top {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.audit-stage-title {
+
+    margin: 0;
+
+    color: #f1f5f9;
+
+    font-size: 0.93rem;
+
+    font-weight: 750;
+}
+
+
+.audit-stage-description {
+
+    margin: 6px 0 0;
+
+    color: #64748b;
+
+    font-size: 0.74rem;
+
+    line-height: 1.6;
+}
+
+
+.audit-stage-status {
+
+    flex-shrink: 0;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.06);
+
+    border: 1px solid rgba(34,197,94,0.11);
+
+    font-size: 0.57rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+
+/* Evidence */
+
+.audit-evidence {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 14px;
+}
+
+
+.audit-evidence-item {
+
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 6px 8px;
+
+    border-radius: 7px;
+
+    background: rgba(2,6,23,0.46);
+
+    border: 1px solid rgba(148,163,184,0.07);
+
+    color: #64748b;
+
+    font-family: monospace;
+
+    font-size: 0.61rem;
+}
+
+
+.audit-evidence-item strong {
+
+    color: #94a3b8;
+
+    font-weight: 600;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LOADING STATE
+══════════════════════════════════════════════════════════════ */
+
+.audit-loading {
+
+    min-height: 190px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    padding: 30px;
+}
+
+
+.loading-orbit {
+
+    position: relative;
+
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(129,140,248,0.16);
+
+    animation: orbitRotate 3s linear infinite;
+}
+
+
+.loading-orbit span {
+
+    position: absolute;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #818cf8;
+
+    box-shadow: 0 0 12px rgba(129,140,248,0.8);
+}
+
+
+.loading-orbit span:nth-child(1) {
+    top: -3px;
+    left: 50%;
+}
+
+
+.loading-orbit span:nth-child(2) {
+    right: 1px;
+    bottom: 9px;
+}
+
+
+.loading-orbit span:nth-child(3) {
+    left: 1px;
+    bottom: 9px;
+}
+
+
+.loading-content strong {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 0.85rem;
+}
+
+
+.loading-content p {
+
+    margin: 5px 0 12px;
+
+    color: #64748b;
+
+    font-size: 0.72rem;
+}
+
+
+.loading-progress {
+
+    width: 240px;
+    height: 3px;
+
+    overflow: hidden;
+
+    border-radius: 99px;
+
+    background: rgba(148,163,184,0.08);
+}
+
+
+.loading-progress span {
+
+    display: block;
+
+    width: 35%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #818cf8,
+        #38bdf8,
+        transparent
+    );
+
+    animation: scanProgress 1.7s infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VERIFICATION FOOTER
+══════════════════════════════════════════════════════════════ */
+
+.audit-verification-footer {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 16px;
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    background: rgba(34,197,94,0.035);
+
+    border: 1px solid rgba(34,197,94,0.09);
+}
+
+
+.verification-shield {
+
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.08);
+
+    border: 1px solid rgba(34,197,94,0.13);
+}
+
+
+.verification-text {
+    flex: 1;
+}
+
+
+.verification-text strong {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 0.74rem;
+}
+
+
+.verification-text span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #64748b;
+
+    font-size: 0.67rem;
+}
+
+
+.verification-badge {
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.05);
+
+    border: 1px solid rgba(34,197,94,0.10);
+
+    font-size: 0.61rem;
+
+    font-weight: 800;
+}
+
+
+.verification-badge span {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow: 0 0 7px rgba(34,197,94,0.8);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════════════════ */
+
+@keyframes auditPulse {
+
+    0%,100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.55;
+        transform: scale(0.82);
+    }
+}
+
+
+@keyframes activeNodeGlow {
+
+    0%,100% {
+        box-shadow:
+            0 0 0 6px rgba(34,211,238,0.035),
+            0 0 25px rgba(34,211,238,0.12);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 9px rgba(34,211,238,0.025),
+            0 0 42px rgba(34,211,238,0.23);
+    }
+}
+
+
+@keyframes orbitRotate {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes scanProgress {
+
+    0% {
+        transform: translateX(-140%);
+    }
+
+    100% {
+        transform: translateX(420%);
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+
+    .audit-header {
+        flex-direction: column;
+    }
+
+    .audit-live-status {
+        width: fit-content;
+    }
+
+    .audit-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .execution-audit-section {
+        padding: 22px 16px;
+        border-radius: 22px;
+    }
+
+    .audit-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .audit-console-bar {
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .console-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .audit-timeline-container {
+        padding: 24px 15px;
+    }
+
+    .audit-stage {
+        grid-template-columns: 46px minmax(0,1fr) !important;
+        gap: 12px !important;
+    }
+
+    .audit-stage-node {
+        width: 44px;
+        height: 44px;
+    }
+
+    .audit-timeline-container .audit-stage::before {
+        left: 22px;
+        top: 44px;
+    }
+
+    .audit-stage-top {
+        flex-direction: column;
+    }
+
+    .audit-verification-footer {
+        align-items: flex-start;
+    }
+
+    .verification-badge {
+        display: none;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+
+    }
+
+}
+
+</style>

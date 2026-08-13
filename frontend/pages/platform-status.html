@@ -1,101 +1,995 @@
-<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-    <div>
-        <h2 style="font-size: 1.8rem; font-weight: 700;">Platform Status & Health Dashboard</h2>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">Real-time subsystem health matrix, operational metrics, circuit breakers, and platform notifications</p>
-    </div>
-    <span id="system-status-badge" class="badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); padding: 8px 16px; font-size: 0.9rem;">
-        ALL SUBSYSTEMS HEALTHY
-    </span>
-</div>
+<style>
+/* =========================================================
+   XRPShield — Platform Status & Infrastructure Health
+   ========================================================= */
 
-<div class="grid-cards" style="margin-bottom: 32px;">
-    <div class="card">
-        <div class="card-title">System Uptime</div>
-        <div class="card-value" style="color: var(--accent-emerald);">99.98%</div>
-        <div class="card-subtext">Enterprise SLA Standards</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Web3 RPC Latency</div>
-        <div class="card-value" id="rpc-latency-val" style="color: var(--primary-cyan);">45 ms</div>
-        <div class="card-subtext">Flare Coston2 Testnet RPC</div>
-    </div>
-    <div class="card">
-        <div class="card-title">FCC TEE Speed</div>
-        <div class="card-value" id="fcc-latency-val" style="color: var(--accent-emerald);">85 ms</div>
-        <div class="card-subtext">Confidential Policy Evaluation</div>
-    </div>
-</div>
+.xps-health {
+    position: relative;
+    margin-bottom: 30px;
+}
 
-<div class="table-container" style="margin-bottom: 32px;">
-    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1.1rem;">Subsystem Health Matrix</h3>
-        <span class="badge">Live Probes</span>
-    </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Subsystem Component</th>
-                <th>Status</th>
-                <th>Latency</th>
-                <th>Details & Operational Status</th>
-            </tr>
-        </thead>
-        <tbody id="health-table-body">
-            <tr>
-                <td><strong>Backend Spring Boot Service</strong></td>
-                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
-                <td>15 ms</td>
-                <td>Java 23 runtime operational (v1.0.0-SNAPSHOT)</td>
-            </tr>
-            <tr>
-                <td><strong>Datasource & Persistence Pool</strong></td>
-                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
-                <td>8 ms</td>
-                <td>Connection pool active (H2 / PostgreSQL)</td>
-            </tr>
-            <tr>
-                <td><strong>Flare Coston2 Web3 RPC</strong></td>
-                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
-                <td>45 ms</td>
-                <td>Chain ID 114 connected via Web3j client</td>
-            </tr>
-            <tr>
-                <td><strong>Flare Confidential Compute (FCC)</strong></td>
-                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
-                <td>85 ms</td>
-                <td>TEE Enclave hardware quotes verified</td>
-            </tr>
-            <tr>
-                <td><strong>Treasury AI Inference Layer</strong></td>
-                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
-                <td>45 ms</td>
-                <td>Natural language intent parser & OpenAI adapter active</td>
-            </tr>
-            <tr>
-                <td><strong>EIP-191 ECDSA Signature Verifier</strong></td>
-                <td><span style="color: var(--accent-emerald); font-weight: 700;">● UP</span></td>
-                <td>5 ms</td>
-                <td>MetaMask authentication engine active</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+/* ---------- Header ---------- */
 
-<script type="module">
-    import { initPlatformStatus } from './js/components/platform-status.js';
-    initPlatformStatus();
-</script>
+.xps-health-header {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 22px;
+    padding: 25px 27px;
+    overflow: hidden;
+
+    border: 1px solid rgba(148,163,184,0.13);
+    border-radius: 18px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(16,185,129,0.10),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(99,102,241,0.08),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.90),
+            rgba(7,12,25,0.96)
+        );
+
+    box-shadow:
+        0 18px 55px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.xps-health-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px);
+
+    background-size: 36px 36px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent 90%
+    );
+}
+
+.xps-health-header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.xps-health-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 10px;
+    padding: 6px 10px;
+
+    border: 1px solid rgba(20,184,166,0.20);
+    border-radius: 999px;
+
+    background: rgba(20,184,166,0.06);
+
+    color: #5eead4;
+
+    font-family: monospace;
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+
+.xps-health-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    background: #10b981;
+
+    box-shadow:
+        0 0 9px rgba(16,185,129,0.75);
+
+    animation: xps-health-pulse 2s ease-in-out infinite;
+}
+
+.xps-health-title {
+    margin: 0;
+
+    font-size: clamp(1.55rem, 3vw, 2.15rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.xps-health-subtitle {
+    max-width: 850px;
+    margin: 9px 0 0;
+
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.65;
+}
+
+/* ---------- System Status ---------- */
+
+.xps-health-system-status {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    flex-shrink: 0;
+
+    padding: 10px 14px;
+
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 999px;
+
+    background: rgba(16,185,129,0.07);
+
+    color: #34d399;
+
+    font-family: monospace;
+    font-size: 0.67rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+
+.xps-health-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+    background: #10b981;
+
+    box-shadow:
+        0 0 10px rgba(16,185,129,0.75);
+
+    animation: xps-health-pulse 1.8s ease-in-out infinite;
+}
+
+/* ---------- KPI Grid ---------- */
+
+.xps-health-kpis {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+
+    margin-bottom: 22px;
+}
+
+.xps-health-kpi {
+    position: relative;
+    min-height: 145px;
+
+    padding: 19px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.82),
+            rgba(8,13,27,0.91)
+        );
+
+    box-shadow:
+        0 13px 35px rgba(0,0,0,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease;
+}
+
+.xps-health-kpi:hover {
+    transform: translateY(-3px);
+    border-color: rgba(99,102,241,0.22);
+}
+
+.xps-health-kpi::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 42%;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        currentColor,
+        transparent
+    );
+
+    opacity: 0.5;
+}
+
+.xps-health-kpi-label {
+    color: var(--text-secondary);
+
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.xps-health-kpi-value {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+
+    margin-top: 13px;
+
+    font-size: 1.75rem;
+    font-weight: 850;
+    letter-spacing: -0.04em;
+}
+
+.xps-health-kpi-value.loading {
+    color: var(--text-muted) !important;
+}
+
+.xps-health-kpi-unit {
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.xps-health-kpi-subtext {
+    margin-top: 7px;
+
+    color: var(--text-muted);
+    font-size: 0.68rem;
+}
+
+.xps-health-kpi-indicator {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+}
+
+.xps-health-kpi-indicator.green {
+    background: #10b981;
+    box-shadow: 0 0 12px rgba(16,185,129,0.65);
+}
+
+.xps-health-kpi-indicator.cyan {
+    background: #22d3ee;
+    box-shadow: 0 0 12px rgba(34,211,238,0.65);
+}
+
+.xps-health-kpi-indicator.amber {
+    background: #f59e0b;
+    box-shadow: 0 0 12px rgba(245,158,11,0.55);
+}
+
+/* ---------- Main Matrix ---------- */
+
+.xps-health-panel {
+    position: relative;
+
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.84),
+            rgba(7,12,25,0.94)
+        );
+
+    box-shadow:
+        0 16px 45px rgba(0,0,0,0.20);
+}
+
+.xps-health-panel::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 90px;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #22d3ee,
+            transparent
+        );
+}
+
+.xps-health-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.xps-health-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-health-panel-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid rgba(34,211,238,0.17);
+    border-radius: 10px;
+
+    background: rgba(34,211,238,0.07);
+
+    color: #67e8f9;
+    font-size: 0.78rem;
+}
+
+.xps-health-panel-title {
+    margin: 0;
+
+    font-size: 0.98rem;
+    font-weight: 800;
+}
+
+.xps-health-panel-subtitle {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+    font-size: 0.67rem;
+}
+
+.xps-health-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 6px 9px;
+
+    border: 1px solid rgba(34,211,238,0.16);
+    border-radius: 999px;
+
+    background: rgba(34,211,238,0.05);
+
+    color: #67e8f9;
+
+    font-family: monospace;
+    font-size: 0.61rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.xps-health-live-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: #22d3ee;
+
+    box-shadow: 0 0 8px rgba(34,211,238,0.7);
+}
+
+/* ---------- Health Table ---------- */
+
+.xps-health-table-wrap {
+    overflow-x: auto;
+}
+
+.xps-health-table {
+    width: 100%;
+    min-width: 800px;
+
+    border-collapse: collapse;
+}
+
+.xps-health-table th {
+    padding: 11px 18px;
+
+    background: rgba(255,255,255,0.018);
+
+    color: var(--text-secondary);
+
+    font-family: monospace;
+    font-size: 0.63rem;
+    font-weight: 700;
+
+    letter-spacing: 0.07em;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.xps-health-table td {
+    padding: 15px 18px;
+
+    border-top: 1px solid rgba(255,255,255,0.045);
+
+    color: var(--text-primary);
+
+    font-size: 0.78rem;
+    vertical-align: middle;
+}
+
+.xps-health-table tbody tr {
+    transition:
+        background 160ms ease;
+}
+
+.xps-health-table tbody tr:hover {
+    background: rgba(255,255,255,0.018);
+}
+
+.xps-health-component {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-health-component-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 9px;
+
+    background: rgba(99,102,241,0.06);
+
+    color: #a5b4fc;
+
+    font-family: monospace;
+    font-size: 0.63rem;
+}
+
+.xps-health-component-name {
+    font-weight: 700;
+}
+
+.xps-health-component-meta {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+    font-family: monospace;
+    font-size: 0.6rem;
+}
+
+.xps-health-up {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #34d399;
+
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: 800;
+}
+
+.xps-health-up-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+    background: #10b981;
+
+    box-shadow: 0 0 8px rgba(16,185,129,0.65);
+}
+
+.xps-health-latency {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border: 1px solid rgba(148,163,184,0.10);
+    border-radius: 7px;
+
+    background: rgba(0,0,0,0.20);
+
+    color: #cbd5e1;
+
+    font-family: monospace;
+    font-size: 0.65rem;
+}
+
+.xps-health-detail {
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ---------- Notification Center ---------- */
+
+.xps-health-notifications {
+    position: relative;
+
+    padding: 21px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.80),
+            rgba(7,12,25,0.93)
+        );
+}
+
+.xps-health-notifications::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 75px;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #c9a96a,
+            transparent
+        );
+}
+
+.xps-health-notification-head {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin-bottom: 15px;
+}
+
+.xps-health-notification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid rgba(201,169,106,0.18);
+    border-radius: 10px;
+
+    background: rgba(201,169,106,0.07);
+
+    color: var(--gold-bright);
+}
+
+.xps-health-notification-title {
+    margin: 0;
+
+    font-size: 0.98rem;
+    font-weight: 800;
+}
+
+.xps-health-notification-subtitle {
+    margin-top: 3px;
+
+    color: var(--text-muted);
+    font-size: 0.66rem;
+}
+
+.xps-health-log {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.xps-health-log-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+
+    padding: 12px 14px;
+
+    border: 1px solid rgba(255,255,255,0.055);
+    border-radius: 11px;
+
+    background: rgba(0,0,0,0.20);
+
+    font-size: 0.75rem;
+    line-height: 1.55;
+}
+
+.xps-health-log-marker {
+    flex: 0 0 auto;
+
+    padding: 3px 6px;
+
+    border-radius: 5px;
+
+    font-family: monospace;
+    font-size: 0.57rem;
+    font-weight: 800;
+}
+
+.xps-health-log-marker.info {
+    border: 1px solid rgba(34,211,238,0.18);
+    background: rgba(34,211,238,0.07);
+    color: #67e8f9;
+}
+
+.xps-health-log-marker.success {
+    border: 1px solid rgba(16,185,129,0.18);
+    background: rgba(16,185,129,0.07);
+    color: #34d399;
+}
+
+.xps-health-log-content {
+    color: var(--text-secondary);
+}
+
+.xps-health-log-content strong {
+    color: var(--text-primary);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 850px) {
+    .xps-health-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xps-health-kpis {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .xps-health-header {
+        padding: 19px;
+        border-radius: 15px;
+    }
+
+    .xps-health-panel,
+    .xps-health-notifications {
+        border-radius: 15px;
+    }
+
+    .xps-health-system-status {
+        width: fit-content;
+        font-size: 0.59rem;
+    }
+
+    .xps-health-panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xps-health-live {
+        align-self: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .xps-health-eyebrow-dot,
+    .xps-health-status-dot {
+        animation: none;
+    }
+
+    .xps-health-kpi {
+        transition: none;
+    }
+}
+
+@keyframes xps-health-pulse {
+    0%, 100% {
+        opacity: 0.55;
+        transform: scale(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+</style>
 
 
-<div class="card" style="padding: 24px; margin-bottom: 32px;">
-    <h3 style="margin-bottom: 16px; font-size: 1.1rem;">Platform Notification & Audit Log Center</h3>
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div style="background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.2); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;">
-            <span style="color: var(--primary-cyan); font-weight: 700;">[INFO]</span> <strong>Database Migration V11 Applied:</strong> Enterprise platform readiness and monitoring tables initialized cleanly.
+<div class="xps-health">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+    <section class="xps-health-header">
+
+        <div class="xps-health-header-content">
+
+            <div class="xps-health-eyebrow">
+                <span class="xps-health-eyebrow-dot"></span>
+                Infrastructure Observability
+            </div>
+
+            <h2 class="xps-health-title">
+                Platform Status &amp; Health Dashboard
+            </h2>
+
+            <p class="xps-health-subtitle">
+                Real-time subsystem health matrix, operational metrics,
+                circuit-breaker state, and platform events across the
+                XRPShield execution infrastructure.
+            </p>
+
         </div>
-        <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;">
-            <span style="color: var(--accent-emerald); font-weight: 700;">[INFO]</span> <strong>Smart Contract Suite Verified:</strong> 13 Solidity contracts compiled with Paris EVM target and 5/5 tests passing.
+
+
+        <span
+            id="system-status-badge"
+            class="xps-health-system-status"
+        >
+            <span class="xps-health-status-dot"></span>
+            CHECKING SUBSYSTEMS
+        </span>
+
+    </section>
+
+
+    <!-- =====================================================
+         KPI STRIP
+         ===================================================== -->
+    <div class="xps-health-kpis">
+
+        <!-- Uptime -->
+        <div class="xps-health-kpi" style="color:#34d399;">
+
+            <span class="xps-health-kpi-indicator green"></span>
+
+            <div class="xps-health-kpi-label">
+                System Uptime
+            </div>
+
+            <div
+                class="xps-health-kpi-value loading"
+                id="system-uptime-val"
+            >
+                —
+            </div>
+
+            <div class="xps-health-kpi-subtext">
+                Derived from platform health probes
+            </div>
+
+        </div>
+
+
+        <!-- RPC -->
+        <div class="xps-health-kpi" style="color:#22d3ee;">
+
+            <span class="xps-health-kpi-indicator cyan"></span>
+
+            <div class="xps-health-kpi-label">
+                Web3 RPC Latency
+            </div>
+
+            <div
+                class="xps-health-kpi-value loading"
+                id="rpc-latency-val"
+            >
+                —
+                <span class="xps-health-kpi-unit">ms</span>
+            </div>
+
+            <div class="xps-health-kpi-subtext">
+                Flare Coston2 RPC probe
+            </div>
+
+        </div>
+
+
+        <!-- FCC -->
+        <div class="xps-health-kpi" style="color:#34d399;">
+
+            <span class="xps-health-kpi-indicator green"></span>
+
+            <div class="xps-health-kpi-label">
+                FCC Evaluation Latency
+            </div>
+
+            <div
+                class="xps-health-kpi-value loading"
+                id="fcc-latency-val"
+            >
+                —
+                <span class="xps-health-kpi-unit">ms</span>
+            </div>
+
+            <div class="xps-health-kpi-subtext">
+                Confidential policy evaluation probe
+            </div>
+
         </div>
 
     </div>
+
+
+    <!-- =====================================================
+         SUBSYSTEM MATRIX
+         ===================================================== -->
+    <section class="xps-health-panel">
+
+        <div class="xps-health-panel-header">
+
+            <div class="xps-health-panel-heading">
+
+                <div class="xps-health-panel-icon">
+                    ◉
+                </div>
+
+                <div>
+                    <h3 class="xps-health-panel-title">
+                        Subsystem Health Matrix
+                    </h3>
+
+                    <div class="xps-health-panel-subtitle">
+                        Live service probes · latency · operational state
+                    </div>
+                </div>
+
+            </div>
+
+
+            <span class="xps-health-live">
+                <span class="xps-health-live-dot"></span>
+                LIVE PROBES
+            </span>
+
+        </div>
+
+
+        <div class="xps-health-table-wrap">
+
+            <table class="xps-health-table">
+
+                <thead>
+                    <tr>
+                        <th>Subsystem Component</th>
+                        <th>Status</th>
+                        <th>Latency</th>
+                        <th>Details &amp; Operational State</th>
+                    </tr>
+                </thead>
+
+                <!--
+                    IMPORTANT:
+                    Keep this ID.
+
+                    platform-status.js should replace the initial
+                    loading state with actual probe results.
+                -->
+                <tbody id="health-table-body">
+
+                    <tr>
+                        <td colspan="4" style="
+                            text-align:center;
+                            padding:30px;
+                            color:var(--text-muted);
+                            font-family:monospace;
+                            font-size:0.72rem;
+                        ">
+                            Initializing subsystem health probes...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- Existing module -->
+    <script type="module">
+        import { initPlatformStatus } from './js/components/platform-status.js';
+        initPlatformStatus();
+    </script>
+
+
+    <!-- =====================================================
+         NOTIFICATION / AUDIT CENTER
+         ===================================================== -->
+    <section class="xps-health-notifications">
+
+        <div class="xps-health-notification-head">
+
+            <div class="xps-health-notification-icon">
+                ◌
+            </div>
+
+            <div>
+                <h3 class="xps-health-notification-title">
+                    Platform Notification &amp; Audit Log Center
+                </h3>
+
+                <div class="xps-health-notification-subtitle">
+                    Operational events surfaced from the platform
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="xps-health-log">
+
+            <div class="xps-health-log-item">
+
+                <span class="xps-health-log-marker info">
+                    INFO
+                </span>
+
+                <div class="xps-health-log-content">
+                    <strong>Database Migration V11 Applied:</strong>
+                    Enterprise platform readiness and monitoring tables
+                    initialized cleanly.
+                </div>
+
+            </div>
+
+
+            <div class="xps-health-log-item">
+
+                <span class="xps-health-log-marker success">
+                    INFO
+                </span>
+
+                <div class="xps-health-log-content">
+                    <strong>Smart Contract Suite Verified:</strong>
+                    13 Solidity contracts compiled with Paris EVM target
+                    and 5/5 tests passing.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </div>

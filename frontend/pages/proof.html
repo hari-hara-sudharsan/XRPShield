@@ -1,50 +1,865 @@
-<div style="margin-bottom: 24px;">
-    <h2 style="font-size: 1.8rem; font-weight: 700;">XRPShield Public Privacy Proof Center</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Cryptographic & On-Chain Audit Proof demonstrating what is publicly verifiable vs what remains strictly private in Flare Confidential Compute</p>
+<style>
+/* =========================================================
+   XRPShield — Public Privacy Proof Center
+   Judge-facing cryptographic evidence console
+   ========================================================= */
+
+.xps-ppc-page {
+    position: relative;
+    isolation: isolate;
+    padding-bottom: 40px;
+    color: var(--text-primary);
+}
+
+.xps-ppc-page::before {
+    content: "";
+    position: absolute;
+    top: -180px;
+    right: -180px;
+
+    width: 520px;
+    height: 520px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(0,242,254,0.11),
+        transparent 68%
+    );
+
+    filter: blur(35px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.xps-ppc-page::after {
+    content: "";
+
+    position: absolute;
+    left: -220px;
+    top: 520px;
+
+    width: 460px;
+    height: 460px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(124,92,255,0.08),
+        transparent 70%
+    );
+
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.xps-ppc-header {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.xps-ppc-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 6px 12px;
+    margin-bottom: 12px;
+
+    border-radius: 999px;
+
+    background: rgba(0,242,254,0.07);
+    border: 1px solid rgba(0,242,254,0.19);
+
+    color: var(--primary-cyan);
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.xps-ppc-live-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--primary-cyan);
+
+    box-shadow:
+        0 0 8px rgba(0,242,254,0.8),
+        0 0 16px rgba(0,242,254,0.35);
+
+    animation: xps-ppc-pulse 1.8s infinite;
+}
+
+.xps-ppc-title {
+    margin: 0 0 8px;
+
+    font-size: clamp(1.55rem, 3vw, 2rem);
+    line-height: 1.12;
+
+    font-weight: 850;
+    letter-spacing: -0.035em;
+
+    background: linear-gradient(
+        90deg,
+        #ffffff 10%,
+        #d8fbff 55%,
+        var(--primary-cyan)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.xps-ppc-subtitle {
+    max-width: 900px;
+
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   EVIDENCE PIPELINE
+   ========================================================= */
+
+.xps-ppc-pipeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    margin-bottom: 22px;
+
+    padding: 15px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(11,18,31,0.9),
+            rgba(8,13,24,0.75)
+        );
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+}
+
+.xps-ppc-stage {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 8px 16px;
+}
+
+.xps-ppc-stage:not(:last-child)::after {
+    content: "→";
+
+    position: absolute;
+    right: -2px;
+
+    color: rgba(0,242,254,0.30);
+
+    font-size: 0.9rem;
+}
+
+.xps-ppc-stage-number {
+    width: 30px;
+    height: 30px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: rgba(0,242,254,0.07);
+    border: 1px solid rgba(0,242,254,0.17);
+
+    color: var(--primary-cyan);
+
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+}
+
+.xps-ppc-stage-title {
+    display: block;
+
+    color: var(--text-primary);
+
+    font-size: 0.74rem;
+    font-weight: 750;
+}
+
+.xps-ppc-stage-subtitle {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--text-muted);
+
+    font-size: 0.63rem;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.xps-ppc-evidence-shell {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 24px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(9,15,27,0.94),
+            rgba(5,10,19,0.88)
+        );
+
+    border: 1px solid rgba(0,242,254,0.16);
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.xps-ppc-evidence-shell::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0,242,254,0.6),
+        rgba(124,92,255,0.45),
+        transparent
+    );
+
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   CONTAINER HEADER
+   ========================================================= */
+
+.xps-ppc-shell-header {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.xps-ppc-shell-title {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin: 0;
+
+    font-size: 1rem;
+    font-weight: 850;
+}
+
+.xps-ppc-shell-icon {
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: rgba(0,242,254,0.08);
+    border: 1px solid rgba(0,242,254,0.17);
+
+    color: var(--primary-cyan);
+}
+
+.xps-ppc-shell-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+}
+
+.xps-ppc-network-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.13);
+
+    color: #34d399;
+
+    font-size: 0.64rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   REAL DATA CONTAINER
+   ========================================================= */
+
+#proofCenterContainer {
+    position: relative;
+
+    min-height: 180px;
+
+    color: var(--text-primary);
+}
+
+/* Style common elements generated by renderProofCenter */
+
+#proofCenterContainer .card,
+#proofCenterContainer .glass-panel {
+    border-radius: 14px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,26,43,0.72),
+            rgba(8,14,25,0.72)
+        ) !important;
+
+    border-color: rgba(255,255,255,0.065) !important;
+
+    box-shadow:
+        0 14px 35px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.025) !important;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+
+.xps-ppc-loading {
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    text-align: center;
+}
+
+.xps-ppc-loader {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(0,242,254,0.12);
+    border-top-color: var(--primary-cyan);
+
+    animation: xps-ppc-spin 0.9s linear infinite;
+}
+
+.xps-ppc-loading-title {
+    color: var(--text-primary);
+
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+
+.xps-ppc-loading-subtitle {
+    color: var(--text-muted);
+
+    font-size: 0.7rem;
+}
+
+
+/* =========================================================
+   BOTTOM VERIFICATION STRIP
+   ========================================================= */
+
+.xps-ppc-verification-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 18px;
+}
+
+.xps-ppc-verification-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    border-radius: 11px;
+
+    background: rgba(255,255,255,0.018);
+
+    border: 1px solid rgba(255,255,255,0.05);
+
+    color: var(--text-secondary);
+
+    font-size: 0.69rem;
+}
+
+.xps-ppc-verification-icon {
+    width: 24px;
+    height: 24px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 7px;
+
+    background: rgba(16,185,129,0.07);
+    border: 1px solid rgba(16,185,129,0.13);
+
+    color: #34d399;
+
+    font-size: 0.65rem;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes xps-ppc-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes xps-ppc-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .xps-ppc-pipeline {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .xps-ppc-stage:not(:last-child)::after {
+        display: none;
+    }
+
+    .xps-ppc-verification-strip {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .xps-ppc-evidence-shell {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .xps-ppc-pipeline {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-ppc-stage {
+        padding: 7px 5px;
+    }
+
+    .xps-ppc-shell-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xps-ppc-shell-meta {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .xps-ppc-page *,
+    .xps-ppc-page *::before,
+    .xps-ppc-page *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+
+
+<div class="xps-ppc-page animate-fade-in">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="xps-ppc-header">
+
+        <div class="xps-ppc-eyebrow">
+
+            <span class="xps-ppc-live-dot"></span>
+
+            Public Verification · Privacy Boundary
+
+        </div>
+
+        <h2 class="xps-ppc-title">
+            XRPShield Public Privacy Proof Center
+        </h2>
+
+        <p class="xps-ppc-subtitle">
+            Cryptographic and on-chain evidence showing exactly what
+            can be publicly verified and what remains confidential
+            within the Flare Confidential Compute execution path.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         EVIDENCE PIPELINE
+         ===================================================== -->
+
+    <div class="xps-ppc-pipeline">
+
+        <div class="xps-ppc-stage">
+
+            <div class="xps-ppc-stage-number">
+                01
+            </div>
+
+            <div>
+                <span class="xps-ppc-stage-title">
+                    Policy Commitment
+                </span>
+
+                <span class="xps-ppc-stage-subtitle">
+                    Binding evidence
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="xps-ppc-stage">
+
+            <div class="xps-ppc-stage-number">
+                02
+            </div>
+
+            <div>
+                <span class="xps-ppc-stage-title">
+                    FCC Evaluation
+                </span>
+
+                <span class="xps-ppc-stage-subtitle">
+                    Confidential decision
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="xps-ppc-stage">
+
+            <div class="xps-ppc-stage-number">
+                03
+            </div>
+
+            <div>
+                <span class="xps-ppc-stage-title">
+                    Authorization Proof
+                </span>
+
+                <span class="xps-ppc-stage-subtitle">
+                    Cryptographic evidence
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="xps-ppc-stage">
+
+            <div class="xps-ppc-stage-number">
+                04
+            </div>
+
+            <div>
+                <span class="xps-ppc-stage-title">
+                    On-Chain Settlement
+                </span>
+
+                <span class="xps-ppc-stage-subtitle">
+                    Public transaction
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LIVE PROOF CENTER
+         ===================================================== -->
+
+    <div class="xps-ppc-evidence-shell">
+
+        <div class="xps-ppc-shell-header">
+
+            <h3 class="xps-ppc-shell-title">
+
+                <span class="xps-ppc-shell-icon">
+                    ◈
+                </span>
+
+                Cryptographic Evidence Console
+
+            </h3>
+
+
+            <div class="xps-ppc-shell-meta">
+
+                <span class="xps-ppc-network-badge">
+                    <span>●</span>
+                    Flare Coston2
+                </span>
+
+                <span>
+                    LIVE TELEMETRY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- IMPORTANT:
+             Keep this ID because PrivacyProofCenter
+             populates this container dynamically.
+        -->
+
+        <div id="proofCenterContainer">
+
+            <div class="xps-ppc-loading">
+
+                <div class="xps-ppc-loader"></div>
+
+                <div class="xps-ppc-loading-title">
+                    Querying Flare Coston2 evidence…
+                </div>
+
+                <div class="xps-ppc-loading-subtitle">
+                    Retrieving policy commitments, FCC results,
+                    signatures and execution telemetry.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         VERIFICATION FOOTER
+         ===================================================== -->
+
+    <div class="xps-ppc-verification-strip">
+
+        <div class="xps-ppc-verification-item">
+
+            <span class="xps-ppc-verification-icon">
+                ✓
+            </span>
+
+            <span>
+                Public evidence can be independently checked
+                against the Flare Coston2 chain.
+            </span>
+
+        </div>
+
+
+        <div class="xps-ppc-verification-item">
+
+            <span class="xps-ppc-verification-icon">
+                ◈
+            </span>
+
+            <span>
+                Confidential policy parameters are not displayed
+                as public proof data.
+            </span>
+
+        </div>
+
+
+        <div class="xps-ppc-verification-item">
+
+            <span class="xps-ppc-verification-icon">
+                ◆
+            </span>
+
+            <span>
+                Evidence shown here is populated by the
+                application's verification layer.
+            </span>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div id="proofCenterContainer">
-    <p style="color:var(--text-secondary);">Querying Flare Coston2 & TEE Attestation Telemetry...</p>
-</div>
 
 <script>
 (async () => {
-    const container = document.getElementById('proofCenterContainer');
+
+    const container =
+        document.getElementById('proofCenterContainer');
+
     if (!container) return;
-    const data = await window.PrivacyProofCenter.fetchProofData();
-    container.innerHTML = window.PrivacyProofCenter.renderProofCenter(data || {
-        policyCommitment: {
-            commitmentHash: "0x8f3c71a9e29a3b610c4f8d5b1c7e9a8f2e4c1b0d3a5e7f9c2b4a6d8e0f2c4a6b",
-            vaultAddress: "0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9",
-            policyVersion: "v1.0-ECIES",
-            revealedPublicly: "Policy Commitment Hash Digest Only",
-            confidentialPrivate: ["Trigger Threshold (-15%)", "Hedge Ratio (100%)", "Maximum Hedge (10,000 FXRP)", "Treasury Risk Limits"]
-        },
-        fccAttestation: {
-            instructionId: "0x585250536869656c64464343457874656e73696f6e0000000000000000000001",
-            resultStatus: "APPROVED",
-            verificationStatus: "VERIFIED_ON_CHAIN",
-            attestationSigner: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-            approvedHedgeCap: "10,000 FXRP"
-        },
-        onChainExecution: {
-            transactionHash: "0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3",
-            blockNumber: 33973480,
-            amountFXRP: "10.00",
-            amountUSDT0: "8.4575",
-            routerAddress: "0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B",
-            executionStatus: "VERIFIED_CONFIRMED",
-            explorerUrl: "https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3"
-        },
-        privacyBoundary: [
-            { field: "Policy Commitment Hash", visibility: "PUBLIC", explanation: "Canonical ECIES hash digest stored on-chain for policy binding" },
-            { field: "Instruction ID", visibility: "PUBLIC", explanation: "Unique FCC instruction identifier tracking evaluation status" },
-            { field: "Approved Hedge Amount", visibility: "PUBLIC", explanation: "Maximum hedge cap verified by TEE for DEX router safety" },
-            { field: "DEX Swap Transaction", visibility: "PUBLIC", explanation: "FXRP -> USDT0 token swap receipt on Coston2 EVM" },
-            { field: "Trigger Threshold (-15%)", visibility: "PRIVATE", explanation: "Decrypted inside TEE memory only; never written to blockchain" },
-            { field: "Hedge Ratio (100%)", visibility: "PRIVATE", explanation: "Evaluated inside enclave RAM; invisible to public observers" },
-            { field: "Treasury Strategy", visibility: "PRIVATE", explanation: "Protected via ECIES encryption and TEE hardware isolation" }
-        ]
-    });
+
+    try {
+
+        const data =
+            await window.PrivacyProofCenter.fetchProofData();
+
+        if (!data) {
+
+            container.innerHTML = `
+                <div class="xps-ppc-loading">
+
+                    <div style="
+                        font-size: 1.4rem;
+                        opacity: 0.65;
+                    ">
+                        ⚠
+                    </div>
+
+                    <div class="xps-ppc-loading-title">
+                        Proof telemetry unavailable
+                    </div>
+
+                    <div class="xps-ppc-loading-subtitle">
+                        No verified evidence payload was returned.
+                        Please retry the verification query.
+                    </div>
+
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML =
+            window.PrivacyProofCenter.renderProofCenter(data);
+
+    } catch (error) {
+
+        console.error(
+            'Privacy Proof Center failed:',
+            error
+        );
+
+        container.innerHTML = `
+            <div class="xps-ppc-loading">
+
+                <div style="
+                    font-size: 1.4rem;
+                    color: var(--accent-flare);
+                ">
+                    !
+                </div>
+
+                <div class="xps-ppc-loading-title">
+                    Unable to retrieve proof telemetry
+                </div>
+
+                <div class="xps-ppc-loading-subtitle">
+                    The verification layer returned an error.
+                    No fallback evidence has been displayed.
+                </div>
+
+            </div>
+        `;
+
+    }
+
 })();
 </script>

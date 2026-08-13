@@ -1,82 +1,1090 @@
-<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-    <div>
-        <h2 style="font-size: 1.8rem; font-weight: 700;">Treasury Intelligence & AI Assistant</h2>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">Natural language policy builder, plain-language decision explanations, and executive report generator</p>
-    </div>
-    <span class="badge" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 8px 16px; font-size: 0.9rem;">
-        Powered by OpenAI GPT-4o
-    </span>
-</div>
+<style>
+    /* =========================================================
+       XRPShield — Treasury Intelligence Premium UI
+       ========================================================= */
 
-<div class="grid-cards" style="margin-bottom: 32px;">
-    <div class="card">
-        <div class="card-title">AI Policy Builder</div>
-        <div class="card-value" style="color: var(--primary-cyan);">Active</div>
-        <div class="card-subtext">Drafts policies from intent</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Privacy Filter Guard</div>
-        <div class="card-value" style="color: var(--accent-emerald);">100% Enforced</div>
-        <div class="card-subtext">Zero FCC TEE Data Transmitted</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Generated Reports</div>
-        <div class="card-value" id="generated-reports-count">8 Reports</div>
-        <div class="card-subtext">Available for Download</div>
-    </div>
-</div>
+    .treasury-intelligence {
+        position: relative;
+        isolation: isolate;
+        margin-bottom: 40px;
+    }
 
-<!-- Grid Layout: Left AI Assistant Chat, Right Prompt Generators -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 32px;">
-    <!-- Left: Natural Language AI Policy Assistant -->
-    <div class="card" style="display: flex; flex-direction: column; height: 500px; padding: 24px;">
-        <div style="padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 1.1rem;">AI Policy Assistant Chat</h3>
-            <span style="font-size: 0.8rem; color: var(--text-secondary);">Session: Policy Builder</span>
-        </div>
-        <div id="ai-chat-messages" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 8px; margin-bottom: 16px;">
-            <div style="background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.2); padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; line-height: 1.5; color: var(--text-primary);">
-                <strong>XRPShield AI Assistant:</strong> Welcome! Describe your treasury risk preferences in plain language, and I will generate a draft confidential policy for your vault.
+    /* Ambient AI atmosphere */
+    .treasury-intelligence::before,
+    .treasury-intelligence::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        z-index: -1;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: ambientFloat 8s ease-in-out infinite alternate;
+    }
+
+    .treasury-intelligence::before {
+        width: 320px;
+        height: 320px;
+        top: 50px;
+        left: -120px;
+        background: rgba(0, 242, 254, 0.08);
+    }
+
+    .treasury-intelligence::after {
+        width: 280px;
+        height: 280px;
+        right: -100px;
+        bottom: 20px;
+        background: rgba(124, 92, 255, 0.09);
+        animation-delay: -3s;
+    }
+
+    @keyframes ambientFloat {
+        from {
+            transform: translate3d(0, 0, 0) scale(1);
+        }
+
+        to {
+            transform: translate3d(25px, -18px, 0) scale(1.12);
+        }
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .ti-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 24px;
+        margin-bottom: 28px;
+    }
+
+    .ti-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--primary-cyan);
+        margin-bottom: 10px;
+    }
+
+    .ti-eyebrow::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--primary-cyan);
+        box-shadow: 0 0 12px var(--primary-cyan);
+        animation: aiPulse 2s infinite;
+    }
+
+    @keyframes aiPulse {
+        0%, 100% {
+            opacity: .5;
+            transform: scale(.8);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1.25);
+        }
+    }
+
+    .ti-title {
+        margin: 0;
+        font-size: clamp(1.7rem, 3vw, 2.35rem);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        background: linear-gradient(
+            100deg,
+            #fff 10%,
+            #9eeaff 45%,
+            #7c8cff 75%,
+            #fff 95%
+        );
+        background-size: 220% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: titleShimmer 6s linear infinite;
+    }
+
+    @keyframes titleShimmer {
+        to {
+            background-position: 220% center;
+        }
+    }
+
+    .ti-subtitle {
+        max-width: 760px;
+        margin: 9px 0 0;
+        color: var(--text-secondary);
+        font-size: .92rem;
+        line-height: 1.65;
+    }
+
+    .ti-status {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 15px;
+        border-radius: 999px;
+        background:
+            linear-gradient(
+                135deg,
+                rgba(0,242,254,.12),
+                rgba(124,92,255,.08)
+            );
+        border: 1px solid rgba(0,242,254,.3);
+        color: var(--primary-cyan);
+        font-family: var(--font-mono);
+        font-size: .72rem;
+        white-space: nowrap;
+        box-shadow:
+            0 0 25px rgba(0,242,254,.06),
+            inset 0 1px rgba(255,255,255,.08);
+    }
+
+    .ti-status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #35f2a3;
+        box-shadow: 0 0 12px #35f2a3;
+    }
+
+    /* =========================================================
+       METRIC CARDS
+       ========================================================= */
+
+    .ti-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 22px;
+    }
+
+    .ti-metric {
+        position: relative;
+        overflow: hidden;
+        padding: 21px;
+        border-radius: 18px;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.065),
+                rgba(255,255,255,.018)
+            );
+        border: 1px solid rgba(255,255,255,.09);
+        backdrop-filter: blur(18px);
+        transition:
+            transform .35s cubic-bezier(.2,.8,.2,1),
+            border-color .35s ease,
+            box-shadow .35s ease;
+    }
+
+    .ti-metric::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 70%;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            var(--primary-cyan),
+            transparent
+        );
+        transition: left .7s ease;
+    }
+
+    .ti-metric:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0,242,254,.25);
+        box-shadow:
+            0 18px 50px rgba(0,0,0,.28),
+            0 0 30px rgba(0,242,254,.05);
+    }
+
+    .ti-metric:hover::before {
+        left: 130%;
+    }
+
+    .ti-metric-label {
+        color: var(--text-secondary);
+        font-size: .76rem;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        font-family: var(--font-mono);
+        margin-bottom: 10px;
+    }
+
+    .ti-metric-value {
+        font-size: 1.45rem;
+        font-weight: 800;
+        letter-spacing: -.025em;
+    }
+
+    .ti-metric-sub {
+        margin-top: 5px;
+        font-size: .75rem;
+        color: var(--text-muted);
+    }
+
+    .ti-active {
+        color: var(--primary-cyan);
+    }
+
+    .ti-safe {
+        color: #35f2a3;
+    }
+
+    /* =========================================================
+       MAIN GRID
+       ========================================================= */
+
+    .ti-main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(340px, .75fr);
+        gap: 20px;
+    }
+
+    /* =========================================================
+       PREMIUM GLASS CARD
+       ========================================================= */
+
+    .ti-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.065),
+                rgba(255,255,255,.018)
+            );
+        border: 1px solid rgba(255,255,255,.09);
+        backdrop-filter: blur(22px);
+        box-shadow:
+            0 20px 70px rgba(0,0,0,.25),
+            inset 0 1px rgba(255,255,255,.06);
+    }
+
+    .ti-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(
+                circle at 0% 0%,
+                rgba(0,242,254,.08),
+                transparent 35%
+            );
+        opacity: .7;
+    }
+
+    /* =========================================================
+       CHAT HEADER
+       ========================================================= */
+
+    .ti-chat {
+        min-height: 560px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ti-chat-header {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 22px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .ti-agent {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .ti-agent-avatar {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+        background:
+            linear-gradient(
+                135deg,
+                rgba(0,242,254,.2),
+                rgba(124,92,255,.2)
+            );
+        border: 1px solid rgba(0,242,254,.25);
+        font-size: 1.15rem;
+        box-shadow: 0 0 25px rgba(0,242,254,.1);
+    }
+
+    .ti-agent-avatar::after {
+        content: "";
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 50%;
+        background: #35f2a3;
+        border: 2px solid #101827;
+        box-shadow: 0 0 10px #35f2a3;
+    }
+
+    .ti-agent-name {
+        font-weight: 700;
+        font-size: .92rem;
+    }
+
+    .ti-agent-status {
+        color: #35f2a3;
+        font-family: var(--font-mono);
+        font-size: .66rem;
+        margin-top: 3px;
+    }
+
+    .ti-session {
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        font-size: .66rem;
+        padding: 7px 10px;
+        border: 1px solid rgba(255,255,255,.07);
+        border-radius: 8px;
+        background: rgba(255,255,255,.025);
+    }
+
+    /* =========================================================
+       CHAT MESSAGES
+       ========================================================= */
+
+    #ai-chat-messages {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+        overflow-y: auto;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        scrollbar-width: thin;
+    }
+
+    #ai-chat-messages > div {
+        max-width: 88%;
+        animation: messageIn .45s cubic-bezier(.2,.8,.2,1);
+        box-shadow: 0 8px 25px rgba(0,0,0,.12);
+    }
+
+    @keyframes messageIn {
+        from {
+            opacity: 0;
+            transform: translateY(12px) scale(.98);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* =========================================================
+       INPUT
+       ========================================================= */
+
+    .ti-input-area {
+        position: relative;
+        z-index: 2;
+        padding: 16px 18px 18px;
+        border-top: 1px solid rgba(255,255,255,.07);
+        background: rgba(0,0,0,.13);
+    }
+
+    .ti-input-wrapper {
+        position: relative;
+        display: flex;
+        gap: 10px;
+        padding: 5px;
+        border-radius: 14px;
+        background: rgba(0,0,0,.3);
+        border: 1px solid rgba(255,255,255,.08);
+        transition: .3s ease;
+    }
+
+    .ti-input-wrapper:focus-within {
+        border-color: rgba(0,242,254,.4);
+        box-shadow:
+            0 0 0 3px rgba(0,242,254,.06),
+            0 0 30px rgba(0,242,254,.08);
+    }
+
+    #ai-input {
+        min-width: 0;
+        flex: 1;
+        border: 0 !important;
+        outline: none !important;
+        background: transparent !important;
+        padding: 11px 13px !important;
+    }
+
+    .ti-send {
+        position: relative;
+        overflow: hidden;
+        border: 0;
+        border-radius: 10px;
+        padding: 0 18px;
+        font-weight: 700;
+        color: #061017;
+        background: linear-gradient(
+            135deg,
+            #00f2fe,
+            #70d8ff
+        );
+        cursor: pointer;
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .ti-send::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        left: -100%;
+        background: linear-gradient(
+            100deg,
+            transparent,
+            rgba(255,255,255,.55),
+            transparent
+        );
+        transition: left .5s ease;
+    }
+
+    .ti-send:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,242,254,.2);
+    }
+
+    .ti-send:hover::before {
+        left: 100%;
+    }
+
+    /* =========================================================
+       RIGHT SIDE TOOLS
+       ========================================================= */
+
+    .ti-tools {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .ti-tool {
+        padding: 23px;
+    }
+
+    .ti-tool-icon {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        margin-bottom: 14px;
+        border-radius: 12px;
+        background: rgba(0,242,254,.08);
+        border: 1px solid rgba(0,242,254,.15);
+        font-size: 1.15rem;
+    }
+
+    .ti-tool h3 {
+        margin: 0 0 7px;
+        font-size: 1rem;
+    }
+
+    .ti-tool-description {
+        margin: 0 0 17px;
+        color: var(--text-secondary);
+        font-size: .78rem;
+        line-height: 1.55;
+    }
+
+    .ti-control-row {
+        display: flex;
+        gap: 9px;
+        align-items: stretch;
+    }
+
+    .ti-control-row select {
+        flex: 1;
+        min-width: 0;
+        background: rgba(0,0,0,.28) !important;
+        border: 1px solid rgba(255,255,255,.09) !important;
+        border-radius: 10px !important;
+        padding: 11px 12px !important;
+        color: var(--text-primary) !important;
+        outline: none;
+        transition: .25s ease;
+    }
+
+    .ti-control-row select:focus {
+        border-color: rgba(0,242,254,.4) !important;
+        box-shadow: 0 0 20px rgba(0,242,254,.06);
+    }
+
+    .ti-action {
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 1px solid rgba(0,242,254,.3);
+        border-radius: 10px;
+        padding: 0 16px;
+        color: var(--primary-cyan);
+        background: rgba(0,242,254,.07);
+        cursor: pointer;
+        font-weight: 700;
+        transition: .3s ease;
+    }
+
+    .ti-action:hover {
+        background: rgba(0,242,254,.14);
+        border-color: rgba(0,242,254,.55);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,242,254,.08);
+    }
+
+    /* =========================================================
+       RESULT PANELS
+       ========================================================= */
+
+    .ti-result {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 12px;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(0,242,254,.055),
+                rgba(0,0,0,.25)
+            );
+        border: 1px solid rgba(0,242,254,.14);
+        font-size: .78rem;
+        line-height: 1.65;
+        animation: resultReveal .4s ease;
+    }
+
+    @keyframes resultReveal {
+        from {
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            max-height: 400px;
+            transform: translateY(0);
+        }
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 900px) {
+        .ti-main-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ti-chat {
+            min-height: 520px;
+        }
+    }
+
+    @media (max-width: 680px) {
+        .ti-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .ti-status {
+            align-self: flex-start;
+        }
+
+        .ti-metrics {
+            grid-template-columns: 1fr;
+        }
+
+        .ti-control-row {
+            flex-direction: column;
+        }
+
+        .ti-action {
+            min-height: 42px;
+        }
+
+        .ti-session {
+            display: none;
+        }
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+        }
+    }
+</style>
+
+
+<section class="treasury-intelligence">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="ti-header">
+
+        <div>
+            <div class="ti-eyebrow">
+                Confidential Treasury Intelligence
             </div>
-        </div>
-        <form id="ai-chat-form" style="display: flex; gap: 10px;">
-            <input id="ai-input" type="text" placeholder="e.g. Protect vault from drawdown > 12% and liquidity < 75,000 FXRP..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.9rem;">
-            <button type="submit" class="btn-connect" style="padding: 10px 20px;">Send</button>
-        </form>
-    </div>
 
-    <!-- Right: Quick Generator Utilities -->
-    <div style="display: flex; flex-direction: column; gap: 24px;">
-        <div class="card" style="padding: 24px;">
-            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Explain Decision</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Generate human-readable breakdown of decision evaluation rationale</p>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
-                <select id="explain-select" style="flex: 1; min-width: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.85rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                    <option value="4957d3dd-918e-43c9-aeef-7c86f5c3e131">Primary FXRP Vault — PROTECT_POSITION (Approved)</option>
-                    <option value="e062e742-1e9a-4c2d-9860-f1c5058728ba">Yield Reserve Vault — REDUCE_EXPOSURE (Pending)</option>
-                </select>
-                <button onclick="window.explainDecisionAI()" class="btn-connect" style="flex-shrink: 0; padding: 10px 18px; white-space: nowrap;">Explain</button>
-            </div>
-            <div id="explain-result-box" style="display: none; margin-top: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-glow); border-radius: 8px; padding: 14px; font-size: 0.85rem; max-height: 240px; overflow-y: auto; word-break: break-word;"></div>
+            <h2 class="ti-title">
+                Treasury Intelligence & AI Assistant
+            </h2>
+
+            <p class="ti-subtitle">
+                Transform treasury intent into explainable, privacy-preserving
+                risk policies — while keeping sensitive strategy parameters
+                outside the public execution layer.
+            </p>
         </div>
 
-        <div class="card" style="padding: 24px;">
-            <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Generate Executive Report</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">Export comprehensive operational and risk summary</p>
-            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px;">
-                <select id="report-type" style="flex: 1; min-width: 0; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px; font-size: 0.85rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                    <option value="EXECUTIVE">Executive Risk Summary</option>
-                    <option value="EXECUTION_AUDIT">Execution Audit Log</option>
-                </select>
-                <button onclick="window.generateExecutiveReportAI()" class="btn-connect" style="flex-shrink: 0; padding: 10px 18px; white-space: nowrap;">Generate</button>
-            </div>
-            <div id="report-result-box" style="display: none; margin-top: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border-glow); border-radius: 8px; padding: 14px; font-size: 0.85rem; max-height: 260px; overflow-y: auto; word-break: break-word;"></div>
+        <div class="ti-status">
+            <span class="ti-status-dot"></span>
+            AI SYSTEM ONLINE
         </div>
+
     </div>
-</div>
+
+
+    <!-- =====================================================
+         METRICS
+         ===================================================== -->
+
+    <div class="ti-metrics">
+
+        <div class="ti-metric">
+
+            <div class="ti-metric-label">
+                AI Policy Builder
+            </div>
+
+            <div class="ti-metric-value ti-active">
+                Active
+            </div>
+
+            <div class="ti-metric-sub">
+                Natural-language intent → structured policy
+            </div>
+
+        </div>
+
+
+        <div class="ti-metric">
+
+            <div class="ti-metric-label">
+                Privacy Filter Guard
+            </div>
+
+            <div class="ti-metric-value ti-safe">
+                100% Enforced
+            </div>
+
+            <div class="ti-metric-sub">
+                FCC-sensitive parameters protected
+            </div>
+
+        </div>
+
+
+        <div class="ti-metric">
+
+            <div class="ti-metric-label">
+                Generated Reports
+            </div>
+
+            <div
+                class="ti-metric-value"
+                id="generated-reports-count"
+            >
+                8 Reports
+            </div>
+
+            <div class="ti-metric-sub">
+                Executive & execution audit reports
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN EXPERIENCE
+         ===================================================== -->
+
+    <div class="ti-main-grid">
+
+        <!-- =================================================
+             AI CHAT
+             ================================================= -->
+
+        <div class="ti-card ti-chat">
+
+            <div class="ti-chat-header">
+
+                <div class="ti-agent">
+
+                    <div class="ti-agent-avatar">
+                        ✦
+                    </div>
+
+                    <div>
+                        <div class="ti-agent-name">
+                            XRPShield AI
+                        </div>
+
+                        <div class="ti-agent-status">
+                            ● Policy Intelligence Engine
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ti-session">
+                    SESSION / POLICY-BUILDER
+                </div>
+
+            </div>
+
+
+            <div id="ai-chat-messages">
+
+                <div style="
+                    background: linear-gradient(
+                        135deg,
+                        rgba(0,242,254,.09),
+                        rgba(124,92,255,.07)
+                    );
+                    border: 1px solid rgba(0,242,254,.18);
+                    padding: 15px 17px;
+                    border-radius: 14px;
+                    font-size: .86rem;
+                    line-height: 1.6;
+                    color: var(--text-primary);
+                ">
+
+                    <div style="
+                        font-family: var(--font-mono);
+                        font-size: .65rem;
+                        color: var(--primary-cyan);
+                        margin-bottom: 7px;
+                    ">
+                        XRPShield AI · READY
+                    </div>
+
+                    <strong>
+                        Welcome to Treasury Intelligence.
+                    </strong>
+
+                    <div style="margin-top: 5px; color: var(--text-secondary);">
+                        Describe your treasury risk preference in plain language.
+                        I'll transform the intent into a draft confidential policy
+                        for your vault.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="ti-input-area">
+
+                <form
+                    id="ai-chat-form"
+                    class="ti-input-wrapper"
+                >
+
+                    <input
+                        id="ai-input"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Describe your treasury rule..."
+                    >
+
+                    <button
+                        type="submit"
+                        class="ti-send"
+                    >
+                        Send&nbsp; ↗
+                    </button>
+
+                </form>
+
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    gap:6px;
+                    margin-top:9px;
+                    font-family:var(--font-mono);
+                    font-size:.58rem;
+                    color:var(--text-muted);
+                ">
+                    <span>🔒</span>
+                    AI is advisory-only · signing keys remain isolated
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             AI TOOLS
+             ================================================= -->
+
+        <div class="ti-tools">
+
+
+            <!-- Explain Decision -->
+
+            <div class="ti-card ti-tool">
+
+                <div class="ti-tool-icon">
+                    ◈
+                </div>
+
+                <h3>
+                    Explain Decision
+                </h3>
+
+                <p class="ti-tool-description">
+                    Convert the machine-evaluated policy decision into
+                    a human-readable explanation of what happened and why.
+                </p>
+
+                <div class="ti-control-row">
+
+                    <select id="explain-select">
+
+                        <option value="4957d3dd-918e-43c9-aeef-7c86f5c3e131">
+                            Primary FXRP Vault — PROTECT_POSITION
+                        </option>
+
+                        <option value="e062e742-1e9a-4c2d-9860-f1c5058728ba">
+                            Yield Reserve Vault — REDUCE_EXPOSURE
+                        </option>
+
+                    </select>
+
+                    <button
+                        onclick="window.explainDecisionAI()"
+                        class="ti-action"
+                    >
+                        Explain
+                    </button>
+
+                </div>
+
+                <div
+                    id="explain-result-box"
+                    class="ti-result"
+                ></div>
+
+            </div>
+
+
+            <!-- Executive Report -->
+
+            <div class="ti-card ti-tool">
+
+                <div
+                    class="ti-tool-icon"
+                    style="
+                        background:rgba(124,92,255,.09);
+                        border-color:rgba(124,92,255,.2);
+                    "
+                >
+                    ◇
+                </div>
+
+                <h3>
+                    Executive Report
+                </h3>
+
+                <p class="ti-tool-description">
+                    Generate an institutional-grade operational and
+                    treasury risk summary for review and reporting.
+                </p>
+
+                <div class="ti-control-row">
+
+                    <select id="report-type">
+
+                        <option value="EXECUTIVE">
+                            Executive Risk Summary
+                        </option>
+
+                        <option value="EXECUTION_AUDIT">
+                            Execution Audit Log
+                        </option>
+
+                    </select>
+
+                    <button
+                        onclick="window.generateExecutiveReportAI()"
+                        class="ti-action"
+                    >
+                        Generate
+                    </button>
+
+                </div>
+
+                <div
+                    id="report-result-box"
+                    class="ti-result"
+                ></div>
+
+            </div>
+
+
+            <!-- AI Trust Panel -->
+
+            <div
+                class="ti-card"
+                style="
+                    padding:20px;
+                    background:
+                        linear-gradient(
+                            135deg,
+                            rgba(0,242,254,.055),
+                            rgba(124,92,255,.045)
+                        );
+                "
+            >
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:12px;
+                ">
+
+                    <span style="
+                        font-family:var(--font-mono);
+                        font-size:.66rem;
+                        color:var(--text-muted);
+                        letter-spacing:.08em;
+                    ">
+                        AI TRUST BOUNDARY
+                    </span>
+
+                    <span style="
+                        font-size:.68rem;
+                        color:#35f2a3;
+                    ">
+                        ● ENFORCED
+                    </span>
+
+                </div>
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(3,1fr);
+                    gap:8px;
+                ">
+
+                    <div style="
+                        padding:10px;
+                        border-radius:10px;
+                        background:rgba(255,255,255,.025);
+                        text-align:center;
+                    ">
+                        <div style="font-size:.85rem;">🔑</div>
+                        <div style="
+                            font-size:.6rem;
+                            color:var(--text-muted);
+                            margin-top:4px;
+                        ">
+                            No Keys
+                        </div>
+                    </div>
+
+                    <div style="
+                        padding:10px;
+                        border-radius:10px;
+                        background:rgba(255,255,255,.025);
+                        text-align:center;
+                    ">
+                        <div style="font-size:.85rem;">🛡️</div>
+                        <div style="
+                            font-size:.6rem;
+                            color:var(--text-muted);
+                            margin-top:4px;
+                        ">
+                            Advisory
+                        </div>
+                    </div>
+
+                    <div style="
+                        padding:10px;
+                        border-radius:10px;
+                        background:rgba(255,255,255,.025);
+                        text-align:center;
+                    ">
+                        <div style="font-size:.85rem;">⛓️</div>
+                        <div style="
+                            font-size:.6rem;
+                            color:var(--text-muted);
+                            margin-top:4px;
+                        ">
+                            Verifiable
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 <script type="module">
-    import { initAIAssistant } from './js/components/ai-assistant.js';
+    import { initAIAssistant }
+        from './js/components/ai-assistant.js';
+
     initAIAssistant();
 </script>
-

@@ -1,139 +1,1501 @@
-<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-    <div>
-        <h2 style="font-size: 1.8rem; font-weight: 700;">Confidential XRP Treasury Vaults</h2>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">Manage FXRP reserves, execute deposits, and track on-chain vault balances</p>
-    </div>
-    <button onclick="document.getElementById('modal-create-vault').style.display='flex'" class="btn-connect" style="padding: 10px 20px;">
-        + Create Vault
-    </button>
-</div>
+<style>
+/* =========================================================
+   XRPShield — Confidential XRP Treasury Vaults
+   Premium Treasury Control Console
+   ========================================================= */
 
-<div class="grid-cards" style="margin-bottom: 32px;">
-    <div class="card">
-        <div class="card-title">Total Treasury Reserves</div>
-        <div class="card-value" id="total-treasury-balance" style="color: var(--primary-cyan);">50,000 FXRP</div>
-        <div class="card-subtext">Protected on Flare Network</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Active Vaults</div>
-        <div class="card-value" id="active-vault-count">3</div>
-        <div class="card-subtext">All Active & Health Check Passed</div>
-    </div>
-    <div class="card">
-        <div class="card-title">24h Net Deposit Flow</div>
-        <div class="card-value" id="net-deposit-flow" style="color: var(--accent-emerald);">+45,000 FXRP</div>
-        <div class="card-subtext">100% On-Chain Verified</div>
-    </div>
-</div>
+.xps-vault-page {
+    --xps-bg: #050812;
+    --xps-panel: rgba(11, 17, 31, 0.82);
+    --xps-panel-strong: rgba(13, 21, 38, 0.96);
+    --xps-border: rgba(148, 163, 184, 0.13);
+    --xps-border-bright: rgba(0, 242, 254, 0.25);
+    --xps-text: #f4f7fb;
+    --xps-muted: #8c98ad;
+    --xps-soft: #b7c1d1;
+    --xps-cyan: #00f2fe;
+    --xps-indigo: #6366f1;
+    --xps-violet: #8b5cf6;
+    --xps-emerald: #34d399;
+    --xps-red: #fb7185;
+    --xps-gold: #fbbf24;
 
-<div class="table-container" style="margin-bottom: 32px;">
-    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1.1rem;">Active Treasury Vaults</h3>
-        <span class="badge">EVM Smart Contract Vaults</span>
-    </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Vault Name</th>
-                <th>Asset Type</th>
-                <th>Current Balance</th>
-                <th>Drawdown Limit</th>
-                <th>TEE Attestation Proof</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="vaults-table-body">
-            <tr>
-                <td><strong>Primary XRP Treasury Vault</strong></td>
-                <td><span class="badge">FXRP</span></td>
-                <td><strong>150,000 FXRP</strong></td>
-                <td><span style="color: #FF495C; font-weight: 600;">10%</span></td>
-                <td><code>FCC-ATT-VERIFIED</code></td>
-                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
-                <td>
-                    <button onclick="window.openFundVaultModal('Primary XRP Treasury Vault')" style="background: rgba(0,242,254,0.15); color: var(--primary-cyan); border: 1px solid var(--primary-cyan); padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-right: 6px;">Deposit / Fund</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    position: relative;
+    color: var(--xps-text);
+    padding-bottom: 40px;
+}
 
-<!-- Modal: Create Vault Wizard -->
-<div id="modal-create-vault" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
-    <div class="card" style="width: 480px; padding: 32px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="font-size: 1.2rem;">Create Confidential Vault</h3>
-            <button onclick="document.getElementById('modal-create-vault').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
+.xps-vault-page *,
+.xps-vault-page *::before,
+.xps-vault-page *::after {
+    box-sizing: border-box;
+}
+
+/* Ambient background */
+.xps-vault-page::before {
+    content: "";
+    position: absolute;
+    inset: -80px -40px auto;
+    height: 420px;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.09), transparent 32%),
+        radial-gradient(circle at 82% 10%, rgba(99, 102, 241, 0.10), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(139, 92, 246, 0.06), transparent 35%);
+    z-index: 0;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.xps-vault-header {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+
+    margin-bottom: 28px;
+    padding: 4px 0;
+}
+
+.xps-vault-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 9px;
+
+    color: var(--xps-cyan);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.xps-vault-eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--xps-cyan);
+    box-shadow: 0 0 14px rgba(0, 242, 254, 0.75);
+}
+
+.xps-vault-header h2 {
+    margin: 0;
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.xps-vault-description {
+    margin: 10px 0 0;
+    color: var(--xps-muted);
+    font-size: 0.91rem;
+    line-height: 1.6;
+}
+
+.xps-create-vault-btn {
+    flex-shrink: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 44px;
+    padding: 0 18px;
+
+    border: 1px solid rgba(0, 242, 254, 0.38);
+    border-radius: 10px;
+
+    color: #031016;
+    background: linear-gradient(
+        135deg,
+        var(--xps-cyan),
+        #67e8f9
+    );
+
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+
+    box-shadow:
+        0 0 24px rgba(0, 242, 254, 0.10),
+        inset 0 1px rgba(255,255,255,0.35);
+
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        filter 180ms ease;
+}
+
+.xps-create-vault-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow:
+        0 10px 30px rgba(0, 242, 254, 0.16),
+        0 0 28px rgba(0, 242, 254, 0.12);
+}
+
+/* =========================================================
+   KPI GRID
+   ========================================================= */
+
+.xps-vault-kpis {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+
+    margin-bottom: 26px;
+}
+
+.xps-kpi-card {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 145px;
+    padding: 20px;
+
+    border: 1px solid var(--xps-border);
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 27, 47, 0.88),
+            rgba(7, 12, 24, 0.86)
+        );
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,0.20),
+        inset 0 1px rgba(255,255,255,0.025);
+
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease;
+}
+
+.xps-kpi-card::after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    right: -65px;
+    top: -65px;
+    border-radius: 50%;
+    background: rgba(0, 242, 254, 0.07);
+    filter: blur(25px);
+}
+
+.xps-kpi-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 242, 254, 0.20);
+}
+
+.xps-kpi-card.flow::after {
+    background: rgba(52, 211, 153, 0.08);
+}
+
+.xps-kpi-card.vaults::after {
+    background: rgba(99, 102, 241, 0.09);
+}
+
+.xps-kpi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.xps-kpi-label {
+    color: var(--xps-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.xps-kpi-icon {
+    display: grid;
+    place-items: center;
+
+    width: 31px;
+    height: 31px;
+
+    border: 1px solid rgba(0,242,254,0.13);
+    border-radius: 9px;
+
+    color: var(--xps-cyan);
+    background: rgba(0,242,254,0.055);
+
+    font-size: 0.9rem;
+}
+
+.xps-kpi-value {
+    position: relative;
+    z-index: 1;
+
+    min-height: 38px;
+
+    color: var(--xps-text);
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.xps-kpi-value.cyan {
+    color: var(--xps-cyan);
+}
+
+.xps-kpi-value.emerald {
+    color: var(--xps-emerald);
+}
+
+.xps-kpi-subtext {
+    margin-top: 7px;
+
+    color: #68758a;
+    font-size: 0.72rem;
+}
+
+/* =========================================================
+   VAULT TABLE
+   ========================================================= */
+
+.xps-vault-table-panel {
+    position: relative;
+    z-index: 1;
+
+    overflow: hidden;
+
+    border: 1px solid var(--xps-border);
+    border-radius: 16px;
+
+    background: rgba(8, 13, 25, 0.82);
+
+    box-shadow:
+        0 24px 70px rgba(0,0,0,0.22),
+        inset 0 1px rgba(255,255,255,0.025);
+}
+
+.xps-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid var(--xps-border);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,242,254,0.025),
+            transparent 45%,
+            rgba(99,102,241,0.025)
+        );
+}
+
+.xps-table-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-table-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    background: var(--xps-emerald);
+    box-shadow: 0 0 12px rgba(52,211,153,0.65);
+}
+
+.xps-table-header h3 {
+    margin: 0;
+
+    font-size: 0.96rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+}
+
+.xps-network-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 6px 10px;
+
+    border: 1px solid rgba(99,102,241,0.20);
+    border-radius: 999px;
+
+    color: #aab5ff;
+    background: rgba(99,102,241,0.07);
+
+    font-size: 0.66rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+}
+
+.xps-table-scroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.xps-vault-table {
+    width: 100%;
+    min-width: 920px;
+
+    border-collapse: collapse;
+}
+
+.xps-vault-table th {
+    padding: 13px 18px;
+
+    border-bottom: 1px solid var(--xps-border);
+
+    color: #657188;
+
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-align: left;
+    text-transform: uppercase;
+
+    background: rgba(255,255,255,0.012);
+}
+
+.xps-vault-table td {
+    padding: 17px 18px;
+
+    border-bottom: 1px solid rgba(148,163,184,0.075);
+
+    color: var(--xps-soft);
+    font-size: 0.79rem;
+    vertical-align: middle;
+}
+
+.xps-vault-table tbody tr {
+    transition: background 150ms ease;
+}
+
+.xps-vault-table tbody tr:hover {
+    background: rgba(0,242,254,0.022);
+}
+
+.xps-vault-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.xps-vault-name {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-vault-symbol {
+    display: grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+
+    border: 1px solid rgba(0,242,254,0.16);
+    border-radius: 9px;
+
+    color: var(--xps-cyan);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,242,254,0.10),
+            rgba(99,102,241,0.08)
+        );
+
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+
+.xps-vault-name strong {
+    display: block;
+
+    color: var(--xps-text);
+    font-size: 0.79rem;
+}
+
+.xps-vault-address {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #5f6c82;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.64rem;
+}
+
+.xps-asset-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 8px;
+
+    border: 1px solid rgba(0,242,254,0.16);
+    border-radius: 6px;
+
+    color: var(--xps-cyan);
+    background: rgba(0,242,254,0.055);
+
+    font-size: 0.64rem;
+    font-weight: 800;
+}
+
+.xps-balance {
+    color: var(--xps-text);
+    font-weight: 800;
+}
+
+.xps-limit {
+    color: var(--xps-gold);
+    font-weight: 750;
+}
+
+.xps-attestation {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #8794a9;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.65rem;
+}
+
+.xps-attestation-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #64748b;
+}
+
+.xps-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 0.61rem;
+    font-weight: 850;
+    letter-spacing: 0.06em;
+}
+
+.xps-status.active {
+    color: var(--xps-emerald);
+    border: 1px solid rgba(52,211,153,0.17);
+    background: rgba(52,211,153,0.06);
+}
+
+.xps-status.pending {
+    color: var(--xps-gold);
+    border: 1px solid rgba(251,191,36,0.17);
+    background: rgba(251,191,36,0.06);
+}
+
+.xps-status-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.xps-vault-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border: 1px solid rgba(0,242,254,0.18);
+    border-radius: 7px;
+
+    color: var(--xps-cyan);
+    background: rgba(0,242,254,0.045);
+
+    font-size: 0.65rem;
+    font-weight: 800;
+    cursor: pointer;
+
+    transition:
+        background 150ms ease,
+        border-color 150ms ease,
+        transform 150ms ease;
+}
+
+.xps-vault-action:hover {
+    transform: translateY(-1px);
+    border-color: rgba(0,242,254,0.35);
+    background: rgba(0,242,254,0.09);
+}
+
+/* Empty/loading state */
+.xps-table-loading {
+    padding: 42px 20px !important;
+
+    color: #657188 !important;
+    text-align: center;
+}
+
+.xps-loading-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.xps-loading-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--xps-cyan);
+    animation: xpsPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes xpsPulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.xps-modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(1, 4, 10, 0.80);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    z-index: 99999;
+}
+
+.xps-modal-panel {
+    width: min(500px, 100%);
+
+    border: 1px solid rgba(148,163,184,0.16);
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 25, 43, 0.98),
+            rgba(6, 11, 22, 0.99)
+        );
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,0.65),
+        0 0 60px rgba(0,242,254,0.05),
+        inset 0 1px rgba(255,255,255,0.035);
+
+    animation: xpsModalIn 180ms ease-out;
+}
+
+@keyframes xpsModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.xps-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px 22px;
+
+    border-bottom: 1px solid var(--xps-border);
+}
+
+.xps-modal-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-modal-icon {
+    display: grid;
+    place-items: center;
+
+    width: 35px;
+    height: 35px;
+
+    border: 1px solid rgba(0,242,254,0.17);
+    border-radius: 9px;
+
+    color: var(--xps-cyan);
+    background: rgba(0,242,254,0.06);
+}
+
+.xps-modal-head h3 {
+    margin: 0;
+
+    color: var(--xps-text);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.xps-modal-close {
+    display: grid;
+    place-items: center;
+
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    color: #748197;
+    background: transparent;
+
+    font-size: 1rem;
+    cursor: pointer;
+
+    transition:
+        color 150ms ease,
+        background 150ms ease,
+        border-color 150ms ease;
+}
+
+.xps-modal-close:hover {
+    color: var(--xps-text);
+    border-color: var(--xps-border);
+    background: rgba(255,255,255,0.04);
+}
+
+.xps-modal-body {
+    padding: 22px;
+}
+
+.xps-field {
+    margin-bottom: 17px;
+}
+
+.xps-field:last-child {
+    margin-bottom: 0;
+}
+
+.xps-field label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #8e9aae;
+
+    font-size: 0.69rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.xps-field input,
+.xps-field select {
+    width: 100%;
+    height: 43px;
+
+    padding: 0 12px;
+
+    border: 1px solid rgba(148,163,184,0.14);
+    border-radius: 9px;
+    outline: none;
+
+    color: var(--xps-text);
+    background: rgba(2,7,16,0.72);
+
+    font: inherit;
+    font-size: 0.78rem;
+
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.xps-field input::placeholder {
+    color: #4e5b70;
+}
+
+.xps-field input:focus,
+.xps-field select:focus {
+    border-color: rgba(0,242,254,0.42);
+
+    box-shadow:
+        0 0 0 3px rgba(0,242,254,0.06),
+        0 0 18px rgba(0,242,254,0.04);
+}
+
+.xps-field select option {
+    background: #0a1120;
+    color: var(--xps-text);
+}
+
+.xps-field-hint {
+    margin-top: 6px;
+
+    color: #566278;
+    font-size: 0.65rem;
+    line-height: 1.5;
+}
+
+.xps-modal-footer {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 23px;
+}
+
+.xps-btn {
+    flex: 1;
+
+    min-height: 42px;
+
+    border-radius: 9px;
+
+    font-size: 0.73rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 150ms ease,
+        filter 150ms ease,
+        background 150ms ease;
+}
+
+.xps-btn:hover {
+    transform: translateY(-1px);
+}
+
+.xps-btn-primary {
+    border: 1px solid rgba(0,242,254,0.30);
+
+    color: #021116;
+    background: linear-gradient(
+        135deg,
+        var(--xps-cyan),
+        #67e8f9
+    );
+}
+
+.xps-btn-secondary {
+    border: 1px solid rgba(148,163,184,0.15);
+
+    color: #a5b0c2;
+    background: rgba(255,255,255,0.035);
+}
+
+.xps-btn-secondary:hover {
+    background: rgba(255,255,255,0.06);
+}
+
+/* Warning modal */
+.xps-warning-panel {
+    border-color: rgba(251,113,133,0.20);
+}
+
+.xps-warning-icon {
+    color: var(--xps-red);
+    border-color: rgba(251,113,133,0.20);
+    background: rgba(251,113,133,0.07);
+}
+
+.xps-warning-title {
+    color: var(--xps-red) !important;
+}
+
+.xps-warning-box {
+    margin-bottom: 20px;
+    padding: 13px 14px;
+
+    border: 1px solid rgba(251,113,133,0.13);
+    border-radius: 10px;
+
+    color: #a9b3c3;
+    background: rgba(251,113,133,0.035);
+
+    font-size: 0.72rem;
+    line-height: 1.6;
+}
+
+.xps-warning-box strong {
+    color: var(--xps-text);
+}
+
+.xps-danger-btn {
+    border: 1px solid rgba(251,113,133,0.30) !important;
+
+    color: #fff !important;
+    background: linear-gradient(
+        135deg,
+        #ef4444,
+        #be123c
+    ) !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .xps-vault-kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-vault-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xps-create-vault-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .xps-vault-page {
+        padding-bottom: 25px;
+    }
+
+    .xps-vault-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .xps-kpi-card {
+        min-height: 125px;
+        padding: 17px;
+    }
+
+    .xps-table-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xps-modal {
+        padding: 12px;
+    }
+
+    .xps-modal-body {
+        padding: 18px;
+    }
+
+    .xps-modal-footer {
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .xps-vault-page *,
+    .xps-vault-page *::before,
+    .xps-vault-page *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+
+
+<!-- =========================================================
+     XRPShield — Treasury Vault Console
+     ========================================================= -->
+
+<div class="xps-vault-page">
+
+    <!-- HEADER -->
+    <div class="xps-vault-header">
+
+        <div>
+            <div class="xps-vault-eyebrow">
+                <span class="xps-vault-eyebrow-dot"></span>
+                Confidential Treasury Infrastructure
+            </div>
+
+            <h2>Confidential XRP Treasury Vaults</h2>
+
+            <p class="xps-vault-description">
+                Manage FXRP reserves, authorize treasury movements,
+                and inspect verified on-chain vault state.
+            </p>
         </div>
-        <form id="create-vault-form">
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Vault Name</label>
-                <input id="vault-name-input" type="text" required placeholder="e.g. Core FXRP Treasury" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
-            </div>
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Asset Type</label>
-                <select id="vault-asset-select" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
-                    <option value="FXRP">FXRP (Flare Wrapped XRP)</option>
-                    <option value="XRP">XRP (Native Ledger)</option>
-                </select>
-            </div>
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Drawdown Limit (%)</label>
-                <input id="vault-drawdown-input" type="number" required value="10" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
-            </div>
-            <div style="margin-bottom: 24px;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Initial Reserve Balance (FXRP)</label>
-                <input id="vault-balance-input" type="number" placeholder="100000" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
-            </div>
-            <div style="display: flex; gap: 12px;">
-                <button type="submit" class="btn-primary" style="flex:1;">Deploy Vault Contract</button>
-                <button type="button" onclick="document.getElementById('modal-create-vault').style.display='none'" class="btn-secondary" style="flex:1;">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
 
-<!-- Modal: Fund Vault (Deposit / Withdraw via Web3) -->
-<div id="modal-fund-vault" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
-    <div class="card" style="width: 480px; padding: 32px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <h3 style="font-size: 1.2rem; color: var(--primary-cyan);">⚡ Fund Vault: <span id="fund-vault-name">Treasury Vault</span></h3>
-            <button onclick="document.getElementById('modal-fund-vault').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer;">✕</button>
-        </div>
-        <form id="fund-vault-form">
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Action</label>
-                <select id="fund-action-select" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
-                    <option value="DEPOSIT">Deposit FXRP Reserve</option>
-                    <option value="WITHDRAW">Withdraw Reserve</option>
-                </select>
-            </div>
-            <div style="margin-bottom: 24px;">
-                <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 6px;">Amount (FXRP)</label>
-                <input id="fund-amount-input" type="number" required value="5000" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 10px; border-radius: 8px;">
-            </div>
-            <div style="display: flex; gap: 12px;">
-                <button type="submit" class="btn-primary" style="flex:1;">Sign & Execute on Flare Coston2</button>
-                <button type="button" onclick="document.getElementById('modal-fund-vault').style.display='none'" class="btn-secondary" style="flex:1;">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
+        <button
+            onclick="document.getElementById('modal-create-vault').style.display='flex'"
+            class="xps-create-vault-btn"
+        >
+            <span>＋</span>
+            Create Vault
+        </button>
 
-<!-- Modal: Deactivate / Activate Vault Confirmation -->
-<div id="modal-deactivate-vault" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center;">
-    <div class="card" style="width: 480px; max-width: 90vw; padding: 28px; background: rgba(12, 18, 32, 0.98); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px;">
-            <h3 style="font-size: 1.15rem; color: #F87171; font-weight: 700; margin: 0;" id="deactivate-modal-title">⚠️ Deactivate Vault</h3>
-            <button onclick="document.getElementById('modal-deactivate-vault').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; padding: 4px; line-height: 1;">✕</button>
-        </div>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px;" id="deactivate-modal-desc">
-            Are you sure you want to deactivate <strong id="deactivate-target-vault-name" style="color: var(--text-primary);">Vault</strong>? Deactivating will pause Flare TEE policy enforcement and seal reserve transactions.
-        </p>
-        <div style="display: flex; gap: 12px; justify-content: flex-end;">
-            <button type="button" onclick="document.getElementById('modal-deactivate-vault').style.display='none'" class="btn-secondary" style="padding: 8px 18px;">Cancel</button>
-            <button type="button" id="confirm-deactivate-btn" class="btn-primary" style="background: linear-gradient(135deg, #EF4444, #DC2626); border: none; padding: 8px 20px;">Confirm Deactivation</button>
-        </div>
     </div>
+
+
+    <!-- =====================================================
+         TREASURY KPIs
+         IMPORTANT:
+         Values intentionally begin empty/loading.
+         Populate them only from real runtime/on-chain data.
+         ===================================================== -->
+
+    <div class="xps-vault-kpis">
+
+        <div class="xps-kpi-card">
+            <div class="xps-kpi-top">
+                <div class="xps-kpi-label">
+                    Total Treasury Reserves
+                </div>
+
+                <div class="xps-kpi-icon">◈</div>
+            </div>
+
+            <div
+                class="xps-kpi-value cyan"
+                id="total-treasury-balance"
+            >
+                —
+            </div>
+
+            <div class="xps-kpi-subtext">
+                FXRP balance resolved from connected vaults
+            </div>
+        </div>
+
+
+        <div class="xps-kpi-card vaults">
+            <div class="xps-kpi-top">
+                <div class="xps-kpi-label">
+                    Active Vaults
+                </div>
+
+                <div class="xps-kpi-icon">▣</div>
+            </div>
+
+            <div
+                class="xps-kpi-value"
+                id="active-vault-count"
+            >
+                —
+            </div>
+
+            <div class="xps-kpi-subtext">
+                Contract state awaiting live verification
+            </div>
+        </div>
+
+
+        <div class="xps-kpi-card flow">
+            <div class="xps-kpi-top">
+                <div class="xps-kpi-label">
+                    24h Net Deposit Flow
+                </div>
+
+                <div class="xps-kpi-icon">↗</div>
+            </div>
+
+            <div
+                class="xps-kpi-value emerald"
+                id="net-deposit-flow"
+            >
+                —
+            </div>
+
+            <div class="xps-kpi-subtext">
+                Calculated from verified deposit / withdrawal events
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIVE VAULTS
+         ===================================================== -->
+
+    <div class="xps-vault-table-panel">
+
+        <div class="xps-table-header">
+
+            <div class="xps-table-title-wrap">
+                <span class="xps-table-live-dot"></span>
+
+                <h3>
+                    Active Treasury Vaults
+                </h3>
+            </div>
+
+            <span class="xps-network-badge">
+                ● EVM Smart Contract Vaults
+            </span>
+
+        </div>
+
+
+        <div class="xps-table-scroll">
+
+            <table class="xps-vault-table">
+
+                <thead>
+                    <tr>
+                        <th>Vault</th>
+                        <th>Asset</th>
+                        <th>Balance</th>
+                        <th>Drawdown</th>
+                        <th>Confidential Compute</th>
+                        <th>Status</th>
+                        <th>Control</th>
+                    </tr>
+                </thead>
+
+                <tbody id="vaults-table-body">
+
+                    <!--
+                        Do not insert synthetic vaults here.
+                        Your existing JS should populate this tbody
+                        from actual contract/runtime data.
+                    -->
+
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="xps-table-loading"
+                        >
+                            <span class="xps-loading-line">
+                                <span class="xps-loading-dot"></span>
+                                Resolving vault state from Coston2…
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CREATE VAULT MODAL
+         ===================================================== -->
+
+    <div
+        id="modal-create-vault"
+        class="xps-modal"
+    >
+
+        <div class="xps-modal-panel">
+
+            <div class="xps-modal-head">
+
+                <div class="xps-modal-heading">
+
+                    <div class="xps-modal-icon">
+                        ◈
+                    </div>
+
+                    <h3>
+                        Create Confidential Vault
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="xps-modal-close"
+                    onclick="document.getElementById('modal-create-vault').style.display='none'"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="xps-modal-body">
+
+                <form id="create-vault-form">
+
+                    <div class="xps-field">
+
+                        <label for="vault-name-input">
+                            Vault Name
+                        </label>
+
+                        <input
+                            id="vault-name-input"
+                            type="text"
+                            required
+                            placeholder="e.g. Core FXRP Treasury"
+                        >
+
+                    </div>
+
+
+                    <div class="xps-field">
+
+                        <label for="vault-asset-select">
+                            Asset Type
+                        </label>
+
+                        <select id="vault-asset-select">
+
+                            <option value="FXRP">
+                                FXRP — Flare wrapped XRP
+                            </option>
+
+                            <option value="XRP">
+                                XRP — Native Ledger asset
+                            </option>
+
+                        </select>
+
+                        <div class="xps-field-hint">
+                            Ensure the selected asset is supported by the
+                            deployed vault contract before execution.
+                        </div>
+
+                    </div>
+
+
+                    <div class="xps-field">
+
+                        <label for="vault-drawdown-input">
+                            Drawdown Limit (%)
+                        </label>
+
+                        <input
+                            id="vault-drawdown-input"
+                            type="number"
+                            required
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value="10"
+                        >
+
+                        <div class="xps-field-hint">
+                            Defines the treasury policy threshold used by
+                            the vault configuration.
+                        </div>
+
+                    </div>
+
+
+                    <div class="xps-field">
+
+                        <label for="vault-balance-input">
+                            Initial Reserve Balance
+                        </label>
+
+                        <input
+                            id="vault-balance-input"
+                            type="number"
+                            min="0"
+                            step="any"
+                            placeholder="Enter reserve amount"
+                        >
+
+                        <div class="xps-field-hint">
+                            Initial funding is executed separately through
+                            the connected wallet when supported.
+                        </div>
+
+                    </div>
+
+
+                    <div class="xps-modal-footer">
+
+                        <button
+                            type="submit"
+                            class="xps-btn xps-btn-primary"
+                        >
+                            Deploy Vault Contract
+                        </button>
+
+                        <button
+                            type="button"
+                            class="xps-btn xps-btn-secondary"
+                            onclick="document.getElementById('modal-create-vault').style.display='none'"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FUND / WITHDRAW VAULT MODAL
+         ===================================================== -->
+
+    <div
+        id="modal-fund-vault"
+        class="xps-modal"
+    >
+
+        <div class="xps-modal-panel">
+
+            <div class="xps-modal-head">
+
+                <div class="xps-modal-heading">
+
+                    <div class="xps-modal-icon">
+                        ↗
+                    </div>
+
+                    <h3>
+                        Treasury Movement
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="xps-modal-close"
+                    onclick="document.getElementById('modal-fund-vault').style.display='none'"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="xps-modal-body">
+
+                <div
+                    style="
+                        margin-bottom:18px;
+                        padding:12px 14px;
+                        border:1px solid rgba(0,242,254,0.10);
+                        border-radius:10px;
+                        background:rgba(0,242,254,0.035);
+                    "
+                >
+                    <div
+                        style="
+                            color:#627087;
+                            font-size:.62rem;
+                            font-weight:800;
+                            letter-spacing:.08em;
+                            text-transform:uppercase;
+                            margin-bottom:5px;
+                        "
+                    >
+                        Target Vault
+                    </div>
+
+                    <div
+                        id="fund-vault-name"
+                        style="
+                            color:#f4f7fb;
+                            font-size:.82rem;
+                            font-weight:800;
+                        "
+                    >
+                        Treasury Vault
+                    </div>
+                </div>
+
+
+                <form id="fund-vault-form">
+
+                    <div class="xps-field">
+
+                        <label for="fund-action-select">
+                            Treasury Action
+                        </label>
+
+                        <select id="fund-action-select">
+
+                            <option value="DEPOSIT">
+                                Deposit FXRP Reserve
+                            </option>
+
+                            <option value="WITHDRAW">
+                                Withdraw Reserve
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="xps-field">
+
+                        <label for="fund-amount-input">
+                            Amount
+                        </label>
+
+                        <input
+                            id="fund-amount-input"
+                            type="number"
+                            required
+                            min="0"
+                            step="any"
+                            placeholder="Enter FXRP amount"
+                        >
+
+                        <div class="xps-field-hint">
+                            The connected wallet will be asked to sign
+                            the resulting transaction.
+                        </div>
+
+                    </div>
+
+
+                    <div class="xps-modal-footer">
+
+                        <button
+                            type="submit"
+                            class="xps-btn xps-btn-primary"
+                        >
+                            Sign &amp; Execute on Coston2
+                        </button>
+
+                        <button
+                            type="button"
+                            class="xps-btn xps-btn-secondary"
+                            onclick="document.getElementById('modal-fund-vault').style.display='none'"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIVATE / DEACTIVATE MODAL
+         ===================================================== -->
+
+    <div
+        id="modal-deactivate-vault"
+        class="xps-modal"
+    >
+
+        <div class="xps-modal-panel xps-warning-panel">
+
+            <div class="xps-modal-head">
+
+                <div class="xps-modal-heading">
+
+                    <div class="xps-modal-icon xps-warning-icon">
+                        !
+                    </div>
+
+                    <h3
+                        id="deactivate-modal-title"
+                        class="xps-warning-title"
+                    >
+                        Deactivate Vault
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="xps-modal-close"
+                    onclick="document.getElementById('modal-deactivate-vault').style.display='none'"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="xps-modal-body">
+
+                <div
+                    class="xps-warning-box"
+                    id="deactivate-modal-desc"
+                >
+                    Are you sure you want to deactivate
+                    <strong id="deactivate-target-vault-name">
+                        Vault
+                    </strong>?
+
+                    <br><br>
+
+                    Deactivation changes the vault's execution state.
+                    Confirm the resulting contract state before relying
+                    on the change.
+                </div>
+
+
+                <div class="xps-modal-footer">
+
+                    <button
+                        type="button"
+                        onclick="document.getElementById('modal-deactivate-vault').style.display='none'"
+                        class="xps-btn xps-btn-secondary"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="confirm-deactivate-btn"
+                        class="xps-btn xps-danger-btn"
+                    >
+                        Confirm Deactivation
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

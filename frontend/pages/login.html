@@ -1,43 +1,695 @@
-<div style="max-width: 480px; margin: 40px auto;">
-    <div class="card" style="padding: 40px;">
-        <div class="brand-icon" style="width: 56px; height: 56px; font-size: 1.8rem; margin: 0 auto 20px auto;">X</div>
-        <h2 style="font-size: 1.6rem; font-weight: 700; text-align: center; margin-bottom: 8px;">Welcome Back</h2>
-        <p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; margin-bottom: 32px;">
-            Authenticate with Web3 MetaMask Wallet or Email
+<style>
+/* =========================================================
+   XRPShield — Premium Authentication / Login
+   ========================================================= */
+
+.xps-login-page {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow: hidden;
+}
+
+/* ---------- Ambient Background ---------- */
+
+.xps-login-page::before {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    top: -220px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(99,102,241,0.15) 0%,
+            rgba(20,184,166,0.07) 34%,
+            transparent 70%
+        );
+    filter: blur(20px);
+    pointer-events: none;
+}
+
+.xps-login-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.45;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(circle at center, black, transparent 75%);
+}
+
+/* ---------- Card ---------- */
+
+.xps-login-card {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 470px);
+    padding: 36px;
+    overflow: hidden;
+
+    border: 1px solid rgba(148,163,184,0.13);
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(99,102,241,0.075),
+            transparent 36%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.94),
+            rgba(7,12,25,0.97)
+        );
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,0.42),
+        0 0 70px rgba(79,70,229,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.xps-login-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(129,140,248,0.7),
+        rgba(45,212,191,0.7),
+        transparent
+    );
+}
+
+.xps-login-card::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: -100px;
+    bottom: -110px;
+    border-radius: 50%;
+    background: rgba(20,184,166,0.07);
+    filter: blur(30px);
+    pointer-events: none;
+}
+
+/* ---------- Brand ---------- */
+
+.xps-login-brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 19px;
+}
+
+.xps-login-brand-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    border: 1px solid rgba(201,169,106,0.32);
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(201,169,106,0.16),
+            rgba(99,102,241,0.09)
+        );
+
+    color: var(--gold-bright);
+    font-size: 1.55rem;
+    font-weight: 900;
+
+    box-shadow:
+        0 0 35px rgba(201,169,106,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.xps-login-brand-icon::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border: 1px solid rgba(201,169,106,0.08);
+    border-radius: 21px;
+}
+
+/* ---------- Heading ---------- */
+
+.xps-login-eyebrow {
+    text-align: center;
+    margin-bottom: 8px;
+
+    color: var(--gold-bright);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.xps-login-title {
+    margin: 0;
+    text-align: center;
+
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.xps-login-description {
+    max-width: 360px;
+    margin: 9px auto 27px;
+
+    color: var(--text-secondary);
+    font-size: 0.83rem;
+    line-height: 1.65;
+    text-align: center;
+}
+
+/* ---------- Wallet Button ---------- */
+
+.xps-login-wallet {
+    position: relative;
+    width: 100%;
+    min-height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(99,102,241,0.35);
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,0.16),
+            rgba(20,184,166,0.09)
+        );
+
+    color: #f8fafc;
+    font-size: 0.91rem;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 30px rgba(79,70,229,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background 180ms ease;
+}
+
+.xps-login-wallet::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -80%;
+    width: 55%;
+
+    transform: skewX(-20deg);
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.08),
+        transparent
+    );
+
+    transition: left 550ms ease;
+}
+
+.xps-login-wallet:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(129,140,248,0.55);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,0.22),
+            rgba(20,184,166,0.13)
+        );
+
+    box-shadow:
+        0 15px 40px rgba(79,70,229,0.18),
+        0 0 25px rgba(20,184,166,0.07);
+}
+
+.xps-login-wallet:hover::before {
+    left: 140%;
+}
+
+.xps-login-wallet:active {
+    transform: translateY(0);
+}
+
+.xps-login-wallet-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
+
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+
+    font-size: 1rem;
+}
+
+/* ---------- Wallet Security Hint ---------- */
+
+.xps-login-wallet-hint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 9px;
+
+    color: var(--text-muted);
+    font-family: monospace;
+    font-size: 0.62rem;
+}
+
+.xps-login-wallet-hint-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: #34d399;
+
+    box-shadow: 0 0 8px rgba(52,211,153,0.55);
+}
+
+/* ---------- Divider ---------- */
+
+.xps-login-divider {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin: 25px 0 22px;
+}
+
+.xps-login-divider-line {
+    flex: 1;
+    height: 1px;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--border-color),
+            transparent
+        );
+}
+
+.xps-login-divider-text {
+    color: var(--text-muted);
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+/* ---------- Form ---------- */
+
+.xps-login-field {
+    margin-bottom: 17px;
+}
+
+.xps-login-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-bottom: 7px;
+}
+
+.xps-login-label {
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+    font-weight: 650;
+}
+
+.xps-login-forgot {
+    color: var(--primary-cyan);
+    font-size: 0.7rem;
+    text-decoration: none;
+
+    transition: color 160ms ease;
+}
+
+.xps-login-forgot:hover {
+    color: #67e8f9;
+}
+
+.xps-login-input-wrap {
+    position: relative;
+}
+
+.xps-login-input {
+    width: 100%;
+    min-height: 48px;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid rgba(148,163,184,0.13);
+    border-radius: 11px;
+
+    outline: none;
+
+    background: rgba(0,0,0,0.27);
+
+    color: var(--text-primary);
+
+    font-size: 0.84rem;
+
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        background 160ms ease;
+}
+
+.xps-login-input::placeholder {
+    color: rgba(148,163,184,0.38);
+}
+
+.xps-login-input:hover {
+    border-color: rgba(148,163,184,0.22);
+}
+
+.xps-login-input:focus {
+    border-color: rgba(99,102,241,0.55);
+
+    background: rgba(0,0,0,0.36);
+
+    box-shadow:
+        0 0 0 3px rgba(99,102,241,0.08),
+        0 0 22px rgba(99,102,241,0.05);
+}
+
+/* ---------- Email Button ---------- */
+
+.xps-login-submit {
+    width: 100%;
+    min-height: 48px;
+
+    margin-top: 3px;
+
+    border: 1px solid rgba(148,163,184,0.14);
+    border-radius: 11px;
+
+    background: rgba(255,255,255,0.055);
+
+    color: var(--text-primary);
+
+    font-size: 0.83rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.xps-login-submit:hover {
+    transform: translateY(-1px);
+
+    border-color: rgba(148,163,184,0.27);
+    background: rgba(255,255,255,0.085);
+}
+
+.xps-login-submit:active {
+    transform: translateY(0);
+}
+
+/* ---------- Bottom ---------- */
+
+.xps-login-register {
+    margin-top: 22px;
+
+    color: var(--text-muted);
+
+    font-size: 0.72rem;
+    text-align: center;
+}
+
+.xps-login-register a {
+    color: var(--primary-cyan);
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.xps-login-register a:hover {
+    color: #67e8f9;
+}
+
+/* ---------- Trust Footer ---------- */
+
+.xps-login-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 21px;
+    padding-top: 17px;
+
+    border-top: 1px solid rgba(255,255,255,0.045);
+
+    color: var(--text-muted);
+
+    font-family: monospace;
+    font-size: 0.6rem;
+}
+
+.xps-login-trust-separator {
+    opacity: 0.35;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 520px) {
+    .xps-login-page {
+        min-height: auto;
+        padding: 25px 14px;
+    }
+
+    .xps-login-card {
+        padding: 28px 20px;
+        border-radius: 19px;
+    }
+
+    .xps-login-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .xps-login-wallet,
+    .xps-login-submit,
+    .xps-login-input {
+        transition: none;
+    }
+
+    .xps-login-wallet::before {
+        display: none;
+    }
+}
+</style>
+
+
+<div class="xps-login-page">
+
+    <div class="xps-login-card">
+
+        <!-- BRAND -->
+        <div class="xps-login-brand">
+            <div class="xps-login-brand-icon">
+                X
+            </div>
+        </div>
+
+
+        <!-- HEADING -->
+        <div class="xps-login-eyebrow">
+            Secure Treasury Access
+        </div>
+
+        <h2 class="xps-login-title">
+            Welcome Back
+        </h2>
+
+        <p class="xps-login-description">
+            Access your XRP treasury through a Web3 wallet
+            or secure email authentication.
         </p>
 
-        <button id="btn-login-metamask" onclick="import('../js/utils/wallet.js').then(m => m.WalletManager.connect())" class="btn-connect" style="width: 100%; padding: 14px; font-size: 1rem; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            🦊 Connect & Sign with Web3 Wallet
+
+        <!-- METAMASK -->
+        <button
+            id="btn-login-metamask"
+            onclick="import('../js/utils/wallet.js').then(m => m.WalletManager.connect())"
+            class="xps-login-wallet"
+            type="button"
+        >
+            <span class="xps-login-wallet-icon">🦊</span>
+
+            <span>
+                Connect &amp; Sign with Web3 Wallet
+            </span>
         </button>
 
-
-        <div style="display: flex; align-items: center; margin-bottom: 24px;">
-            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
-            <span style="padding: 0 12px; font-size: 0.8rem; color: var(--text-muted);">OR EMAIL SIGN IN</span>
-            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+        <div class="xps-login-wallet-hint">
+            <span class="xps-login-wallet-hint-dot"></span>
+            Non-custodial wallet authentication
         </div>
 
-        <form id="login-form" onsubmit="event.preventDefault(); window.handleLoginSubmit();">
-            <div style="margin-bottom: 16px; text-align: left;">
-                <label style="display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">Email Address</label>
-                <input type="email" id="login-email" required placeholder="name@company.com" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; border-radius: 10px;">
-            </div>
 
-            <div style="margin-bottom: 20px; text-align: left;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <label style="font-size: 0.85rem; color: var(--text-secondary);">Password</label>
-                    <a href="#forgot-password" style="font-size: 0.8rem; color: var(--primary-cyan); text-decoration: none;">Forgot?</a>
+        <!-- DIVIDER -->
+        <div class="xps-login-divider">
+            <div class="xps-login-divider-line"></div>
+
+            <span class="xps-login-divider-text">
+                OR EMAIL SIGN IN
+            </span>
+
+            <div class="xps-login-divider-line"></div>
+        </div>
+
+
+        <!-- EMAIL LOGIN -->
+        <form
+            id="login-form"
+            onsubmit="event.preventDefault(); window.handleLoginSubmit();"
+        >
+
+            <!-- EMAIL -->
+            <div class="xps-login-field">
+
+                <div class="xps-login-label-row">
+                    <label
+                        class="xps-login-label"
+                        for="login-email"
+                    >
+                        Email Address
+                    </label>
                 </div>
-                <input type="password" id="login-password" required placeholder="••••••••" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px 16px; border-radius: 10px;">
+
+                <div class="xps-login-input-wrap">
+                    <input
+                        type="email"
+                        id="login-email"
+                        required
+                        autocomplete="email"
+                        placeholder="name@company.com"
+                        class="xps-login-input"
+                    >
+                </div>
+
             </div>
 
-            <button type="submit" style="width: 100%; background: rgba(255,255,255,0.08); color: var(--text-primary); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer;">
+
+            <!-- PASSWORD -->
+            <div class="xps-login-field">
+
+                <div class="xps-login-label-row">
+
+                    <label
+                        class="xps-login-label"
+                        for="login-password"
+                    >
+                        Password
+                    </label>
+
+                    <a
+                        href="#forgot-password"
+                        class="xps-login-forgot"
+                    >
+                        Forgot password?
+                    </a>
+
+                </div>
+
+                <div class="xps-login-input-wrap">
+                    <input
+                        type="password"
+                        id="login-password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="••••••••"
+                        class="xps-login-input"
+                    >
+                </div>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+            <button
+                type="submit"
+                class="xps-login-submit"
+            >
                 Sign In with Password
             </button>
+
         </form>
 
-        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 24px;">
-            Don't have an account? <a href="#register" style="color: var(--primary-cyan); text-decoration: none;">Create One</a>
+
+        <!-- REGISTER -->
+        <div class="xps-login-register">
+            Don't have an account?
+            <a href="#register">
+                Create One
+            </a>
         </div>
+
+
+        <!-- TRUST FOOTER -->
+        <div class="xps-login-trust">
+            <span>Wallet</span>
+            <span class="xps-login-trust-separator">•</span>
+            <span>Email</span>
+            <span class="xps-login-trust-separator">•</span>
+            <span>XRPShield</span>
+        </div>
+
     </div>
+
 </div>

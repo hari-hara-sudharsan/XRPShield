@@ -1,158 +1,1213 @@
-<div class="verification-page animate-fade-in">
-    <!-- Hero Banner -->
-    <div class="glass-panel" style="padding: 28px; border-radius: 18px; margin-bottom: 24px; border: 1px solid rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, rgba(11, 15, 25, 0.95), rgba(18, 25, 40, 0.95)); position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: rgba(16, 185, 129, 0.12); filter: blur(50px); border-radius: 50%; pointer-events: none;"></div>
-        
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+<style>
+/* =========================================================
+   XRPShield — Independent Verification Center
+   Forensic / On-Chain Evidence Console
+   ========================================================= */
+
+.xps-verification {
+    --xv-bg: #050812;
+    --xv-panel: rgba(9, 15, 28, 0.84);
+    --xv-panel-strong: rgba(12, 20, 36, 0.96);
+    --xv-border: rgba(148, 163, 184, 0.13);
+    --xv-border-bright: rgba(16, 185, 129, 0.28);
+
+    --xv-text: #f5f7fb;
+    --xv-muted: #8793a8;
+    --xv-dim: #5e6a7e;
+
+    --xv-emerald: #10b981;
+    --xv-cyan: #00f2fe;
+    --xv-violet: #8b5cf6;
+    --xv-gold: #fbbf24;
+    --xv-red: #fb7185;
+
+    position: relative;
+    color: var(--xv-text);
+    padding-bottom: 40px;
+}
+
+.xps-verification *,
+.xps-verification *::before,
+.xps-verification *::after {
+    box-sizing: border-box;
+}
+
+.xps-verification::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    left: 10%;
+    width: 500px;
+    height: 360px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(16, 185, 129, 0.075),
+            transparent 68%
+        );
+
+    filter: blur(20px);
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.xv-hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 28px;
+
+    margin-bottom: 22px;
+
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(11, 18, 31, 0.97),
+            rgba(7, 14, 27, 0.92)
+        );
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.25),
+        inset 0 1px rgba(255,255,255,0.025);
+}
+
+.xv-hero::before {
+    content: "";
+
+    position: absolute;
+    right: -100px;
+    top: -100px;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background: rgba(16, 185, 129, 0.08);
+    filter: blur(65px);
+
+    pointer-events: none;
+}
+
+.xv-hero-grid {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.xv-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 12px;
+    padding: 5px 11px;
+
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    border-radius: 999px;
+
+    color: var(--xv-emerald);
+    background: rgba(16, 185, 129, 0.055);
+
+    font-size: 0.64rem;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.xv-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--xv-emerald);
+
+    box-shadow:
+        0 0 10px rgba(16,185,129,0.85);
+}
+
+.xv-hero h2 {
+    margin: 0 0 10px;
+
+    max-width: 900px;
+
+    font-size: clamp(1.55rem, 3vw, 2.15rem);
+    line-height: 1.12;
+    font-weight: 850;
+    letter-spacing: -0.04em;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #dffdf3 48%,
+            #10b981
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.xv-hero-copy {
+    max-width: 850px;
+
+    margin: 0;
+
+    color: var(--xv-muted);
+
+    font-size: 0.86rem;
+    line-height: 1.7;
+}
+
+.xv-hero-actions {
+    flex-shrink: 0;
+}
+
+.xv-explorer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    min-height: 42px;
+    padding: 0 16px;
+
+    border: 1px solid rgba(16,185,129,0.28);
+    border-radius: 9px;
+
+    color: #dffcf1;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(16,185,129,0.17),
+            rgba(5,150,105,0.10)
+        );
+
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-decoration: none;
+
+    box-shadow:
+        0 0 22px rgba(16,185,129,0.06);
+
+    transition:
+        transform 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
+}
+
+.xv-explorer-btn:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(16,185,129,0.46);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(16,185,129,0.24),
+            rgba(5,150,105,0.15)
+        );
+}
+
+
+/* =========================================================
+   TRUST STRIP
+   ========================================================= */
+
+.xv-trust-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.xv-trust-item {
+    padding: 12px 13px;
+
+    border: 1px solid rgba(148,163,184,0.10);
+    border-radius: 10px;
+
+    background: rgba(0,0,0,0.16);
+}
+
+.xv-trust-label {
+    color: #58657a;
+
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.xv-trust-value {
+    margin-top: 4px;
+
+    color: #cbd5e1;
+
+    font-size: 0.72rem;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.xv-panel {
+    position: relative;
+
+    margin-bottom: 22px;
+    padding: 22px;
+
+    border: 1px solid var(--xv-border);
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,21,37,0.86),
+            rgba(6,11,22,0.86)
+        );
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.20),
+        inset 0 1px rgba(255,255,255,0.02);
+}
+
+.xv-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    margin-bottom: 16px;
+}
+
+.xv-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.xv-section-icon {
+    display: grid;
+    place-items: center;
+
+    width: 31px;
+    height: 31px;
+
+    border: 1px solid rgba(0,242,254,0.13);
+    border-radius: 8px;
+
+    color: var(--xv-cyan);
+    background: rgba(0,242,254,0.05);
+
+    font-size: 0.78rem;
+}
+
+.xv-section-title h3 {
+    margin: 0;
+
+    color: var(--xv-text);
+
+    font-size: 0.96rem;
+    font-weight: 800;
+}
+
+.xv-section-meta {
+    color: #627087;
+
+    font-size: 0.63rem;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CONTRACT REGISTRY
+   ========================================================= */
+
+.xv-contract-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+}
+
+.xv-contract {
+    position: relative;
+    overflow: hidden;
+
+    padding: 16px;
+
+    border: 1px solid rgba(148,163,184,0.10);
+    border-radius: 12px;
+
+    background: rgba(0,0,0,0.20);
+
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease;
+}
+
+.xv-contract:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(0,242,254,0.19);
+}
+
+.xv-contract::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 14px;
+    bottom: 14px;
+
+    width: 2px;
+
+    background: var(--xv-cyan);
+
+    border-radius: 4px;
+}
+
+.xv-contract.gold::before {
+    background: var(--xv-gold);
+}
+
+.xv-contract.green::before {
+    background: var(--xv-emerald);
+}
+
+.xv-contract.violet::before {
+    background: var(--xv-violet);
+}
+
+.xv-contract-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+.xv-contract-name {
+    color: var(--xv-text);
+
+    font-size: 0.77rem;
+    font-weight: 800;
+}
+
+.xv-contract-link {
+    color: var(--xv-cyan);
+
+    font-size: 0.62rem;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.xv-contract-link:hover {
+    text-decoration: underline;
+}
+
+.xv-contract-address {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--xv-cyan);
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 0.65rem;
+
+    word-break: break-all;
+}
+
+.xv-contract-desc {
+    color: #68758a;
+
+    font-size: 0.65rem;
+    line-height: 1.5;
+}
+
+.xv-contract-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    margin-top: 9px;
+    padding: 4px 7px;
+
+    border: 1px solid rgba(148,163,184,0.11);
+    border-radius: 999px;
+
+    color: #7e8ba0;
+    background: rgba(255,255,255,0.025);
+
+    font-size: 0.57rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   AUDIT TABLE
+   ========================================================= */
+
+.xv-table-wrap {
+    overflow-x: auto;
+
+    border: 1px solid rgba(148,163,184,0.09);
+    border-radius: 11px;
+}
+
+.xv-audit-table {
+    width: 100%;
+    min-width: 1050px;
+
+    border-collapse: collapse;
+}
+
+.xv-audit-table th {
+    padding: 12px 14px;
+
+    border-bottom: 1px solid rgba(148,163,184,0.10);
+
+    color: #657188;
+
+    background: rgba(255,255,255,0.015);
+
+    font-size: 0.59rem;
+    font-weight: 850;
+    letter-spacing: 0.09em;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.xv-audit-table td {
+    padding: 14px;
+
+    border-bottom: 1px solid rgba(148,163,184,0.065);
+
+    color: #9ba7b9;
+
+    font-size: 0.70rem;
+    vertical-align: middle;
+}
+
+.xv-audit-table tbody tr {
+    transition: background 140ms ease;
+}
+
+.xv-audit-table tbody tr:hover {
+    background: rgba(0,242,254,0.018);
+}
+
+.xv-audit-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.xv-operation {
+    color: var(--xv-text);
+    font-weight: 750;
+}
+
+.xv-operation-index {
+    display: inline-grid;
+    place-items: center;
+
+    width: 23px;
+    height: 23px;
+
+    margin-right: 7px;
+
+    border: 1px solid rgba(0,242,254,0.12);
+    border-radius: 6px;
+
+    color: var(--xv-cyan);
+    background: rgba(0,242,254,0.04);
+
+    font-size: 0.58rem;
+    font-weight: 850;
+}
+
+.xv-code {
+    color: var(--xv-cyan);
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 0.63rem;
+}
+
+.xv-code.gold {
+    color: var(--xv-gold);
+}
+
+.xv-code.violet {
+    color: var(--xv-violet);
+}
+
+.xv-code.green {
+    color: var(--xv-emerald);
+}
+
+.xv-block {
+    color: #b7c1d0;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 0.64rem;
+}
+
+.xv-tx {
+    color: #657188;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 0.60rem;
+}
+
+.xv-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    font-size: 0.57rem;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+}
+
+.xv-pill::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+}
+
+.xv-pill-green {
+    color: var(--xv-emerald);
+
+    border: 1px solid rgba(16,185,129,0.17);
+    background: rgba(16,185,129,0.055);
+}
+
+.xv-pill-green::before {
+    background: var(--xv-emerald);
+    box-shadow: 0 0 7px rgba(16,185,129,0.65);
+}
+
+.xv-pill-gold {
+    color: var(--xv-gold);
+
+    border: 1px solid rgba(251,191,36,0.17);
+    background: rgba(251,191,36,0.05);
+}
+
+.xv-pill-gold::before {
+    background: var(--xv-gold);
+}
+
+.xv-verify-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 31px;
+    padding: 0 10px;
+
+    border: 1px solid rgba(148,163,184,0.13);
+    border-radius: 7px;
+
+    color: #aeb8c8;
+    background: rgba(255,255,255,0.025);
+
+    font-size: 0.61rem;
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition:
+        color 150ms ease,
+        border-color 150ms ease,
+        background 150ms ease;
+}
+
+.xv-verify-link:hover {
+    color: var(--xv-cyan);
+
+    border-color: rgba(0,242,254,0.25);
+    background: rgba(0,242,254,0.05);
+}
+
+
+/* =========================================================
+   EVIDENCE NOTICE
+   ========================================================= */
+
+.xv-evidence-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin-top: 16px;
+    padding: 13px 15px;
+
+    border: 1px solid rgba(0,242,254,0.10);
+    border-radius: 10px;
+
+    background: rgba(0,242,254,0.025);
+}
+
+.xv-evidence-icon {
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    width: 27px;
+    height: 27px;
+
+    border-radius: 7px;
+
+    color: var(--xv-cyan);
+    background: rgba(0,242,254,0.07);
+
+    font-size: 0.72rem;
+}
+
+.xv-evidence-title {
+    margin-bottom: 3px;
+
+    color: #c6d0df;
+
+    font-size: 0.69rem;
+    font-weight: 800;
+}
+
+.xv-evidence-copy {
+    color: #657188;
+
+    font-size: 0.63rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .xv-hero-grid {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xv-hero-actions {
+        width: 100%;
+    }
+
+    .xv-explorer-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .xv-trust-strip {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .xv-contract-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .xv-hero {
+        padding: 21px;
+    }
+
+    .xv-panel {
+        padding: 17px;
+    }
+
+    .xv-trust-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .xv-hero h2 {
+        font-size: 1.45rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .xps-verification *,
+    .xps-verification *::before,
+    .xps-verification *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+</style>
+
+
+<div class="xps-verification">
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <div class="xv-hero">
+
+        <div class="xv-hero-grid">
+
             <div>
-                <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10B981; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">
-                    🔍 Independent On-Chain Audit & Verification Hub
+
+                <div class="xv-eyebrow">
+                    <span class="xv-eyebrow-dot"></span>
+                    Independent Verification Center
                 </div>
-                <h2 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #FFFFFF, #10B981); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">
-                    100% On-Chain Verifiable Architecture on Flare Coston2 Testnet
+
+                <h2>
+                    On-Chain Evidence &amp; Verification
                 </h2>
-                <p style="color: var(--text-secondary); max-width: 820px; font-size: 0.94rem; line-height: 1.6;">
-                    Every major operation in XRPShield—from vault registration and FXRP ERC-20 deposits to FTSOv2 price readings, TEE attestation verifications, and DEX swaps—is recorded on-chain. Hackathon judges and third-party auditors can independently verify all transactions directly on Flare's official BlockScout Explorer.
+
+                <p class="xv-hero-copy">
+                    Inspect XRPShield's deployed contracts, oracle
+                    infrastructure, confidential-compute integration,
+                    and transaction evidence directly against Flare
+                    Coston2. Explorer links provide independent
+                    verification paths outside the application UI.
                 </p>
+
             </div>
-            
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="https://coston2-explorer.flare.network" target="_blank" class="btn-primary" style="padding: 10px 18px; font-size: 0.85rem; background: linear-gradient(135deg, #10B981, #059669);">🌐 Flare Coston2 Explorer ↗</a>
+
+
+            <div class="xv-hero-actions">
+
+                <a
+                    href="https://coston2-explorer.flare.network"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="xv-explorer-btn"
+                >
+                    <span>◉</span>
+                    Open Coston2 Explorer
+                    <span>↗</span>
+                </a>
+
             </div>
+
         </div>
+
+
+        <div class="xv-trust-strip">
+
+            <div class="xv-trust-item">
+                <div class="xv-trust-label">
+                    Network
+                </div>
+                <div class="xv-trust-value">
+                    Flare Coston2
+                </div>
+            </div>
+
+            <div class="xv-trust-item">
+                <div class="xv-trust-label">
+                    Chain ID
+                </div>
+                <div class="xv-trust-value">
+                    114
+                </div>
+            </div>
+
+            <div class="xv-trust-item">
+                <div class="xv-trust-label">
+                    Evidence Source
+                </div>
+                <div class="xv-trust-value">
+                    Public Chain State
+                </div>
+            </div>
+
+            <div class="xv-trust-item">
+                <div class="xv-trust-label">
+                    Verification Model
+                </div>
+                <div class="xv-trust-value">
+                    Independent Explorer
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- System Contract Registry Section -->
-    <div class="glass-panel" style="padding: 24px; border-radius: 16px; margin-bottom: 28px; border: 1px solid rgba(255, 255, 255, 0.08);">
-        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            📑 Verified System Contracts & FTSOv2 Oracle Feeds
-        </h3>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 16px; border-radius: 12px; border-left: 3px solid var(--primary-cyan);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong style="color: var(--text-primary); font-size: 0.9rem;">Vault Manager Contract</strong>
-                    <a href="https://coston2-explorer.flare.network/address/0x5bb8082987515f40398fb9893d90616b47c04208" target="_blank" style="color: var(--primary-cyan); font-size: 0.75rem; text-decoration: underline;">Explorer ↗</a>
+    <!-- =====================================================
+         CONTRACT REGISTRY
+         ===================================================== -->
+
+    <div class="xv-panel">
+
+        <div class="xv-section-head">
+
+            <div class="xv-section-title">
+
+                <div class="xv-section-icon">
+                    ◈
                 </div>
-                <code style="color: var(--primary-cyan); font-family: var(--font-mono); font-size: 0.8rem; display: block; word-break: break-all;">0x5bb8082987515f40398fb9893d90616b47c04208</code>
-                <span style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 4px; display: block;">Gatekeeper execution, vault balance accounting, event dispatcher</span>
+
+                <h3>
+                    System Contract Registry
+                </h3>
+
             </div>
 
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 16px; border-radius: 12px; border-left: 3px solid var(--metal-gold-bright);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong style="color: var(--text-primary); font-size: 0.9rem;">Treasury Storage Contract</strong>
-                    <a href="https://coston2-explorer.flare.network/address/0x0165878A594ca255338adfa4d48449f69242Eb8F" target="_blank" style="color: var(--metal-gold-bright); font-size: 0.75rem; text-decoration: underline;">Explorer ↗</a>
-                </div>
-                <code style="color: var(--metal-gold-bright); font-family: var(--font-mono); font-size: 0.8rem; display: block; word-break: break-all;">0x0165878A594ca255338adfa4d48449f69242Eb8F</code>
-                <span style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 4px; display: block;">Storage layer for keccak256 policy commitments & nonces</span>
+            <div class="xv-section-meta">
+                Coston2 deployment references
             </div>
 
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 16px; border-radius: 12px; border-left: 3px solid #10B981;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong style="color: var(--text-primary); font-size: 0.9rem;">FCC Extension Adapter</strong>
-                    <a href="https://coston2-explorer.flare.network/address/08A791620dd6260079BF849Dc5567aDC3F2FdC318" target="_blank" style="color: #10B981; font-size: 0.75rem; text-decoration: underline;">Explorer ↗</a>
-                </div>
-                <code style="color: #10B981; font-family: var(--font-mono); font-size: 0.8rem; display: block; word-break: break-all;">0x8A791620dd6260079BF849Dc5567aDC3F2FdC318</code>
-                <span style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 4px; display: block;">EIP-712 domain separator & TEE attestation verification</span>
-            </div>
-
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 16px; border-radius: 12px; border-left: 3px solid #8B5CF6;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <strong style="color: var(--text-primary); font-size: 0.9rem;">Flare FTSOv2 Oracle Contract</strong>
-                    <a href="https://coston2-explorer.flare.network/address/0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d" target="_blank" style="color: #8B5CF6; font-size: 0.75rem; text-decoration: underline;">Explorer ↗</a>
-                </div>
-                <code style="color: #8B5CF6; font-family: var(--font-mono); font-size: 0.8rem; display: block; word-break: break-all;">0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d</code>
-                <span style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 4px; display: block;">Feed ID: <code>0x015852502f55534400000000000000000000000000</code> (XRP/USD)</span>
-            </div>
         </div>
+
+
+        <div class="xv-contract-grid">
+
+            <!-- Vault Manager -->
+
+            <div class="xv-contract">
+
+                <div class="xv-contract-head">
+
+                    <div class="xv-contract-name">
+                        Vault Manager Contract
+                    </div>
+
+                    <a
+                        href="https://coston2-explorer.flare.network/address/0x5bb8082987515f40398fb9893d90616b47c04208"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="xv-contract-link"
+                    >
+                        Explorer ↗
+                    </a>
+
+                </div>
+
+                <code class="xv-contract-address">
+                    0x5bb8082987515f40398fb9893d90616b47c04208
+                </code>
+
+                <div class="xv-contract-desc">
+                    Gatekeeper execution, vault accounting,
+                    and event dispatch.
+                </div>
+
+                <span class="xv-contract-status">
+                    Deployment Reference
+                </span>
+
+            </div>
+
+
+            <!-- Treasury Storage -->
+
+            <div class="xv-contract gold">
+
+                <div class="xv-contract-head">
+
+                    <div class="xv-contract-name">
+                        Treasury Storage Contract
+                    </div>
+
+                    <a
+                        href="https://coston2-explorer.flare.network/address/0x0165878A594ca255338adfa4d48449f69242Eb8F"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="xv-contract-link"
+                        style="color:#fbbf24"
+                    >
+                        Explorer ↗
+                    </a>
+
+                </div>
+
+                <code
+                    class="xv-contract-address"
+                    style="color:#fbbf24"
+                >
+                    0x0165878A594ca255338adfa4d48449f69242Eb8F
+                </code>
+
+                <div class="xv-contract-desc">
+                    Storage layer for policy commitments,
+                    nonces, and related treasury state.
+                </div>
+
+                <span class="xv-contract-status">
+                    Deployment Reference
+                </span>
+
+            </div>
+
+
+            <!-- FCC Adapter -->
+
+            <div class="xv-contract green">
+
+                <div class="xv-contract-head">
+
+                    <div class="xv-contract-name">
+                        FCC Extension Adapter
+                    </div>
+
+                    <a
+                        href="https://coston2-explorer.flare.network/address/0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="xv-contract-link"
+                        style="color:#10b981"
+                    >
+                        Explorer ↗
+                    </a>
+
+                </div>
+
+                <code
+                    class="xv-contract-address"
+                    style="color:#10b981"
+                >
+                    0x8A791620dd6260079BF849Dc5567aDC3F2FdC318
+                </code>
+
+                <div class="xv-contract-desc">
+                    Confidential-compute authorization boundary
+                    and ActionResult verification path.
+                </div>
+
+                <span class="xv-contract-status">
+                    FCC Integration
+                </span>
+
+            </div>
+
+
+            <!-- FTSOv2 -->
+
+            <div class="xv-contract violet">
+
+                <div class="xv-contract-head">
+
+                    <div class="xv-contract-name">
+                        Flare FTSOv2 Oracle Contract
+                    </div>
+
+                    <a
+                        href="https://coston2-explorer.flare.network/address/0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="xv-contract-link"
+                        style="color:#8b5cf6"
+                    >
+                        Explorer ↗
+                    </a>
+
+                </div>
+
+                <code
+                    class="xv-contract-address"
+                    style="color:#8b5cf6"
+                >
+                    0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d
+                </code>
+
+                <div class="xv-contract-desc">
+                    XRP/USD FTSOv2 feed infrastructure used by
+                    the treasury risk pipeline.
+                </div>
+
+                <span class="xv-contract-status">
+                    Oracle Reference
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- Interactive Operations Verification Table -->
-    <div class="glass-panel" style="padding: 24px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);">
-        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            ⚡ Real Major Operations On-Chain Audit Table
-        </h3>
 
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+    <!-- =====================================================
+         OPERATIONS AUDIT
+         ===================================================== -->
+
+    <div class="xv-panel">
+
+        <div class="xv-section-head">
+
+            <div class="xv-section-title">
+
+                <div
+                    class="xv-section-icon"
+                    style="
+                        color:#10b981;
+                        background:rgba(16,185,129,0.055);
+                        border-color:rgba(16,185,129,0.13);
+                    "
+                >
+                    ✓
+                </div>
+
+                <h3>
+                    Major Operations Audit
+                </h3>
+
+            </div>
+
+            <div class="xv-section-meta">
+                Explorer-verifiable evidence
+            </div>
+
+        </div>
+
+
+        <div class="xv-table-wrap">
+
+            <table class="xv-audit-table">
+
                 <thead>
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-secondary); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                        <th style="padding: 12px 14px;">Operation Name</th>
-                        <th style="padding: 12px 14px;">Event / Function Selector</th>
-                        <th style="padding: 12px 14px;">Block Number</th>
-                        <th style="padding: 12px 14px;">Transaction Hash</th>
-                        <th style="padding: 12px 14px;">Status</th>
-                        <th style="padding: 12px 14px; text-align: right;">Independent Verification</th>
-                    </tr>
-                </thead>
-                <tbody id="verification-table-body">
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                        <td style="padding: 14px; font-weight: 600; color: var(--text-primary);">1. Vault Registration</td>
-                        <td style="padding: 14px;"><code style="color: var(--primary-cyan); font-size: 0.8rem;">VaultRegistered</code></td>
-                        <td style="padding: 14px; font-family: var(--font-mono);">33705120</td>
-                        <td style="padding: 14px; font-family: var(--font-mono); color: var(--text-secondary);">0x313bc772c0c920b6...</td>
-                        <td style="padding: 14px;"><span class="pill pill-jade">CONFIRMED</span></td>
-                        <td style="padding: 14px; text-align: right;">
-                            <a href="https://coston2-explorer.flare.network/tx/0x313bc772c0c920b6a77c0d1e11456bffec247e399af8c7194458ed5bd1099816" target="_blank" class="btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block; cursor: pointer;">Verify on BlockScout ↗</a>
-                        </td>
-                    </tr>
-
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                        <td style="padding: 14px; font-weight: 600; color: var(--text-primary);">2. FXRP ERC-20 Deposit</td>
-                        <td style="padding: 14px;"><code style="color: var(--primary-cyan); font-size: 0.8rem;">DepositExecuted</code></td>
-                        <td style="padding: 14px; font-family: var(--font-mono);">33705125</td>
-                        <td style="padding: 14px; font-family: var(--font-mono); color: var(--text-secondary);">0x863c7c4a86381ea8...</td>
-                        <td style="padding: 14px;"><span class="pill pill-jade">CONFIRMED</span></td>
-                        <td style="padding: 14px; text-align: right;">
-                            <a href="https://coston2-explorer.flare.network/tx/0x863c7c4a86381ea8e5a4114f22a105e9645ab1bcbafe1076b45ed8bf4b2057a8" target="_blank" class="btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block; cursor: pointer;">Verify on BlockScout ↗</a>
-                        </td>
-                    </tr>
-
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                        <td style="padding: 14px; font-weight: 600; color: var(--text-primary);">3. Policy Commitment Registration</td>
-                        <td style="padding: 14px;"><code style="color: var(--metal-gold-bright); font-size: 0.8rem;">PolicyCommitmentRegistered</code></td>
-                        <td style="padding: 14px; font-family: var(--font-mono);">33705130</td>
-                        <td style="padding: 14px; font-family: var(--font-mono); color: var(--text-secondary);">0x1f7503d4d303739e...</td>
-                        <td style="padding: 14px;"><span class="pill pill-gold">RECORDED</span></td>
-                        <td style="padding: 14px; text-align: right;">
-                            <a href="https://coston2-explorer.flare.network/tx/0x1f7503d4d303739e8abbdf6e30b2629ef0906c17fcd4401dd869886c4118be6a" target="_blank" class="btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block; cursor: pointer;">Verify on BlockScout ↗</a>
-                        </td>
-                    </tr>
-
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                        <td style="padding: 14px; font-weight: 600; color: var(--text-primary);">4. FTSOv2 XRP/USD Price Read</td>
-                        <td style="padding: 14px;"><code style="color: #8B5CF6; font-size: 0.8rem;">getFeedById(0x015852...)</code></td>
-                        <td style="padding: 14px; font-family: var(--font-mono);">33705132</td>
-                        <td style="padding: 14px; font-family: var(--font-mono); color: var(--text-secondary);">0x93e9f806a12b4890...</td>
-                        <td style="padding: 14px;"><span class="pill pill-jade">CONFIRMED</span></td>
-                        <td style="padding: 14px; text-align: right;">
-                            <a href="https://coston2-explorer.flare.network/address/0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d" target="_blank" class="btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block; cursor: pointer;">Verify Oracle ↗</a>
-                        </td>
-                    </tr>
-
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                        <td style="padding: 14px; font-weight: 600; color: var(--text-primary);">5. TEE Attestation Verification</td>
-                        <td style="padding: 14px;"><code style="color: #10B981; font-size: 0.8rem;">ActionResultVerified</code></td>
-                        <td style="padding: 14px; font-family: var(--font-mono);">33705135</td>
-                        <td style="padding: 14px; font-family: var(--font-mono); color: var(--text-secondary);">0x673461f44fbc1e7f...</td>
-                        <td style="padding: 14px;"><span class="pill pill-jade">VERIFIED</span></td>
-                        <td style="padding: 14px; text-align: right;">
-                            <a href="https://coston2-explorer.flare.network/tx/0x673461f44fbc1e7f9b9a8369d58e22a47a6b5d9c0bd3b99bc82b71295d4893ed" target="_blank" class="btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block; cursor: pointer;">Verify on BlockScout ↗</a>
-                        </td>
-                    </tr>
 
                     <tr>
-                        <td style="padding: 14px; font-weight: 600; color: var(--text-primary);">6. DEX Hedge Swap Execution</td>
-                        <td style="padding: 14px;"><code style="color: var(--primary-cyan); font-size: 0.8rem;">HedgeExecuted</code></td>
-                        <td style="padding: 14px; font-family: var(--font-mono);">33705140</td>
-                        <td style="padding: 14px; font-family: var(--font-mono); color: var(--text-secondary);">0x6a47070ae8326fb2...</td>
-                        <td style="padding: 14px;"><span class="pill pill-jade">EXECUTED</span></td>
-                        <td style="padding: 14px; text-align: right;">
-                            <a href="https://coston2-explorer.flare.network/tx/0x6a47070ae8326fb2b86712d6f05296f1e9bf859e0e22cce1e2a64a43d6a60658" target="_blank" class="btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block; cursor: pointer;">Verify on BlockScout ↗</a>
-                        </td>
+                        <th>Operation</th>
+                        <th>Event / Function</th>
+                        <th>Block</th>
+                        <th>Transaction</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">
+                            Independent Verification
+                        </th>
                     </tr>
+
+                </thead>
+
+
+                <!--
+                    IMPORTANT:
+                    Keep this tbody connected to your real
+                    verification/evidence loader.
+
+                    Do not treat static rows as live state.
+                -->
+
+                <tbody id="verification-table-body">
+
+                    <tr>
+
+                        <td colspan="6"
+                            style="
+                                padding:42px 20px;
+                                text-align:center;
+                                color:#68758a;
+                            "
+                        >
+
+                            <span
+                                style="
+                                    display:inline-flex;
+                                    align-items:center;
+                                    gap:8px;
+                                "
+                            >
+
+                                <span
+                                    style="
+                                        width:6px;
+                                        height:6px;
+                                        border-radius:50%;
+                                        background:#10b981;
+                                        box-shadow:0 0 10px rgba(16,185,129,.65);
+                                    "
+                                ></span>
+
+                                Resolving transaction evidence…
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
                 </tbody>
+
             </table>
+
         </div>
+
+
+        <!-- Evidence disclaimer -->
+
+        <div class="xv-evidence-notice">
+
+            <div class="xv-evidence-icon">
+                ⛓
+            </div>
+
+            <div>
+
+                <div class="xv-evidence-title">
+                    Independent verification boundary
+                </div>
+
+                <div class="xv-evidence-copy">
+                    Transaction status, block numbers, contract events,
+                    and oracle observations should be populated from
+                    verified chain data. The interface does not create
+                    synthetic confirmation records when live evidence
+                    is unavailable.
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>

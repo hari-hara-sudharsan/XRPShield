@@ -1,101 +1,2512 @@
-<div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
-    <div>
-        <h2 style="font-size: 1.8rem; font-weight: 700;">Treasury Portfolio Overview</h2>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">Real-time confidential FXRP reserve tracking, risk metrics, and Flare TEE attestation status</p>
-    </div>
-    <div style="display: flex; gap: 12px;">
-        <button onclick="window.location.hash='#vaults'" class="btn-primary">
-            + New FXRP Vault
-        </button>
-        <button onclick="window.location.hash='#ai-assistant'" class="btn-secondary">
-            🤖 AI Policy Builder
-        </button>
-    </div>
-</div>
+<!-- ═══════════════════════════════════════════════════════════════
+     XRP SHIELD — TREASURY COMMAND CENTER
+════════════════════════════════════════════════════════════════ -->
 
-<!-- Flare FTSOv2 Live XRP/USD Market Price Widget -->
-<div id="ftso-xrp-widget" style="margin-bottom: 24px;"></div>
+<section class="treasury-command-center">
 
-<!-- Portfolio Metrics Cards Grid -->
-<div class="grid-cards" style="margin-bottom: 32px;">
-    <div class="card">
-        <div class="card-title">Connected Web3 Wallet</div>
-        <div class="card-value" id="dash-connected-address" style="color: var(--secondary); font-size: 1.5rem;">Not Connected</div>
-        <div class="card-subtext">Flare Coston2 Testnet (Chain ID 114)</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Active Protected Vaults</div>
-        <div class="card-value" id="dash-active-vaults" style="color: var(--primary);">3</div>
-        <div class="card-subtext">100% Verified in TEE Enclaves</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Active Risk Policies</div>
-        <div class="card-value" id="dash-active-policies" style="color: var(--purple);">3</div>
-        <div class="card-subtext">AES-256 Encrypted Rules</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Total Treasury Reserves</div>
-        <div class="card-value" id="dash-protected-volume" style="color: var(--success);">50,000 FXRP</div>
-        <div class="card-subtext">Verified On-Chain</div>
-    </div>
-</div>
+    <!-- ═══════════════════════════════════════════════════════════
+         HEADER
+    ═══════════════════════════════════════════════════════════ -->
 
-<!-- Grid: Active Vaults & Live Activity Logs -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-bottom: 32px;">
-    <!-- Left: Recent Activity Feed from Database & TEE -->
-    <div class="table-container">
-        <div style="padding: 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 1.1rem;">Live FCC Decision Activity</h3>
-            <span class="badge success" id="dash-fcc-status">SEALED & ATTESTED</span>
+    <div class="treasury-header">
+
+        <div class="treasury-heading">
+
+            <div class="treasury-eyebrow">
+                <span class="treasury-live-dot"></span>
+                CONFIDENTIAL TREASURY CONTROL
+            </div>
+
+            <h2>
+                Treasury
+                <span>Portfolio Overview</span>
+            </h2>
+
+            <p>
+                Real-time confidential FXRP reserve tracking, risk
+                intelligence, and Flare Confidential Compute
+                attestation telemetry.
+            </p>
+
         </div>
-        <div id="dash-recent-activity" style="padding: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; border-bottom: 1px solid var(--border-color);">
+
+
+        <div class="treasury-actions">
+
+            <button
+                onclick="window.location.hash='#vaults'"
+                class="treasury-btn primary"
+            >
+                <span class="btn-plus">+</span>
+                New FXRP Vault
+            </button>
+
+            <button
+                onclick="window.location.hash='#ai-assistant'"
+                class="treasury-btn secondary"
+            >
+                <span>✦</span>
+                AI Policy Builder
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         LIVE MARKET PRICE
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="xrp-market-container">
+
+        <div class="market-header">
+
+            <div class="market-title">
+
+                <span class="market-icon">
+                    XRP
+                </span>
+
                 <div>
-                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--primary-cyan, #00F2FE);">DRAWDOWN_CIRCUIT_BREAKER</div>
-                    <div style="font-size: 0.78rem; color: var(--text-secondary); font-family: var(--font-mono, monospace); margin-top: 2px;">Primary FXRP Treasury Vault · Attestation: <code>FCC-ATT-992184</code></div>
+                    <strong>
+                        FXRP / USD
+                    </strong>
+
+                    <small>
+                        Flare FTSOv2 Oracle
+                    </small>
                 </div>
-                <div style="text-align: right;">
-                    <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald, #10B981); font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">APPROVED</span>
-                    <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono, monospace);">Just now</div>
-                </div>
+
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; border-bottom: 1px solid var(--border-color);">
+
+            <div class="oracle-status">
+                <span></span>
+                LIVE ORACLE
+            </div>
+
+        </div>
+
+        <div id="ftso-xrp-widget"></div>
+
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PORTFOLIO METRICS
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="treasury-metrics-grid">
+
+
+        <!-- Wallet -->
+
+        <div class="treasury-metric wallet-metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon wallet-icon">
+                    ◉
+                </div>
+
+                <span class="metric-status">
+                    WEB3
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                CONNECTED WEB3 WALLET
+            </div>
+
+            <div
+                class="metric-value wallet-address"
+                id="dash-connected-address"
+            >
+                Not Connected
+            </div>
+
+            <div class="metric-sub">
+                <span class="status-dot"></span>
+                Flare Coston2
+                <span>•</span>
+                Chain 114
+            </div>
+
+        </div>
+
+
+        <!-- Vaults -->
+
+        <div class="treasury-metric vault-metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon vault-icon">
+                    ◈
+                </div>
+
+                <span
+                    class="metric-status active"
+                    id="dash-vault-status"
+                >
+                    ACTIVE
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                ACTIVE PROTECTED VAULTS
+            </div>
+
+            <div
+                class="metric-value"
+                id="dash-active-vaults"
+            >
+                —
+            </div>
+
+            <div class="metric-sub">
+                <span class="status-dot"></span>
+                TEE verification status
+                <strong id="dash-vault-verification">
+                    —
+                </strong>
+            </div>
+
+            <div class="metric-glow"></div>
+
+        </div>
+
+
+        <!-- Policies -->
+
+        <div class="treasury-metric policy-metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon policy-icon">
+                    ◆
+                </div>
+
+                <span class="metric-status secure">
+                    PRIVATE
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                ACTIVE RISK POLICIES
+            </div>
+
+            <div
+                class="metric-value"
+                id="dash-active-policies"
+            >
+                —
+            </div>
+
+            <div class="metric-sub">
+                <span class="status-dot purple"></span>
+                Encrypted policy rules
+                <strong id="dash-policy-state">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <!-- Reserves -->
+
+        <div class="treasury-metric reserve-metric">
+
+            <div class="metric-top">
+
+                <div class="metric-icon reserve-icon">
+                    $
+                </div>
+
+                <span class="metric-status verified">
+                    VERIFIED
+                </span>
+
+            </div>
+
+            <div class="metric-label">
+                TOTAL TREASURY RESERVES
+            </div>
+
+            <div
+                class="metric-value reserve-value"
+                id="dash-protected-volume"
+            >
+                —
+            </div>
+
+            <div class="metric-sub">
+                <span class="status-dot green"></span>
+                On-chain reserve evidence
+            </div>
+
+            <div class="reserve-lines">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         MAIN DASHBOARD GRID
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="treasury-main-grid">
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             FCC ACTIVITY
+        ═══════════════════════════════════════════════════════ -->
+
+        <div class="fcc-activity-panel">
+
+            <div class="fcc-panel-header">
+
+                <div class="fcc-title">
+
+                    <div class="fcc-icon">
+                        ⟡
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Live FCC Decision Activity
+                        </h3>
+
+                        <p>
+                            Confidential Compute execution telemetry
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="fcc-attestation-status"
+                    id="dash-fcc-status"
+                >
+                    <i></i>
+                    ATTESTATION STATUS: —
+                </span>
+
+            </div>
+
+
+            <!-- Activity feed -->
+
+            <div
+                id="dash-recent-activity"
+                class="fcc-activity-feed"
+            >
+
+                <div class="activity-loading">
+
+                    <div class="activity-loader"></div>
+
+                    <div>
+                        <strong>
+                            Loading confidential decisions
+                        </strong>
+
+                        <span>
+                            Reconstructing verified activity...
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Feed footer -->
+
+            <div class="fcc-feed-footer">
+
                 <div>
-                    <div style="font-size: 0.9rem; font-weight: 700; color: var(--primary-cyan, #00F2FE);">AUTOMATED_REBALANCE</div>
-                    <div style="font-size: 0.78rem; color: var(--text-secondary); font-family: var(--font-mono, monospace); margin-top: 2px;">Yield Reserve Vault · Attestation: <code>FCC-ATT-77B10C</code></div>
+                    <span class="footer-live-dot"></span>
+                    Awaiting live decision events
                 </div>
-                <div style="text-align: right;">
-                    <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald, #10B981); font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">APPROVED</span>
-                    <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono, monospace);">1 hour ago</div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Right: Subsystem Health & Quick Actions -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-        <div class="card" style="padding: 20px;">
-            <h3 style="margin-bottom: 12px; font-size: 1rem;">Platform Infrastructure</h3>
-            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Flare Network RPC:</span>
-                    <span style="color: var(--success); font-weight: 600;">UP (45ms)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>FCC TEE Enclave:</span>
-                    <span style="color: var(--success); font-weight: 600;">UP (85ms)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>H2 / Postgres DB Pool:</span>
-                    <span style="color: var(--success); font-weight: 600;">UP (8ms)</span>
-                </div>
+                <button
+                    onclick="window.location.hash='#audit'"
+                    class="view-audit-btn"
+                >
+                    View Full Audit →
+                </button>
+
             </div>
+
         </div>
 
-        <div class="card" style="padding: 20px; background: rgba(91,140,255,0.08); border-color: rgba(91,140,255,0.3);">
-            <h3 style="margin-bottom: 8px; font-size: 1rem; color: var(--secondary);">AI Treasury Assistant</h3>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 14px;">Ask the AI Policy Assistant to draft policies or explain decision evaluations.</p>
-            <button onclick="window.location.hash='#ai-assistant'" class="btn-primary" style="width: 100%; justify-content: center;">Open AI Assistant</button>
+
+        <!-- ═══════════════════════════════════════════════════════
+             RIGHT SIDE
+        ═══════════════════════════════════════════════════════ -->
+
+        <div class="treasury-side-column">
+
+
+            <!-- Infrastructure -->
+
+            <div class="infra-health-card">
+
+                <div class="side-card-header">
+
+                    <div>
+
+                        <span class="side-eyebrow">
+                            SYSTEM TELEMETRY
+                        </span>
+
+                        <h3>
+                            Platform Infrastructure
+                        </h3>
+
+                    </div>
+
+                    <span class="health-ring">
+                        ✓
+                    </span>
+
+                </div>
+
+
+                <div class="health-list">
+
+
+                    <!-- RPC -->
+
+                    <div class="health-row">
+
+                        <div class="health-name">
+
+                            <span class="health-icon rpc">
+                                ⌁
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Flare Network RPC
+                                </strong>
+
+                                <small>
+                                    Coston2 EVM endpoint
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="health-value">
+
+                            <span
+                                class="health-state"
+                                id="dash-rpc-health"
+                            >
+                                —
+                            </span>
+
+                            <small
+                                id="dash-rpc-latency"
+                            >
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FCC -->
+
+                    <div class="health-row">
+
+                        <div class="health-name">
+
+                            <span class="health-icon tee">
+                                ◇
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    FCC TEE Enclave
+                                </strong>
+
+                                <small>
+                                    Confidential evaluation
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="health-value">
+
+                            <span
+                                class="health-state"
+                                id="dash-tee-health"
+                            >
+                                —
+                            </span>
+
+                            <small
+                                id="dash-tee-latency"
+                            >
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Database -->
+
+                    <div class="health-row">
+
+                        <div class="health-name">
+
+                            <span class="health-icon database">
+                                ▦
+                            </span>
+
+                            <div>
+
+                                <strong>
+                                    Database Pool
+                                </strong>
+
+                                <small>
+                                    Application persistence
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <div class="health-value">
+
+                            <span
+                                class="health-state"
+                                id="dash-db-health"
+                            >
+                                —
+                            </span>
+
+                            <small
+                                id="dash-db-latency"
+                            >
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-footer">
+
+                    <span>
+                        Infrastructure health
+                    </span>
+
+                    <strong id="dash-system-health">
+                        CHECKING
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI Assistant -->
+
+            <div class="ai-treasury-card">
+
+                <div class="ai-card-orb"></div>
+
+                <div class="ai-card-content">
+
+                    <div class="ai-card-top">
+
+                        <span class="ai-spark">
+                            ✦
+                        </span>
+
+                        <span>
+                            AI INTELLIGENCE
+                        </span>
+
+                    </div>
+
+                    <h3>
+                        AI Treasury Assistant
+                    </h3>
+
+                    <p>
+                        Draft confidential risk policies, interpret
+                        decision evaluations, and understand treasury
+                        protection logic.
+                    </p>
+
+                    <div class="ai-capabilities">
+
+                        <span>
+                            Policy Builder
+                        </span>
+
+                        <span>
+                            Decision Explain
+                        </span>
+
+                        <span>
+                            Advisory Only
+                        </span>
+
+                    </div>
+
+                    <button
+                        onclick="window.location.hash='#ai-assistant'"
+                        class="ai-open-btn"
+                    >
+                        <span>Open AI Assistant</span>
+                        <b>→</b>
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
-</div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         BOTTOM TRUST STRIP
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="treasury-trust-strip">
+
+        <div class="trust-item">
+
+            <span class="trust-icon">
+                ⛓
+            </span>
+
+            <div>
+                <strong>
+                    ON-CHAIN EVIDENCE
+                </strong>
+
+                <small>
+                    Contract state & events
+                </small>
+            </div>
+
+        </div>
+
+
+        <div class="trust-divider"></div>
+
+
+        <div class="trust-item">
+
+            <span class="trust-icon purple">
+                ◇
+            </span>
+
+            <div>
+                <strong>
+                    CONFIDENTIAL COMPUTE
+                </strong>
+
+                <small>
+                    Private policy evaluation
+                </small>
+            </div>
+
+        </div>
+
+
+        <div class="trust-divider"></div>
+
+
+        <div class="trust-item">
+
+            <span class="trust-icon green">
+                ✓
+            </span>
+
+            <div>
+                <strong>
+                    VERIFIED EXECUTION
+                </strong>
+
+                <small>
+                    Authorization before settlement
+                </small>
+            </div>
+
+        </div>
+
+
+        <div class="trust-spacer"></div>
+
+        <span class="trust-label">
+            XRPShield Control Plane
+        </span>
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════
+   TREASURY COMMAND CENTER
+════════════════════════════════════════════════════════════════ */
+
+.treasury-command-center {
+
+    position: relative;
+
+    margin: 42px 0;
+
+    padding: 34px;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(99,102,241,0.14),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 100% 20%,
+            rgba(14,165,233,0.08),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 60% 100%,
+            rgba(168,85,247,0.07),
+            transparent 25%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.96),
+            rgba(2,6,23,0.96)
+        );
+
+    border: 1px solid rgba(148,163,184,0.13);
+
+    box-shadow:
+        0 35px 90px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+
+    backdrop-filter: blur(28px);
+}
+
+
+.treasury-command-center::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(148,163,184,0.024) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(148,163,184,0.024) 1px,
+            transparent 1px
+        );
+
+    background-size: 34px 34px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 88%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════════ */
+
+.treasury-header {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 24px;
+}
+
+
+.treasury-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    color: #94a3b8;
+
+    font-size: 0.68rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.15em;
+}
+
+
+.treasury-live-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 9px rgba(34,197,94,0.9);
+
+    animation: treasuryPulse 1.8s infinite;
+}
+
+
+.treasury-heading h2 {
+
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: clamp(1.9rem, 3vw, 2.65rem);
+
+    line-height: 1.05;
+
+    font-weight: 850;
+
+    letter-spacing: -0.045em;
+}
+
+
+.treasury-heading h2 span {
+
+    background:
+        linear-gradient(
+            105deg,
+            #818cf8,
+            #38bdf8,
+            #a78bfa
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+.treasury-heading p {
+
+    max-width: 750px;
+
+    margin: 12px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 0.91rem;
+
+    line-height: 1.7;
+}
+
+
+/* Buttons */
+
+.treasury-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.treasury-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 14px;
+
+    border-radius: 11px;
+
+    font-size: 0.72rem;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+
+.treasury-btn:hover {
+
+    transform: translateY(-2px);
+}
+
+
+.treasury-btn.primary {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #4f46e5
+        );
+
+    border: 1px solid rgba(129,140,248,0.35);
+
+    box-shadow:
+        0 8px 24px rgba(79,70,229,0.22);
+}
+
+
+.treasury-btn.primary:hover {
+
+    box-shadow:
+        0 12px 30px rgba(79,70,229,0.32);
+}
+
+
+.treasury-btn.secondary {
+
+    color: #c4b5fd;
+
+    background: rgba(99,102,241,0.06);
+
+    border: 1px solid rgba(129,140,248,0.16);
+}
+
+
+.treasury-btn.secondary:hover {
+
+    border-color: rgba(129,140,248,0.35);
+
+    background: rgba(99,102,241,0.10);
+}
+
+
+.btn-plus {
+
+    font-size: 1rem;
+
+    line-height: 1;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MARKET WIDGET
+══════════════════════════════════════════════════════════════ */
+
+.xrp-market-container {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin-bottom: 16px;
+
+    padding: 15px 17px;
+
+    overflow: hidden;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(6,182,212,0.045),
+            rgba(99,102,241,0.045)
+        );
+
+    border: 1px solid rgba(56,189,248,0.10);
+}
+
+
+.market-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+
+.market-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.market-icon {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 10px;
+
+    color: #67e8f9;
+
+    background: rgba(6,182,212,0.08);
+
+    border: 1px solid rgba(34,211,238,0.12);
+
+    font-size: 0.57rem;
+
+    font-weight: 900;
+}
+
+
+.market-title strong {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 0.72rem;
+}
+
+
+.market-title small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #64748b;
+
+    font-size: 0.60rem;
+}
+
+
+.oracle-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    color: #67e8f9;
+
+    background: rgba(6,182,212,0.045);
+
+    border: 1px solid rgba(34,211,238,0.08);
+
+    font-size: 0.54rem;
+
+    font-weight: 850;
+
+    letter-spacing: .07em;
+}
+
+
+.oracle-status span {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #22d3ee;
+
+    box-shadow:
+        0 0 7px rgba(34,211,238,.8);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   METRICS
+══════════════════════════════════════════════════════════════ */
+
+.treasury-metrics-grid {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 13px;
+
+    margin-bottom: 18px;
+}
+
+
+.treasury-metric {
+
+    position: relative;
+
+    min-height: 176px;
+
+    padding: 18px;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,0.66),
+            rgba(15,23,42,0.48)
+        );
+
+    border: 1px solid rgba(148,163,184,0.09);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+
+.treasury-metric:hover {
+
+    transform: translateY(-4px);
+
+    border-color: rgba(129,140,248,0.23);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.22),
+        0 0 30px rgba(99,102,241,.05);
+}
+
+
+.metric-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 21px;
+}
+
+
+.metric-icon {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 11px;
+
+    font-size: .95rem;
+
+    border: 1px solid rgba(129,140,248,.12);
+
+    background: rgba(99,102,241,.07);
+}
+
+
+.wallet-icon {
+    color: #67e8f9;
+}
+
+.vault-icon {
+    color: #a5b4fc;
+}
+
+.policy-icon {
+    color: #c4b5fd;
+}
+
+.reserve-icon {
+    color: #86efac;
+}
+
+
+.metric-status {
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    color: #94a3b8;
+
+    background: rgba(148,163,184,.035);
+
+    border: 1px solid rgba(148,163,184,.07);
+
+    font-size: .53rem;
+
+    font-weight: 850;
+
+    letter-spacing: .07em;
+}
+
+
+.metric-status.active {
+
+    color: #86efac;
+
+    background: rgba(34,197,94,.05);
+
+    border-color: rgba(34,197,94,.09);
+}
+
+
+.metric-status.secure {
+
+    color: #c4b5fd;
+
+    background: rgba(168,85,247,.05);
+
+    border-color: rgba(168,85,247,.10);
+}
+
+
+.metric-status.verified {
+
+    color: #86efac;
+
+    background: rgba(34,197,94,.05);
+
+    border-color: rgba(34,197,94,.09);
+}
+
+
+.metric-label {
+
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: .59rem;
+
+    font-weight: 850;
+
+    letter-spacing: .11em;
+}
+
+
+.metric-value {
+
+    color: #f1f5f9;
+
+    font-size: 1.55rem;
+
+    line-height: 1.1;
+
+    font-weight: 850;
+
+    letter-spacing: -.03em;
+}
+
+
+.wallet-address {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: .91rem;
+}
+
+
+.reserve-value {
+
+    color: #86efac;
+}
+
+
+.metric-sub {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 9px;
+
+    color: #64748b;
+
+    font-size: .64rem;
+}
+
+
+.metric-sub strong {
+
+    color: #94a3b8;
+}
+
+
+.status-dot {
+
+    width: 5px;
+    height: 5px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 7px rgba(34,197,94,.65);
+}
+
+
+.status-dot.purple {
+
+    background: #a78bfa;
+
+    box-shadow:
+        0 0 7px rgba(167,139,250,.65);
+}
+
+
+.status-dot.green {
+
+    background: #34d399;
+}
+
+
+/* Reserve decoration */
+
+.reserve-lines {
+
+    position: absolute;
+
+    right: 17px;
+
+    bottom: 17px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 4px;
+
+    height: 32px;
+
+    opacity: .45;
+}
+
+
+.reserve-lines i {
+
+    width: 4px;
+
+    border-radius: 4px;
+
+    background: linear-gradient(
+        to top,
+        rgba(34,197,94,.12),
+        rgba(34,197,94,.65)
+    );
+}
+
+
+.reserve-lines i:nth-child(1) {
+    height: 30%;
+}
+
+.reserve-lines i:nth-child(2) {
+    height: 55%;
+}
+
+.reserve-lines i:nth-child(3) {
+    height: 80%;
+}
+
+.reserve-lines i:nth-child(4) {
+    height: 100%;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN GRID
+══════════════════════════════════════════════════════════════ */
+
+.treasury-main-grid {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0,1.55fr)
+        minmax(320px,.8fr);
+
+    gap: 18px;
+
+    margin-bottom: 18px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FCC ACTIVITY
+══════════════════════════════════════════════════════════════ */
+
+.fcc-activity-panel {
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,.88),
+            rgba(2,6,23,.78)
+        );
+
+    border: 1px solid rgba(148,163,184,.10);
+}
+
+
+.fcc-panel-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 19px 20px;
+
+    border-bottom: 1px solid rgba(148,163,184,.08);
+}
+
+
+.fcc-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.fcc-icon {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 37px;
+    height: 37px;
+
+    border-radius: 10px;
+
+    color: #67e8f9;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(6,182,212,.10),
+            rgba(99,102,241,.08)
+        );
+
+    border: 1px solid rgba(34,211,238,.12);
+
+    font-size: 1rem;
+}
+
+
+.fcc-title h3 {
+
+    margin: 0;
+
+    color: #e2e8f0;
+
+    font-size: .88rem;
+
+    font-weight: 750;
+}
+
+
+.fcc-title p {
+
+    margin: 3px 0 0;
+
+    color: #64748b;
+
+    font-size: .62rem;
+}
+
+
+.fcc-attestation-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px 9px;
+
+    border-radius: 7px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,.045);
+
+    border: 1px solid rgba(34,197,94,.09);
+
+    font-size: .54rem;
+
+    font-weight: 850;
+
+    letter-spacing: .06em;
+}
+
+
+.fcc-attestation-status i {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 7px rgba(34,197,94,.8);
+}
+
+
+/* Activity */
+
+.fcc-activity-feed {
+
+    min-height: 270px;
+
+    padding: 4px;
+}
+
+
+.activity-loading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    min-height: 260px;
+
+    color: #64748b;
+}
+
+
+.activity-loading strong {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: .74rem;
+}
+
+
+.activity-loading span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: .62rem;
+}
+
+
+.activity-loader {
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(129,140,248,.12);
+
+    border-top-color: #818cf8;
+
+    animation: loaderSpin .9s linear infinite;
+}
+
+
+/* Activity item support */
+
+.fcc-activity-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    border-bottom: 1px solid rgba(148,163,184,.055);
+
+    transition:
+        background .2s ease;
+}
+
+
+.fcc-activity-item:hover {
+
+    background: rgba(99,102,241,.025);
+}
+
+
+.activity-main {
+
+    min-width: 0;
+}
+
+
+.activity-policy {
+
+    color: #67e8f9;
+
+    font-size: .70rem;
+
+    font-weight: 800;
+
+    letter-spacing: .02em;
+}
+
+
+.activity-details {
+
+    margin-top: 5px;
+
+    color: #64748b;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: .59rem;
+}
+
+
+.activity-details code {
+
+    color: #818cf8;
+}
+
+
+.activity-result {
+
+    text-align: right;
+
+    flex-shrink: 0;
+}
+
+
+.activity-approved {
+
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,.06);
+
+    border: 1px solid rgba(34,197,94,.10);
+
+    font-size: .54rem;
+
+    font-weight: 850;
+}
+
+
+.activity-time {
+
+    margin-top: 4px;
+
+    color: #475569;
+
+    font-family: monospace;
+
+    font-size: .57rem;
+}
+
+
+.fcc-feed-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px 17px;
+
+    border-top: 1px solid rgba(148,163,184,.07);
+
+    background: rgba(2,6,23,.22);
+}
+
+
+.fcc-feed-footer > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #475569;
+
+    font-size: .58rem;
+}
+
+
+.footer-live-dot {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 7px rgba(34,197,94,.8);
+}
+
+
+.view-audit-btn {
+
+    color: #818cf8;
+
+    background: none;
+
+    border: none;
+
+    font-size: .61rem;
+
+    font-weight: 750;
+
+    cursor: pointer;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDE COLUMN
+══════════════════════════════════════════════════════════════ */
+
+.treasury-side-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* Infrastructure */
+
+.infra-health-card {
+
+    padding: 19px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,.62),
+            rgba(15,23,42,.48)
+        );
+
+    border: 1px solid rgba(148,163,184,.10);
+}
+
+
+.side-card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 17px;
+}
+
+
+.side-eyebrow {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #475569;
+
+    font-size: .55rem;
+
+    font-weight: 850;
+
+    letter-spacing: .12em;
+}
+
+
+.side-card-header h3 {
+
+    margin: 0;
+
+    color: #cbd5e1;
+
+    font-size: .88rem;
+}
+
+
+.health-ring {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,.06);
+
+    border: 1px solid rgba(34,197,94,.11);
+
+    font-size: .72rem;
+}
+
+
+.health-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.health-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid rgba(148,163,184,.055);
+}
+
+
+.health-row:last-child {
+
+    border-bottom: none;
+}
+
+
+.health-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+}
+
+
+.health-icon {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 28px;
+    height: 28px;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    color: #818cf8;
+
+    background: rgba(99,102,241,.05);
+
+    border: 1px solid rgba(129,140,248,.08);
+
+    font-size: .70rem;
+}
+
+
+.health-icon.tee {
+    color: #c4b5fd;
+}
+
+.health-icon.database {
+    color: #67e8f9;
+}
+
+
+.health-name strong {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: .64rem;
+}
+
+
+.health-name small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #475569;
+
+    font-size: .53rem;
+}
+
+
+.health-value {
+
+    text-align: right;
+
+    flex-shrink: 0;
+}
+
+
+.health-state {
+
+    display: block;
+
+    color: #86efac;
+
+    font-size: .57rem;
+
+    font-weight: 850;
+}
+
+
+.health-value small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #475569;
+
+    font-family: monospace;
+
+    font-size: .53rem;
+}
+
+
+.health-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 12px;
+
+    padding-top: 11px;
+
+    border-top: 1px solid rgba(148,163,184,.07);
+
+    color: #475569;
+
+    font-size: .56rem;
+}
+
+
+.health-footer strong {
+
+    color: #86efac;
+
+    font-size: .56rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   AI CARD
+══════════════════════════════════════════════════════════════ */
+
+.ai-treasury-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 220px;
+
+    padding: 21px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(129,140,248,.16),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(49,46,129,.25),
+            rgba(15,23,42,.72)
+        );
+
+    border: 1px solid rgba(129,140,248,.17);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+
+.ai-card-orb {
+
+    position: absolute;
+
+    right: -50px;
+    top: -55px;
+
+    width: 160px;
+    height: 160px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(129,140,248,.10);
+
+    box-shadow:
+        0 0 50px rgba(99,102,241,.08);
+}
+
+
+.ai-card-orb::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 30px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(56,189,248,.10);
+}
+
+
+.ai-card-content {
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.ai-card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 11px;
+
+    color: #a5b4fc;
+
+    font-size: .55rem;
+
+    font-weight: 850;
+
+    letter-spacing: .11em;
+}
+
+
+.ai-spark {
+
+    color: #67e8f9;
+
+    font-size: .8rem;
+}
+
+
+.ai-card-content h3 {
+
+    margin: 0;
+
+    color: #eef2ff;
+
+    font-size: 1.02rem;
+
+    font-weight: 800;
+}
+
+
+.ai-card-content p {
+
+    max-width: 400px;
+
+    margin: 8px 0 13px;
+
+    color: #94a3b8;
+
+    font-size: .65rem;
+
+    line-height: 1.65;
+}
+
+
+.ai-capabilities {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-bottom: 15px;
+}
+
+
+.ai-capabilities span {
+
+    padding: 5px 7px;
+
+    border-radius: 6px;
+
+    color: #a5b4fc;
+
+    background: rgba(129,140,248,.055);
+
+    border: 1px solid rgba(129,140,248,.09);
+
+    font-size: .50rem;
+
+    font-weight: 750;
+}
+
+
+.ai-open-btn {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    width: 100%;
+
+    padding: 9px 11px;
+
+    border-radius: 9px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,.75),
+            rgba(79,70,229,.75)
+        );
+
+    border: 1px solid rgba(129,140,248,.25);
+
+    cursor: pointer;
+
+    font-size: .65rem;
+
+    font-weight: 750;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.ai-open-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(79,70,229,.22);
+}
+
+
+.ai-open-btn b {
+
+    font-size: .85rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TRUST STRIP
+══════════════════════════════════════════════════════════════ */
+
+.treasury-trust-strip {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    padding: 14px 17px;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99,102,241,.045),
+            rgba(6,182,212,.035)
+        );
+
+    border: 1px solid rgba(129,140,248,.08);
+}
+
+
+.trust-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.trust-icon {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 8px;
+
+    color: #818cf8;
+
+    background: rgba(99,102,241,.06);
+
+    border: 1px solid rgba(129,140,248,.09);
+
+    font-size: .68rem;
+}
+
+
+.trust-icon.purple {
+    color: #c4b5fd;
+}
+
+.trust-icon.green {
+    color: #86efac;
+}
+
+
+.trust-item strong {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: .53rem;
+
+    letter-spacing: .06em;
+}
+
+
+.trust-item small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #475569;
+
+    font-size: .51rem;
+}
+
+
+.trust-divider {
+
+    width: 1px;
+
+    height: 28px;
+
+    background: rgba(148,163,184,.08);
+}
+
+
+.trust-spacer {
+
+    flex: 1;
+}
+
+
+.trust-label {
+
+    color: #475569;
+
+    font-family: monospace;
+
+    font-size: .53rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════════════════ */
+
+@keyframes treasuryPulse {
+
+    0%,100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .5;
+        transform: scale(.82);
+    }
+}
+
+
+@keyframes loaderSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1100px) {
+
+    .treasury-metrics-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+    }
+
+    .treasury-main-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .treasury-command-center {
+
+        padding: 22px 16px;
+
+        border-radius: 23px;
+    }
+
+    .treasury-header {
+
+        flex-direction: column;
+    }
+
+    .treasury-actions {
+
+        width: 100%;
+    }
+
+    .treasury-btn {
+
+        flex: 1;
+
+        justify-content: center;
+    }
+
+    .treasury-metrics-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .fcc-panel-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .treasury-trust-strip {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .trust-divider {
+
+        display: none;
+    }
+
+    .trust-spacer {
+
+        display: none;
+    }
+
+    .trust-label {
+
+        margin-top: 3px;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: .01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: .01ms !important;
+    }
+
+}
+
+</style>

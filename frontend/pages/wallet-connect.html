@@ -1,20 +1,557 @@
-<div style="max-width: 600px; margin: 40px auto;">
-    <div class="card" style="padding: 40px; text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 16px;">🦊</div>
-        <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 8px;">MetaMask Web3 Connection</h2>
-        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
-            Cryptographic signature authentication (EIP-191 / EIP-4361). Connect your EVM wallet to access confidential Flare enclaves.
-        </p>
+<style>
+/* =========================================================
+   XRPShield — Web3 Wallet Authentication Gateway
+   Drop-in redesign
+   Preserves:
+   window.AuthManager.connectMetaMask()
+   ========================================================= */
 
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 24px;">
-            <div style="margin-bottom: 10px; font-size: 0.85rem; color: var(--text-secondary);">Current EVM Chain</div>
-            <div style="font-weight: 600; color: var(--primary-cyan);">Flare Coston2 Testnet (Chain ID 114)</div>
-            <div style="margin-top: 14px; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-secondary);">RPC Endpoint</div>
-            <div style="font-family: monospace; font-size: 0.85rem;">https://coston2-api.flare.network/ext/C/rpc</div>
+.xps-auth-page {
+    position: relative;
+    max-width: 720px;
+    margin: 42px auto;
+    padding: 0 18px;
+}
+
+.xps-auth-page::before {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: -170px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(
+        circle,
+        rgba(34, 211, 238, 0.10),
+        rgba(99, 102, 241, 0.035) 42%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: -1;
+}
+
+.xps-auth-card {
+    position: relative;
+    overflow: hidden;
+    padding: 34px;
+    border-radius: 20px;
+    border: 1px solid rgba(71, 85, 105, 0.42);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.90),
+            rgba(2, 6, 23, 0.84)
+        );
+    box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.xps-auth-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            120deg,
+            rgba(34, 211, 238, 0.035),
+            transparent 30%,
+            rgba(139, 92, 246, 0.035)
+        );
+    pointer-events: none;
+}
+
+.xps-auth-top {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.xps-auth-icon {
+    width: 74px;
+    height: 74px;
+    margin: 0 auto 18px;
+    display: grid;
+    place-items: center;
+    border-radius: 22px;
+    font-size: 2.25rem;
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(34, 211, 238, 0.18),
+            rgba(99, 102, 241, 0.08) 52%,
+            rgba(2, 6, 23, 0.7)
+        );
+    border: 1px solid rgba(34, 211, 238, 0.20);
+    box-shadow:
+        0 0 40px rgba(34, 211, 238, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.xps-auth-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    color: #67e8f9;
+    background: rgba(34, 211, 238, 0.07);
+    border: 1px solid rgba(34, 211, 238, 0.16);
+    font-family: monospace;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.xps-auth-eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
+}
+
+.xps-auth-title {
+    margin: 0;
+    color: #f8fafc;
+    font-size: clamp(1.55rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.xps-auth-description {
+    max-width: 570px;
+    margin: 11px auto 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+/* Authentication flow */
+
+.xps-auth-flow {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin: 24px 0;
+}
+
+.xps-auth-step {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #64748b;
+    font-family: monospace;
+    font-size: 0.63rem;
+    font-weight: 700;
+}
+
+.xps-auth-step-number {
+    width: 23px;
+    height: 23px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #94a3b8;
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    background: rgba(100, 116, 139, 0.06);
+}
+
+.xps-auth-step.active {
+    color: #67e8f9;
+}
+
+.xps-auth-step.active .xps-auth-step-number {
+    color: #67e8f9;
+    border-color: rgba(34, 211, 238, 0.35);
+    background: rgba(34, 211, 238, 0.08);
+}
+
+.xps-auth-arrow {
+    color: #334155;
+    font-size: 0.75rem;
+}
+
+/* Network panel */
+
+.xps-auth-network {
+    position: relative;
+    z-index: 1;
+    margin: 22px 0;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(71, 85, 105, 0.30);
+    background: rgba(2, 6, 23, 0.55);
+}
+
+.xps-auth-network-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.xps-auth-network-title {
+    color: #cbd5e1;
+    font-size: 0.76rem;
+    font-weight: 750;
+}
+
+.xps-auth-network-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #94a3b8;
+    background: rgba(100, 116, 139, 0.07);
+    border: 1px solid rgba(100, 116, 139, 0.15);
+    font-family: monospace;
+    font-size: 0.59rem;
+    font-weight: 700;
+}
+
+.xps-auth-network-status::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #64748b;
+}
+
+.xps-auth-network-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.xps-auth-info {
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.58);
+    border: 1px solid rgba(71, 85, 105, 0.20);
+}
+
+.xps-auth-info-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #475569;
+    font-family: monospace;
+    font-size: 0.60rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.xps-auth-info-value {
+    color: #cbd5e1;
+    font-family: monospace;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    word-break: break-all;
+}
+
+.xps-auth-info-value.chain {
+    color: #67e8f9;
+}
+
+.xps-auth-rpc {
+    grid-column: 1 / -1;
+}
+
+/* Trust notice */
+
+.xps-auth-trust {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 18px 0;
+    padding: 13px 14px;
+    border-radius: 11px;
+    background: rgba(99, 102, 241, 0.055);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.xps-auth-trust-icon {
+    flex: 0 0 auto;
+    color: #a5b4fc;
+    font-size: 0.9rem;
+}
+
+.xps-auth-trust-text {
+    color: #64748b;
+    font-size: 0.68rem;
+    line-height: 1.55;
+}
+
+.xps-auth-trust-text strong {
+    color: #a5b4fc;
+}
+
+/* Button */
+
+.xps-auth-button-wrap {
+    position: relative;
+    z-index: 1;
+    margin-top: 22px;
+}
+
+.xps-auth-button {
+    width: 100%;
+    min-height: 52px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 12px !important;
+    font-size: 0.84rem !important;
+    font-weight: 750 !important;
+    letter-spacing: 0.01em;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.xps-auth-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(34, 211, 238, 0.10);
+}
+
+.xps-auth-button-icon {
+    font-size: 1.1rem;
+}
+
+.xps-auth-footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 17px;
+    color: #475569;
+    font-family: monospace;
+    font-size: 0.59rem;
+    text-align: center;
+}
+
+.xps-auth-footer strong {
+    color: #64748b;
+}
+
+@media (max-width: 620px) {
+    .xps-auth-page {
+        margin: 25px auto;
+        padding: 0 12px;
+    }
+
+    .xps-auth-card {
+        padding: 24px 18px;
+    }
+
+    .xps-auth-flow {
+        gap: 5px;
+    }
+
+    .xps-auth-step {
+        font-size: 0.56rem;
+    }
+
+    .xps-auth-step-number {
+        width: 20px;
+        height: 20px;
+    }
+
+    .xps-auth-network-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-auth-rpc {
+        grid-column: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+
+
+<!-- =========================================================
+     WEB3 AUTHENTICATION GATEWAY
+     ========================================================= -->
+
+<div class="xps-auth-page">
+
+    <div class="xps-auth-card">
+
+        <!-- Header -->
+
+        <div class="xps-auth-top">
+
+            <div class="xps-auth-icon">
+                🦊
+            </div>
+
+            <div class="xps-auth-eyebrow">
+                WEB3 AUTHENTICATION GATEWAY
+            </div>
+
+            <h2 class="xps-auth-title">
+                Connect Your Treasury Wallet
+            </h2>
+
+            <p class="xps-auth-description">
+                Authenticate ownership of your EVM wallet using a cryptographic
+                signature. XRPShield uses the signed nonce to establish your
+                application session without requesting custody of your assets.
+            </p>
+
         </div>
 
-        <button onclick="window.AuthManager.connectMetaMask()" class="btn-connect" style="width: 100%; padding: 14px; font-size: 1rem;">
-            Connect MetaMask & Sign Nonce
-        </button>
+
+        <!-- Authentication Flow -->
+
+        <div class="xps-auth-flow">
+
+            <div class="xps-auth-step active">
+                <span class="xps-auth-step-number">01</span>
+                CONNECT
+            </div>
+
+            <span class="xps-auth-arrow">→</span>
+
+            <div class="xps-auth-step">
+                <span class="xps-auth-step-number">02</span>
+                SIGN NONCE
+            </div>
+
+            <span class="xps-auth-arrow">→</span>
+
+            <div class="xps-auth-step">
+                <span class="xps-auth-step-number">03</span>
+                SESSION
+            </div>
+
+        </div>
+
+
+        <!-- Network Information -->
+
+        <div class="xps-auth-network">
+
+            <div class="xps-auth-network-header">
+
+                <span class="xps-auth-network-title">
+                    Network Connection Target
+                </span>
+
+                <span class="xps-auth-network-status">
+                    Coston2
+                </span>
+
+            </div>
+
+            <div class="xps-auth-network-grid">
+
+                <div class="xps-auth-info">
+
+                    <span class="xps-auth-info-label">
+                        EVM Network
+                    </span>
+
+                    <span class="xps-auth-info-value chain">
+                        Flare Coston2 Testnet
+                    </span>
+
+                </div>
+
+
+                <div class="xps-auth-info">
+
+                    <span class="xps-auth-info-label">
+                        Chain ID
+                    </span>
+
+                    <span class="xps-auth-info-value">
+                        114
+                    </span>
+
+                </div>
+
+
+                <div class="xps-auth-info xps-auth-rpc">
+
+                    <span class="xps-auth-info-label">
+                        RPC Endpoint
+                    </span>
+
+                    <span class="xps-auth-info-value">
+                        https://coston2-api.flare.network/ext/C/rpc
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Security Notice -->
+
+        <div class="xps-auth-trust">
+
+            <div class="xps-auth-trust-icon">
+                ◈
+            </div>
+
+            <div class="xps-auth-trust-text">
+                <strong>Non-custodial authentication.</strong>
+                Your wallet remains under your control. The authentication
+                flow requests a signature for identity/session verification;
+                it does not grant XRPShield custody of your private key.
+            </div>
+
+        </div>
+
+
+        <!-- Connect -->
+
+        <div class="xps-auth-button-wrap">
+
+            <button
+                onclick="window.AuthManager.connectMetaMask()"
+                class="btn-connect xps-auth-button"
+                type="button"
+            >
+                <span class="xps-auth-button-icon">🦊</span>
+                Connect MetaMask &amp; Sign Nonce
+            </button>
+
+        </div>
+
+
+        <!-- Footer -->
+
+        <div class="xps-auth-footer">
+
+            <span>AUTH METHOD:</span>
+            <strong>EIP-191 / SIWE-COMPATIBLE SIGNATURE FLOW</strong>
+
+        </div>
+
     </div>
+
 </div>

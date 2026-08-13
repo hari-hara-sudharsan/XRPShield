@@ -1,424 +1,1667 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XRPShield — Confidential Treasury Platform</title>
-<meta name="description" content="Privacy-preserving XRP and FXRP treasury risk management on Flare Network with Flare Confidential Compute enclaves.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./css/design-system.css">
-<link rel="stylesheet" href="./index.css">
-<link rel="stylesheet" href="./css/style.css">
-<style>
-:root{
-  --bg-void:#0A0C11;
-  --bg-surface:#12151C;
-  --bg-surface-2:#171B24;
-  --bg-surface-3:#1D222D;
-  --border-color:rgba(255,255,255,0.08);
-  --border-strong:rgba(201,169,106,0.30);
-  --text-primary:#F1EFE9;
-  --text-secondary:#8D93A3;
-  --text-tertiary:#565C6C;
-  --gold:#C9A96A;
-  --gold-bright:#E7C88E;
-  --indigo:#6C7CFF;
-  --indigo-soft:rgba(108,124,255,0.14);
-  --jade:#49D28F;
-  --jade-soft:rgba(73,210,143,0.12);
-  --red:#EE6B6B;
-  --red-soft:rgba(238,107,107,0.12);
-  --radius-sm:8px;
-  --radius-md:12px;
-  --radius-lg:18px;
-  --font-display:'Space Grotesk',sans-serif;
-  --font-body:'Inter',sans-serif;
-  --font-mono:'IBM Plex Mono',monospace;
-  --ease:cubic-bezier(.22,1,.36,1);
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{
-  background:var(--bg-void);
-  color:var(--text-primary);
-  font-family:var(--font-body);
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  background-image:
-    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(108,124,255,0.10), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(201,169,106,0.06), transparent 55%);
-  background-attachment:fixed;
-}
-::selection{background:var(--indigo);color:#fff;}
-a{color:inherit;text-decoration:none;}
-button{font-family:inherit;border:none;cursor:pointer;}
-::-webkit-scrollbar{width:10px;height:10px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--bg-surface-3);border-radius:8px;border:2px solid var(--bg-void);}
-::-webkit-scrollbar-thumb:hover{background:var(--text-tertiary);}
+  <meta charset="UTF-8">
 
-.app-container{display:flex;min-height:100vh;width:100%;position:relative;}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-/* ---------- Sidebar ---------- */
-.sidebar{
-  width:264px;flex-shrink:0;
-  background:linear-gradient(180deg,var(--bg-surface),var(--bg-void));
-  border-right:1px solid var(--border-color);
-  padding:28px 18px;
-  display:flex;flex-direction:column;
-  position:fixed;left:0;top:0;height:100vh;z-index:100;
-  overflow-y:auto;overflow-x:hidden;
-}
-.sidebar-logo{
-  display:flex;align-items:center;gap:10px;
-  padding:6px 10px 30px 10px;
-  font-family:var(--font-display);font-weight:600;font-size:1.15rem;letter-spacing:0.01em;
-}
-.sidebar-logo .mark{
-  width:34px;height:34px;border-radius:9px;
-  background:linear-gradient(145deg,var(--gold-bright),var(--gold) 60%,#8a6f3e);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 14px rgba(201,169,106,0.35);
-}
-.sidebar-logo .mark svg{width:18px;height:18px;stroke:#12151C;}
-.sidebar-tag{display:block;font-family:var(--font-mono);font-size:0.62rem;color:var(--text-tertiary);letter-spacing:0.14em;text-transform:uppercase;padding:0 10px 22px;}
-.nav-list{list-style:none;display:flex;flex-direction:column;gap:2px;flex:1;}
-.nav-item a{
-  display:flex;align-items:center;gap:12px;
-  padding:11px 14px;border-radius:10px;
-  color:var(--text-secondary);font-size:0.875rem;font-weight:500;
-  position:relative;
-  transition:color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease);
-}
-.nav-item a svg{width:17px;height:17px;flex-shrink:0;opacity:0.85;stroke:currentColor;fill:none;stroke-width:1.7;}
-.nav-item a:hover{color:var(--text-primary);background:rgba(255,255,255,0.03);transform:translateX(2px);}
-.nav-item.active a{color:var(--text-primary);background:rgba(201,169,106,0.08);}
-.nav-item.active a::before{
-  content:'';position:absolute;left:-18px;top:50%;transform:translateY(-50%);
-  width:3px;height:20px;border-radius:2px;background:var(--gold);
-  box-shadow:0 0 10px rgba(201,169,106,0.6);
-}
-.sidebar-foot{
-  border-top:1px solid var(--border-color);padding-top:16px;margin-top:14px;
-  display:flex;align-items:center;gap:10px;padding-left:10px;
-}
-.enclave-dot{width:7px;height:7px;border-radius:50%;background:var(--jade);position:relative;flex-shrink:0;}
-.enclave-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--jade);animation:pulseRing 2.2s var(--ease) infinite;}
-.sidebar-foot span{font-family:var(--font-mono);font-size:0.68rem;color:var(--text-tertiary);}
+  <title>XRPShield — Confidential Treasury Infrastructure</title>
 
-/* ---------- Main ---------- */
-.main-content{margin-left:264px;width:calc(100% - 264px);flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh;}
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:20px;
-  padding:20px 36px;border-bottom:1px solid var(--border-color);
-  position:sticky;top:0;background:rgba(10,12,17,0.72);backdrop-filter:blur(14px);z-index:20;
-}
-.search-box{
-  flex:1;max-width:420px;display:flex;align-items:center;gap:10px;
-  background:var(--bg-surface);border:1px solid var(--border-color);
-  border-radius:10px;padding:9px 14px;transition:border-color .2s var(--ease);
-}
-.search-box:focus-within{border-color:var(--border-strong);}
-.search-box svg{width:15px;height:15px;stroke:var(--text-tertiary);flex-shrink:0;}
-.search-box input{background:none;border:none;outline:none;color:var(--text-primary);font-size:0.85rem;width:100%;}
-.search-box input::placeholder{color:var(--text-tertiary);}
-.topbar-actions{display:flex;align-items:center;gap:14px;}
-.icon-btn{
-  position:relative;background:var(--bg-surface);border:1px solid var(--border-color);
-  color:var(--text-secondary);width:38px;height:38px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;transition:all .2s var(--ease);
-}
-.icon-btn:hover{color:var(--text-primary);border-color:var(--border-strong);transform:translateY(-1px);}
-.icon-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;}
-.notif-badge{
-  position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;
-  font-size:0.62rem;font-weight:700;width:16px;height:16px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);
-}
-.btn-primary{
-  display:flex;align-items:center;gap:8px;
-  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
-  color:#211A0C;font-weight:600;font-size:0.84rem;
-  padding:10px 18px;border-radius:10px;
-  box-shadow:0 4px 16px rgba(201,169,106,0.25);
-  transition:transform .18s var(--ease),box-shadow .18s var(--ease);
-}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(201,169,106,0.38);}
-.btn-primary:active{transform:translateY(0px) scale(0.98);}
-.btn-primary.connected{background:var(--bg-surface-2);color:var(--jade);border:1px solid rgba(73,210,143,0.3);box-shadow:none;}
-.btn-primary svg{width:14px;height:14px;stroke:currentColor;fill:none;}
+  <meta
+    name="description"
+    content="Privacy-preserving XRP and FXRP treasury risk management on Flare Network with confidential compute."
+  >
 
-/* notification drawer */
-.notif-drawer{
-  position:absolute;top:60px;right:36px;width:320px;
-  background:var(--bg-surface-2);border:1px solid var(--border-color);
-  border-radius:var(--radius-md);box-shadow:0 20px 50px rgba(0,0,0,0.5);
-  padding:8px;z-index:50;opacity:0;visibility:hidden;transform:translateY(-8px);
-  transition:all .22s var(--ease);
-}
-.notif-drawer.open{opacity:1;visibility:visible;transform:translateY(0);}
-.notif-drawer-head{padding:10px 12px 8px;font-size:0.78rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;}
-.notif-row{display:flex;gap:10px;padding:10px 12px;border-radius:8px;transition:background .15s;}
-.notif-row:hover{background:rgba(255,255,255,0.03);}
-.notif-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0;}
-.notif-row p{font-size:0.8rem;line-height:1.4;color:var(--text-primary);}
-.notif-row span{display:block;font-size:0.68rem;color:var(--text-tertiary);margin-top:2px;font-family:var(--font-mono);}
+  <meta name="theme-color" content="#080b12">
 
-#page-render-container{padding:34px 36px 60px;max-width:1400px;width:100%;margin:0 auto;}
-.page{animation:pageIn .5s var(--ease);}
-@keyframes pageIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:28px;flex-wrap:wrap;}
-.page-eyebrow{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.page-title{font-family:var(--font-display);font-size:1.9rem;font-weight:600;letter-spacing:-0.01em;}
-.page-sub{color:var(--text-secondary);font-size:0.92rem;margin-top:6px;max-width:560px;}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
 
-.reveal{opacity:0;transform:translateY(16px);animation:reveal .6s var(--ease) forwards;}
-@keyframes reveal{to{opacity:1;transform:translateY(0);}}
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="./css/style.css">
 
-/* ---------- Cards / grid ---------- */
-.grid{display:grid;gap:16px;}
-.grid-4{grid-template-columns:repeat(4,1fr);}
-.grid-3{grid-template-columns:repeat(3,1fr);}
-.grid-2{grid-template-columns:2fr 1fr;}
-@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr);}.grid-3{grid-template-columns:repeat(2,1fr);}.grid-2{grid-template-columns:1fr;}}
+  <style>
+    /* =========================================================
+       XRP SHIELD — GLOBAL APPLICATION SHELL
+       ========================================================= */
 
-.card{
-  background:var(--bg-surface);border:1px solid var(--border-color);
-  border-radius:var(--radius-lg);padding:22px;
-  transition:border-color .25s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease);
-}
-.card:hover{border-color:var(--border-strong);transform:translateY(-2px);box-shadow:0 14px 40px rgba(0,0,0,0.35);}
-.card-flat{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-lg);}
+    :root {
+      --xps-bg: #080b12;
+      --xps-bg-2: #0c1018;
+      --xps-surface: #10151e;
+      --xps-surface-2: #141a24;
+      --xps-surface-3: #1a212d;
 
-.stat-card .stat-label{font-size:0.76rem;color:var(--text-secondary);display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.stat-card .stat-value{font-family:var(--font-display);font-size:1.7rem;font-weight:600;letter-spacing:-0.01em;}
-.stat-card .stat-delta{font-family:var(--font-mono);font-size:0.74rem;margin-top:8px;display:inline-flex;align-items:center;gap:4px;}
-.up{color:var(--jade);}
-.down{color:var(--red);}
-.stat-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
-.stat-icon svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;}
-.i-indigo{background:var(--indigo-soft);color:var(--indigo);}
-.i-gold{background:rgba(201,169,106,0.14);color:var(--gold);}
-.i-jade{background:var(--jade-soft);color:var(--jade);}
-.i-red{background:var(--red-soft);color:var(--red);}
+      --xps-border: rgba(255,255,255,.075);
+      --xps-border-hover: rgba(201,169,106,.34);
 
-.section-label{font-size:0.78rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;}
+      --xps-text: #f4f2ed;
+      --xps-text-2: #9ca3b2;
+      --xps-text-3: #5f6778;
 
-/* pill / badge */
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;font-weight:600;padding:4px 10px;border-radius:20px;font-family:var(--font-mono);}
-.pill-jade{background:var(--jade-soft);color:var(--jade);}
-.pill-gold{background:rgba(201,169,106,0.14);color:var(--gold-bright);}
-.pill-indigo{background:var(--indigo-soft);color:var(--indigo);}
-.pill-red{background:var(--red-soft);color:var(--red);}
-.pill-grey{background:rgba(255,255,255,0.05);color:var(--text-secondary);}
-.mono{font-family:var(--font-mono);}
+      --xps-gold: #c9a96a;
+      --xps-gold-bright: #ead09a;
 
-/* ---------- Shield hero ---------- */
-.shield-hero{
-  position:relative;overflow:hidden;
-  background:radial-gradient(ellipse 600px 400px at 80% 0%, rgba(108,124,255,0.14), transparent 60%), var(--bg-surface);
-  border:1px solid var(--border-color);border-radius:var(--radius-lg);
-  padding:34px;display:flex;align-items:center;gap:40px;justify-content:space-between;flex-wrap:wrap;
-}
-.shield-copy{max-width:420px;position:relative;z-index:2;}
-.attest-badge{display:inline-flex;align-items:center;gap:7px;background:var(--jade-soft);color:var(--jade);
-  font-family:var(--font-mono);font-size:0.72rem;padding:5px 11px;border-radius:20px;margin-bottom:16px;}
-.attest-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--jade);animation:blinkDot 1.8s ease infinite;}
-.shield-hero h1{font-family:var(--font-display);font-size:2.5rem;font-weight:600;letter-spacing:-0.02em;line-height:1.08;margin-bottom:14px;}
-.shield-hero h1 .num{color:var(--gold-bright);}
-.shield-hero p{color:var(--text-secondary);font-size:0.92rem;line-height:1.6;}
-.shield-meta{display:flex;gap:26px;margin-top:22px;}
-.shield-meta div p:first-child{font-family:var(--font-mono);font-size:1.15rem;font-weight:600;color:var(--text-primary);}
-.shield-meta div p:last-child{font-size:0.72rem;color:var(--text-tertiary);margin-top:2px;}
+      --xps-indigo: #7180ff;
+      --xps-indigo-soft: rgba(113,128,255,.12);
 
-.ring-wrap{position:relative;width:210px;height:210px;flex-shrink:0;}
-.ring-wrap svg{width:100%;height:100%;}
-.ring-track{fill:none;stroke:rgba(255,255,255,0.05);stroke-width:2;}
-.ring-arc{fill:none;stroke-linecap:round;transform-origin:center;}
-.ring-arc.r1{stroke:var(--gold);animation:spin 14s linear infinite;}
-.ring-arc.r2{stroke:var(--indigo);animation:spin 20s linear infinite reverse;}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.ring-center svg.shield-icon{width:34px;height:34px;stroke:var(--gold-bright);fill:none;stroke-width:1.5;margin-bottom:6px;}
-.ring-center span{font-family:var(--font-mono);font-size:0.64rem;color:var(--jade);letter-spacing:0.08em;}
-@keyframes spin{to{transform:rotate(360deg);}}
-@keyframes blinkDot{0%,100%{opacity:1;}50%{opacity:0.3;}}
-@keyframes pulseRing{0%{transform:scale(0.8);opacity:0.9;}100%{transform:scale(2.1);opacity:0;}}
+      --xps-cyan: #62d9ee;
+      --xps-cyan-soft: rgba(98,217,238,.10);
 
-/* table-list rows */
-.row-list{display:flex;flex-direction:column;}
-.row-item{
-  display:flex;align-items:center;gap:14px;padding:14px 4px;
-  border-bottom:1px solid var(--border-color);transition:background .2s;
-}
-.row-item:last-child{border-bottom:none;}
-.row-item:hover{background:rgba(255,255,255,0.02);}
-.row-avatar{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.row-avatar svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
-.row-main{flex:1;min-width:0;}
-.row-title{font-size:0.86rem;font-weight:500;color:var(--text-primary);}
-.row-sub{font-size:0.74rem;color:var(--text-tertiary);font-family:var(--font-mono);margin-top:2px;}
-.row-right{text-align:right;flex-shrink:0;}
-.row-value{font-family:var(--font-mono);font-size:0.86rem;font-weight:500;}
-.row-time{font-size:0.7rem;color:var(--text-tertiary);margin-top:3px;}
+      --xps-green: #49d28f;
+      --xps-green-soft: rgba(73,210,143,.11);
 
-/* allocation donut */
-.donut-wrap{display:flex;align-items:center;gap:22px;}
-.legend-row{display:flex;align-items:center;gap:9px;font-size:0.8rem;padding:7px 0;}
-.legend-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
-.legend-row .amt{margin-left:auto;font-family:var(--font-mono);color:var(--text-secondary);}
+      --xps-red: #ef7373;
+      --xps-red-soft: rgba(239,115,115,.11);
 
-/* toggle switch */
-.switch{position:relative;width:38px;height:22px;flex-shrink:0;}
-.switch input{opacity:0;width:0;height:0;}
-.switch-track{position:absolute;inset:0;background:var(--bg-surface-3);border-radius:20px;transition:.25s;border:1px solid var(--border-color);}
-.switch-thumb{position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text-tertiary);border-radius:50%;transition:.25s var(--ease);}
-.switch input:checked + .switch-track{background:rgba(73,210,143,0.25);border-color:rgba(73,210,143,0.4);}
-.switch input:checked + .switch-track .switch-thumb{transform:translateX(16px);background:var(--jade);}
+      --xps-radius-sm: 8px;
+      --xps-radius-md: 12px;
+      --xps-radius-lg: 18px;
 
-/* policy card */
-.policy-card{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px;}
-.policy-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.policy-head svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.7;}
-.policy-title{font-weight:600;font-size:0.9rem;}
-.policy-desc{color:var(--text-secondary);font-size:0.8rem;line-height:1.55;max-width:440px;}
+      --xps-display: "Space Grotesk", sans-serif;
+      --xps-body: "Inter", sans-serif;
+      --xps-mono: "IBM Plex Mono", monospace;
 
-/* vault card */
-.vault-card{display:flex;flex-direction:column;gap:14px;}
-.vault-top{display:flex;align-items:center;justify-content:space-between;}
-.vault-id{font-family:var(--font-mono);font-size:0.72rem;color:var(--text-tertiary);}
-.vault-balance{font-family:var(--font-display);font-size:1.5rem;font-weight:600;margin:2px 0 2px;}
-.vault-asset{font-size:0.76rem;color:var(--text-secondary);}
-.vault-bar{height:5px;border-radius:4px;background:var(--bg-surface-3);overflow:hidden;}
-.vault-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--indigo));}
-.vault-foot{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-tertiary);}
+      --xps-ease: cubic-bezier(.22,1,.36,1);
+    }
 
-/* decision timeline */
-.timeline{position:relative;padding-left:26px;}
-.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--border-color);}
-.tl-item{position:relative;padding-bottom:26px;}
-.tl-item:last-child{padding-bottom:0;}
-.tl-dot{position:absolute;left:-26px;top:3px;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg-void);}
-.tl-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:5px;}
-.tl-title{font-weight:600;font-size:0.87rem;}
-.tl-desc{color:var(--text-secondary);font-size:0.8rem;line-height:1.55;max-width:560px;}
-.tl-meta{font-family:var(--font-mono);font-size:0.7rem;color:var(--text-tertiary);margin-top:6px;}
 
-/* AI cards */
-.ai-card{display:flex;gap:14px;}
-.ai-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ai-icon svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;}
-.ai-body p.ai-title{font-weight:600;font-size:0.87rem;margin-bottom:4px;}
-.ai-body p.ai-text{color:var(--text-secondary);font-size:0.82rem;line-height:1.6;}
-.ai-input-bar{
-  display:flex;align-items:center;gap:10px;background:var(--bg-surface-2);
-  border:1px solid var(--border-color);border-radius:12px;padding:6px 6px 6px 16px;margin-top:6px;
-}
-.ai-input-bar input{flex:1;background:none;border:none;outline:none;color:var(--text-primary);font-size:0.85rem;}
-.ai-input-bar input::placeholder{color:var(--text-tertiary);}
-.ai-send{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gold-bright),var(--gold));display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ai-send svg{width:15px;height:15px;stroke:#221b0c;fill:none;stroke-width:2;}
+    /* =========================================================
+       RESET
+       ========================================================= */
 
-/* status */
-.status-row{display:flex;align-items:center;gap:16px;padding:16px 4px;border-bottom:1px solid var(--border-color);}
-.status-row:last-child{border-bottom:none;}
-.status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;position:relative;}
-.status-dot.ok{background:var(--jade);}
-.status-dot.ok::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--jade);animation:pulseRing 2s var(--ease) infinite;}
-.status-dot.warn{background:var(--gold);}
-.status-name{font-size:0.87rem;font-weight:500;flex:1;}
-.status-latency{font-family:var(--font-mono);font-size:0.76rem;color:var(--text-tertiary);width:90px;}
-.status-uptime{font-family:var(--font-mono);font-size:0.76rem;width:70px;text-align:right;}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-/* settings */
-.settings-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 2px;border-bottom:1px solid var(--border-color);}
-.settings-row:last-child{border-bottom:none;}
-.settings-label{font-size:0.86rem;font-weight:500;}
-.settings-desc{font-size:0.76rem;color:var(--text-tertiary);margin-top:3px;max-width:420px;}
-.btn-ghost{background:var(--bg-surface-2);border:1px solid var(--border-color);color:var(--text-primary);padding:8px 14px;border-radius:9px;font-size:0.8rem;font-weight:500;transition:all .2s;}
-.btn-ghost:hover{border-color:var(--border-strong);}
-.btn-danger{background:var(--red-soft);border:1px solid rgba(238,107,107,0.3);color:var(--red);padding:8px 14px;border-radius:9px;font-size:0.8rem;font-weight:500;}
+    html {
+      scroll-behavior: smooth;
+      background: var(--xps-bg);
+    }
 
-#toast-container{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:10px;z-index:200;}
-.toast{
-  background:var(--bg-surface-2);border:1px solid var(--border-strong);border-radius:10px;
-  padding:13px 18px;font-size:0.83rem;color:var(--text-primary);box-shadow:0 12px 30px rgba(0,0,0,0.4);
-  animation:toastIn .3s var(--ease);display:flex;align-items:center;gap:10px;
-}
-.toast.out{animation:toastOut .3s var(--ease) forwards;}
-@keyframes toastIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
-@keyframes toastOut{to{opacity:0;transform:translateX(30px);}}
+    body {
+      margin: 0;
+      min-height: 100vh;
 
-@media(max-width:900px){
-  .sidebar{position:fixed;left:-280px;z-index:100;transition:left .3s var(--ease);}
-  .sidebar.open{left:0;}
-  #page-render-container{padding:24px 18px;}
-  .shield-hero{flex-direction:column;}
-}
-</style>
+      background:
+        radial-gradient(
+          ellipse 900px 500px at 10% -15%,
+          rgba(113,128,255,.095),
+          transparent 62%
+        ),
+        radial-gradient(
+          ellipse 800px 500px at 105% 0%,
+          rgba(201,169,106,.055),
+          transparent 60%
+        ),
+        linear-gradient(
+          180deg,
+          #080b12 0%,
+          #090c13 55%,
+          #080b11 100%
+        );
+
+      color: var(--xps-text);
+      font-family: var(--xps-body);
+
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+      z-index: -1;
+
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,.018) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255,255,255,.018) 1px,
+          transparent 1px
+        );
+
+      background-size: 64px 64px;
+
+      mask-image:
+        linear-gradient(
+          to bottom,
+          rgba(0,0,0,.8),
+          transparent 80%
+        );
+    }
+
+    ::selection {
+      background: var(--xps-indigo);
+      color: #fff;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font-family: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    input {
+      outline: none;
+    }
+
+
+    /* =========================================================
+       SCROLLBAR
+       ========================================================= */
+
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #202733;
+      border-radius: 20px;
+      border: 2px solid var(--xps-bg);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #303949;
+    }
+
+
+    /* =========================================================
+       APPLICATION FRAME
+       ========================================================= */
+
+    .app-container {
+      width: 100%;
+      min-height: 100vh;
+
+      display: flex;
+
+      position: relative;
+    }
+
+
+    /* =========================================================
+       SIDEBAR
+       ========================================================= */
+
+    .sidebar {
+      width: 272px;
+      flex: 0 0 272px;
+
+      position: fixed;
+      inset: 0 auto 0 0;
+
+      display: flex;
+      flex-direction: column;
+
+      padding: 22px 16px 18px;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(17,22,31,.98),
+          rgba(8,11,18,.99)
+        );
+
+      border-right: 1px solid var(--xps-border);
+
+      box-shadow:
+        18px 0 60px rgba(0,0,0,.16);
+
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      z-index: 100;
+    }
+
+    .sidebar::after {
+      content: "";
+
+      position: absolute;
+
+      top: 0;
+      right: 0;
+
+      width: 1px;
+      height: 35%;
+
+      background:
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(113,128,255,.35),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+
+    /* =========================================================
+       BRAND
+       ========================================================= */
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+
+      padding: 5px 9px 8px;
+
+      font-family: var(--xps-display);
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: -.015em;
+
+      user-select: none;
+    }
+
+    .sidebar-logo .mark {
+      width: 36px;
+      height: 36px;
+
+      flex: 0 0 36px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 10px;
+
+      background:
+        linear-gradient(
+          145deg,
+          var(--xps-gold-bright),
+          var(--xps-gold) 58%,
+          #856b3d
+        );
+
+      box-shadow:
+        0 6px 22px rgba(201,169,106,.22),
+        inset 0 1px rgba(255,255,255,.3);
+    }
+
+    .sidebar-logo .mark svg {
+      width: 19px;
+      height: 19px;
+
+      stroke: #11151d;
+      fill: none;
+    }
+
+    .sidebar-tag {
+      display: block;
+
+      padding:
+        7px
+        10px
+        22px;
+
+      color: var(--xps-text-3);
+
+      font-family: var(--xps-mono);
+      font-size: .59rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    .nav-list {
+      flex: 1;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 3px;
+
+      list-style: none;
+
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-item a {
+      min-height: 43px;
+
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      padding: 10px 13px;
+
+      border: 1px solid transparent;
+      border-radius: 11px;
+
+      color: var(--xps-text-2);
+
+      font-size: .825rem;
+      font-weight: 500;
+
+      transition:
+        color .2s var(--xps-ease),
+        background .2s var(--xps-ease),
+        border-color .2s var(--xps-ease),
+        transform .2s var(--xps-ease);
+    }
+
+    .nav-item a svg {
+      width: 17px;
+      height: 17px;
+
+      flex: 0 0 17px;
+
+      stroke: currentColor;
+      fill: none;
+
+      stroke-width: 1.7;
+
+      opacity: .78;
+
+      transition:
+        opacity .2s var(--xps-ease),
+        color .2s var(--xps-ease);
+    }
+
+    .nav-item a:hover {
+      color: var(--xps-text);
+
+      background:
+        rgba(255,255,255,.028);
+
+      border-color:
+        rgba(255,255,255,.045);
+
+      transform: translateX(2px);
+    }
+
+    .nav-item a:hover svg {
+      opacity: 1;
+    }
+
+    .nav-item.active a {
+      color: var(--xps-text);
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(201,169,106,.10),
+          rgba(201,169,106,.035)
+        );
+
+      border-color:
+        rgba(201,169,106,.10);
+    }
+
+    .nav-item.active a svg {
+      color: var(--xps-gold-bright);
+      opacity: 1;
+    }
+
+    .nav-item.active a::before {
+      content: "";
+
+      position: absolute;
+
+      left: -16px;
+      top: 50%;
+
+      width: 3px;
+      height: 21px;
+
+      transform: translateY(-50%);
+
+      border-radius: 0 3px 3px 0;
+
+      background:
+        linear-gradient(
+          to bottom,
+          var(--xps-gold-bright),
+          var(--xps-gold)
+        );
+
+      box-shadow:
+        0 0 14px rgba(201,169,106,.5);
+    }
+
+
+    /* =========================================================
+       SIDEBAR STATUS
+       ========================================================= */
+
+    .sidebar-foot {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      margin-top: 14px;
+      padding:
+        15px
+        9px
+        3px;
+
+      border-top: 1px solid var(--xps-border);
+    }
+
+    .enclave-dot {
+      width: 7px;
+      height: 7px;
+
+      position: relative;
+
+      flex: 0 0 7px;
+
+      border-radius: 50%;
+
+      background: var(--xps-cyan);
+
+      box-shadow:
+        0 0 10px rgba(98,217,238,.35);
+    }
+
+    .enclave-dot::after {
+      content: "";
+
+      position: absolute;
+
+      inset: -4px;
+
+      border: 1px solid rgba(98,217,238,.42);
+      border-radius: 50%;
+
+      animation: xpsPulse 2.6s ease-out infinite;
+    }
+
+    .sidebar-foot span {
+      color: var(--xps-text-3);
+
+      font-family: var(--xps-mono);
+      font-size: .61rem;
+
+      letter-spacing: .05em;
+    }
+
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    .main-content {
+      width: calc(100% - 272px);
+
+      min-width: 0;
+      min-height: 100vh;
+
+      margin-left: 272px;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    /* =========================================================
+       TOPBAR
+       ========================================================= */
+
+    .topbar {
+      min-height: 76px;
+
+      position: sticky;
+      top: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 22px;
+
+      padding: 16px 34px;
+
+      background:
+        rgba(8,11,18,.76);
+
+      border-bottom: 1px solid var(--xps-border);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      z-index: 30;
+    }
+
+    .topbar::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      right: 0;
+      bottom: -1px;
+
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(113,128,255,.16),
+          transparent
+        );
+
+      pointer-events: none;
+    }
+
+
+    /* =========================================================
+       SEARCH
+       ========================================================= */
+
+    .search-box {
+      width: min(430px, 45vw);
+
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px 14px;
+
+      background:
+        rgba(16,21,30,.84);
+
+      border: 1px solid var(--xps-border);
+
+      border-radius: 11px;
+
+      transition:
+        border-color .2s var(--xps-ease),
+        box-shadow .2s var(--xps-ease),
+        background .2s var(--xps-ease);
+    }
+
+    .search-box:focus-within {
+      background: var(--xps-surface);
+
+      border-color:
+        rgba(201,169,106,.34);
+
+      box-shadow:
+        0 0 0 3px rgba(201,169,106,.055);
+    }
+
+    .search-box svg {
+      width: 16px;
+      height: 16px;
+
+      flex: 0 0 16px;
+
+      stroke: var(--xps-text-3);
+    }
+
+    .search-box input {
+      width: 100%;
+
+      border: 0;
+      background: transparent;
+
+      color: var(--xps-text);
+
+      font-size: .81rem;
+    }
+
+    .search-box input::placeholder {
+      color: var(--xps-text-3);
+    }
+
+
+    /* =========================================================
+       TOPBAR ACTIONS
+       ========================================================= */
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--xps-surface);
+
+      border: 1px solid var(--xps-border);
+
+      border-radius: 10px;
+
+      color: var(--xps-text-2);
+
+      transition:
+        transform .2s var(--xps-ease),
+        color .2s var(--xps-ease),
+        border-color .2s var(--xps-ease),
+        background .2s var(--xps-ease);
+    }
+
+    .icon-btn:hover {
+      color: var(--xps-text);
+
+      background: var(--xps-surface-2);
+
+      border-color: var(--xps-border-hover);
+
+      transform: translateY(-1px);
+    }
+
+    .icon-btn svg {
+      width: 17px;
+      height: 17px;
+
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .notif-badge {
+      min-width: 17px;
+      height: 17px;
+
+      position: absolute;
+
+      top: -5px;
+      right: -5px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0 4px;
+
+      border: 2px solid var(--xps-bg);
+
+      border-radius: 999px;
+
+      background: var(--xps-gold);
+
+      color: #1a150c;
+
+      font-family: var(--xps-mono);
+      font-size: .55rem;
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       CONNECT WALLET
+       ========================================================= */
+
+    .btn-primary {
+      min-height: 40px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      padding: 0 16px;
+
+      border-radius: 10px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--xps-gold-bright),
+          var(--xps-gold)
+        );
+
+      color: #1c160b;
+
+      font-size: .78rem;
+      font-weight: 700;
+
+      box-shadow:
+        0 5px 18px rgba(201,169,106,.18);
+
+      transition:
+        transform .18s var(--xps-ease),
+        box-shadow .18s var(--xps-ease),
+        filter .18s var(--xps-ease);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 8px 25px rgba(201,169,106,.27);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(.985);
+    }
+
+    .btn-primary.connected {
+      background:
+        rgba(73,210,143,.08);
+
+      color: var(--xps-green);
+
+      border: 1px solid rgba(73,210,143,.25);
+
+      box-shadow: none;
+    }
+
+    .btn-primary svg {
+      width: 15px;
+      height: 15px;
+
+      stroke: currentColor;
+      fill: none;
+    }
+
+
+    /* =========================================================
+       NOTIFICATION DRAWER
+       ========================================================= */
+
+    .notif-drawer {
+      width: 340px;
+
+      position: absolute;
+
+      top: 66px;
+      right: 34px;
+
+      padding: 8px;
+
+      background:
+        rgba(20,26,36,.98);
+
+      border: 1px solid var(--xps-border);
+
+      border-radius: 14px;
+
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.48);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transform:
+        translateY(-8px)
+        scale(.985);
+
+      transform-origin: top right;
+
+      transition:
+        opacity .22s var(--xps-ease),
+        visibility .22s var(--xps-ease),
+        transform .22s var(--xps-ease);
+
+      z-index: 100;
+    }
+
+    .notif-drawer.open {
+      opacity: 1;
+      visibility: visible;
+
+      transform:
+        translateY(0)
+        scale(1);
+    }
+
+    .notif-drawer-head {
+      padding: 10px 12px 9px;
+
+      color: var(--xps-text-2);
+
+      font-family: var(--xps-mono);
+      font-size: .62rem;
+      font-weight: 600;
+
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .notif-row {
+      display: flex;
+      gap: 11px;
+
+      padding: 11px 12px;
+
+      border-radius: 9px;
+
+      transition:
+        background .18s var(--xps-ease);
+    }
+
+    .notif-row:hover {
+      background: rgba(255,255,255,.028);
+    }
+
+    .notif-dot {
+      width: 6px;
+      height: 6px;
+
+      flex: 0 0 6px;
+
+      margin-top: 6px;
+
+      border-radius: 50%;
+    }
+
+    .notif-row p {
+      margin: 0;
+
+      color: var(--xps-text);
+
+      font-size: .76rem;
+      line-height: 1.45;
+    }
+
+    .notif-row span {
+      display: block;
+
+      margin-top: 4px;
+
+      color: var(--xps-text-3);
+
+      font-family: var(--xps-mono);
+      font-size: .61rem;
+    }
+
+
+    /* =========================================================
+       PAGE CONTAINER
+       ========================================================= */
+
+    #page-render-container {
+      width: 100%;
+      max-width: 1500px;
+
+      margin: 0 auto;
+
+      padding: 34px 36px 70px;
+    }
+
+    .page {
+      animation:
+        xpsPageIn .42s var(--xps-ease);
+    }
+
+    @keyframes xpsPageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* =========================================================
+       GLOBAL STATES
+       ========================================================= */
+
+    .xps-loading {
+      color: var(--xps-text-3);
+
+      font-family: var(--xps-mono);
+      font-size: .72rem;
+    }
+
+    .xps-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .xps-live::before {
+      content: "";
+
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+
+      background: var(--xps-green);
+
+      box-shadow:
+        0 0 9px rgba(73,210,143,.45);
+    }
+
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    #toast-container {
+      position: fixed;
+
+      right: 24px;
+      bottom: 24px;
+
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+
+      z-index: 500;
+    }
+
+    .toast {
+      min-width: 280px;
+
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 13px 16px;
+
+      background:
+        rgba(20,26,36,.97);
+
+      border: 1px solid var(--xps-border-hover);
+
+      border-radius: 11px;
+
+      color: var(--xps-text);
+
+      font-size: .78rem;
+
+      box-shadow:
+        0 18px 45px rgba(0,0,0,.42);
+
+      animation:
+        xpsToastIn .28s var(--xps-ease);
+    }
+
+    .toast.out {
+      animation:
+        xpsToastOut .25s var(--xps-ease) forwards;
+    }
+
+    @keyframes xpsToastIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes xpsToastOut {
+      to {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+    }
+
+
+    /* =========================================================
+       SIDEBAR MOBILE OVERLAY
+       ========================================================= */
+
+    .xps-mobile-overlay {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+
+      background: rgba(0,0,0,.58);
+
+      backdrop-filter: blur(3px);
+
+      z-index: 90;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      .sidebar {
+        width: 248px;
+        flex-basis: 248px;
+      }
+
+      .main-content {
+        width: calc(100% - 248px);
+        margin-left: 248px;
+      }
+
+      #page-render-container {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .topbar {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+    }
+
+
+    @media (max-width: 900px) {
+
+      .sidebar {
+        width: 272px;
+        left: -280px;
+
+        transition:
+          left .3s var(--xps-ease);
+      }
+
+      .sidebar.open {
+        left: 0;
+
+        box-shadow:
+          25px 0 70px rgba(0,0,0,.5);
+      }
+
+      .main-content {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .topbar {
+        min-height: 68px;
+
+        padding:
+          13px
+          18px;
+      }
+
+      .search-box {
+        width: auto;
+        flex: 1;
+      }
+
+      #page-render-container {
+        padding:
+          24px
+          18px
+          55px;
+      }
+
+      .notif-drawer {
+        right: 18px;
+        width: min(340px, calc(100vw - 36px));
+      }
+    }
+
+
+    @media (max-width: 620px) {
+
+      .topbar {
+        gap: 10px;
+      }
+
+      .search-box {
+        max-width: none;
+      }
+
+      .topbar-actions {
+        gap: 7px;
+      }
+
+      .btn-primary {
+        padding: 0 11px;
+      }
+
+      #wallet-btn-label {
+        display: none;
+      }
+
+      .btn-primary {
+        width: 40px;
+        padding: 0;
+      }
+
+      .icon-btn {
+        width: 38px;
+        height: 38px;
+      }
+
+      .notif-drawer {
+        top: 62px;
+      }
+
+      #toast-container {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .toast {
+        min-width: 0;
+        width: 100%;
+      }
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+
+    /* =========================================================
+       ACCESSIBILITY
+       ========================================================= */
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--xps-indigo);
+      outline-offset: 3px;
+    }
+
+
+    /* =========================================================
+       ANIMATIONS
+       ========================================================= */
+
+    @keyframes xpsPulse {
+      0% {
+        transform: scale(.8);
+        opacity: .8;
+      }
+
+      100% {
+        transform: scale(2.1);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
+
+
 <body>
-<div class="app-container">
-  <aside class="sidebar">
-    <div class="sidebar-logo" style="cursor: pointer;" onclick="window.location.hash='#landing'">
-      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6L12 2z"/></svg></div>
-      <span>XRPShield</span>
-    </div>
-    <span class="sidebar-tag">Confidential treasury</span>
-    <ul class="nav-list" id="nav-list">
-      <li class="nav-item" data-route="landing"><a href="#landing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Landing overview</a></li>
-      <li class="nav-item" data-route="dashboard"><a href="#dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Treasury overview</a></li>
-      <li class="nav-item" data-route="vaults"><a href="#vaults"><svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0110 0v3"/><circle cx="12" cy="15" r="1.6"/></svg>Vault management</a></li>
-      <li class="nav-item" data-route="policies"><a href="#policies"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/></svg>Confidential policies</a></li>
-      <li class="nav-item" data-route="privacy-proof"><a href="#privacy-proof"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Privacy Proof Center</a></li>
-      <li class="nav-item" data-route="audit-trail"><a href="#audit-trail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>10-Stage Audit Trail</a></li>
-      <li class="nav-item" data-route="verification"><a href="#verification"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Verification Hub</a></li>
-      <li class="nav-item" data-route="decisions"><a href="#decisions"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>Decision engine</a></li>
-      <li class="nav-item" data-route="executions"><a href="#executions"><svg viewBox="0 0 24 24"><path d="M12 2l3 6 6.5 1-4.7 4.6L18 20l-6-3.2L6 20l1.2-6.4L2.5 9l6.5-1L12 2z"/></svg>Protected executions</a></li>
-      <li class="nav-item" data-route="ai-assistant"><a href="#ai-assistant"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>AI intelligence</a></li>
-      <li class="nav-item" data-route="platform-status"><a href="#platform-status"><svg viewBox="0 0 24 24"><path d="M2 12h4l2-7 4 14 3-9 2 4h5"/></svg>System status</a></li>
-      <li class="nav-item" data-route="docs"><a href="#docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Technical Architecture</a></li>
-      <li class="nav-item" data-route="settings"><a href="#settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5V21a2 2 0 11-4 0v-.2a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.2a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.2a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.5 1z"/></svg>Settings and security</a></li>
-    </ul>
 
-    <div class="sidebar-foot">
-      <div class="enclave-dot"></div>
-      <span>FCC enclave · attested</span>
-    </div>
-  </aside>
+  <div class="app-container">
 
-  <main class="main-content">
-    <header class="topbar">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="text" id="global-search-input" placeholder="Search vaults, decisions, executions, or policies…">
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+      <div
+        class="sidebar-logo"
+        style="cursor:pointer"
+        onclick="window.location.hash='#landing'"
+      >
+        <div class="mark">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6L12 2z"
+            />
+          </svg>
+
+        </div>
+
+        <span>XRPShield</span>
       </div>
-      <div class="topbar-actions">
-        <button class="icon-btn" id="notif-btn" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
-          <span class="notif-badge">3</span>
-        </button>
-        <button id="wallet-connect-btn" class="btn-primary">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg>
-          <span id="wallet-btn-label">Connect wallet</span>
-        </button>
+
+
+      <span class="sidebar-tag">
+        Confidential treasury infrastructure
+      </span>
+
+
+      <!-- Navigation -->
+
+      <ul class="nav-list" id="nav-list">
+
+        <li class="nav-item" data-route="landing">
+          <a href="#landing">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+
+            Landing overview
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="dashboard">
+          <a href="#dashboard">
+
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="9" rx="1.5"/>
+              <rect x="14" y="3" width="7" height="5" rx="1.5"/>
+              <rect x="14" y="12" width="7" height="9" rx="1.5"/>
+              <rect x="3" y="16" width="7" height="5" rx="1.5"/>
+            </svg>
+
+            Treasury overview
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="vaults">
+          <a href="#vaults">
+
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="10" width="18" height="11" rx="2"/>
+              <path d="M7 10V7a5 5 0 0110 0v3"/>
+              <circle cx="12" cy="15" r="1.6"/>
+            </svg>
+
+            Vault management
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="policies">
+          <a href="#policies">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4"/>
+              <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/>
+            </svg>
+
+            Confidential policies
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="privacy-proof">
+          <a href="#privacy-proof">
+
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+
+            Privacy Proof Center
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="audit-trail">
+          <a href="#audit-trail">
+
+            <svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+
+            10-Stage Audit Trail
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="verification">
+          <a href="#verification">
+
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+
+            Verification Hub
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="decisions">
+          <a href="#decisions">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>
+            </svg>
+
+            Decision engine
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="executions">
+          <a href="#executions">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3 6 6.5 1-4.7 4.6L18 20l-6-3.2L6 20l1.2-6.4L2.5 9l6.5-1L12 2z"/>
+            </svg>
+
+            Protected executions
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="ai-assistant">
+          <a href="#ai-assistant">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>
+              <circle cx="12" cy="12" r="3.2"/>
+            </svg>
+
+            AI intelligence
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="platform-status">
+          <a href="#platform-status">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M2 12h4l2-7 4 14 3-9 2 4h5"/>
+            </svg>
+
+            System status
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="docs">
+          <a href="#docs">
+
+            <svg viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+
+            Technical Architecture
+          </a>
+        </li>
+
+
+        <li class="nav-item" data-route="settings">
+          <a href="#settings">
+
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5V21a2 2 0 11-4 0v-.2a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.2a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.2a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.5 1z"/>
+            </svg>
+
+            Settings and security
+          </a>
+        </li>
+
+      </ul>
+
+
+      <!-- Runtime status -->
+
+      <div class="sidebar-foot">
+
+        <div class="enclave-dot"></div>
+
+        <span>
+          FCC runtime · status resolving
+        </span>
+
       </div>
-      <div class="notif-drawer" id="notif-drawer">
-        <div class="notif-drawer-head">Notifications</div>
-        <div class="notif-row"><div class="notif-dot" style="background:var(--jade)"></div><div><p>Vault VLT-7F3A attestation renewed</p><span>2 minutes ago</span></div></div>
-        <div class="notif-row"><div class="notif-dot" style="background:var(--gold)"></div><div><p>Policy threshold nearing limit on FXRP rebalance</p><span>41 minutes ago</span></div></div>
-        <div class="notif-row"><div class="notif-dot" style="background:var(--indigo)"></div><div><p>Decision engine approved 3 automated actions</p><span>3 hours ago</span></div></div>
-      </div>
-    </header>
 
-    <div id="page-render-container"></div>
-  </main>
-</div>
+    </aside>
 
-<div id="toast-container"></div>
 
-<script type="module" src="./js/app.js"></script>
+    <!-- =====================================================
+         MAIN APPLICATION
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+      <!-- ===================================================
+           TOP BAR
+           =================================================== -->
+
+      <header class="topbar">
+
+        <div class="search-box">
+
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <circle cx="11" cy="11" r="7"/>
+            <path d="M21 21l-4.3-4.3"/>
+          </svg>
+
+          <input
+            type="text"
+            id="global-search-input"
+            placeholder="Search vaults, decisions, executions, or policies…"
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <div class="topbar-actions">
+
+          <!-- Notifications -->
+
+          <button
+            class="icon-btn"
+            id="notif-btn"
+            aria-label="Notifications"
+            aria-expanded="false"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            >
+              <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.7 21a2 2 0 01-3.4 0"/>
+            </svg>
+
+            <!--
+              Keep this hidden/empty unless the application
+              actually has unread notifications.
+            -->
+            <span
+              class="notif-badge"
+              id="notif-count"
+              hidden
+            ></span>
+
+          </button>
+
+
+          <!-- Wallet -->
+
+          <button
+            id="wallet-connect-btn"
+            class="btn-primary"
+            type="button"
+          >
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect
+                x="2"
+                y="6"
+                width="20"
+                height="14"
+                rx="2"
+              />
+
+              <path d="M2 10h20"/>
+
+              <circle
+                cx="17"
+                cy="15"
+                r="1"
+              />
+            </svg>
+
+            <span id="wallet-btn-label">
+              Connect wallet
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- =================================================
+             NOTIFICATION DRAWER
+
+             Starts empty so the shell never invents
+             blockchain/application activity.
+             ================================================= -->
+
+        <div
+          class="notif-drawer"
+          id="notif-drawer"
+          aria-hidden="true"
+        >
+
+          <div class="notif-drawer-head">
+            Activity
+          </div>
+
+          <div
+            id="notification-list"
+            class="notification-list"
+          >
+
+            <div
+              class="notif-row"
+              id="notifications-empty"
+            >
+
+              <div
+                class="notif-dot"
+                style="background:var(--xps-text-3)"
+              ></div>
+
+              <div>
+
+                <p>
+                  No verified notifications available.
+                </p>
+
+                <span>
+                  Waiting for application events
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <!-- ===================================================
+           ROUTE RENDER TARGET
+           =================================================== -->
+
+      <div id="page-render-container"></div>
+
+    </main>
+
+  </div>
+
+
+  <!-- =======================================================
+       GLOBAL TOAST HOST
+       ======================================================= -->
+
+  <div
+    id="toast-container"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
+
+  <!-- =======================================================
+       APPLICATION
+       ======================================================= -->
+
+  <script
+    type="module"
+    src="./js/app.js"
+  ></script>
+
 </body>
 </html>

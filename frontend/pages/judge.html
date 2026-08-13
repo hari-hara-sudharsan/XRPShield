@@ -1,70 +1,1044 @@
-<div style="margin-bottom: 24px;">
-    <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(201,169,106,0.14); color:var(--gold-bright); font-family:monospace; font-size:0.75rem; padding:4px 10px; border-radius:20px; margin-bottom:12px;">
-        FLARE HACKATHON JUDGE INDEPENDENT VERIFICATION MODE
-    </div>
-    <h2 style="font-size: 1.8rem; font-weight: 700;">Hackathon Judge Evaluation Center</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Independently verify real Flare Coston2 execution, FTSOv2 price feeds, FCC attestation signatures, and DEX token swaps</p>
-</div>
+<style>
+/* =========================================================
+   XRPShield — Judge Evaluation / Independent Verification
+   ========================================================= */
 
-<!-- REAL VS SIMULATED VERIFICATION MATRIX -->
-<div class="card" style="padding: 24px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
-    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">1. System Real Infrastructure Audit Matrix</h3>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Component</th>
-                <th>Status</th>
-                <th>Verifiable On-Chain Evidence</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Coston2 EVM Contract</strong></td>
-                <td><span class="badge" style="background:#10b98122; color:#10b981; border:1px solid #10b981;">REAL</span></td>
-                <td><a href="https://coston2-explorer.flare.network/address/0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9" target="_blank" style="color:var(--accent-teal);">0xb7902ebd... ↗</a></td>
-            </tr>
-            <tr>
-                <td><strong>Flare FTSOv2 Price Feed</strong></td>
-                <td><span class="badge" style="background:#10b98122; color:#10b981; border:1px solid #10b981;">REAL</span></td>
-                <td>Feed ID <code>0x01...001</code> | Real-Time Price `$0.84575`</td>
-            </tr>
-            <tr>
-                <td><strong>Flare FCC Extension</strong></td>
-                <td><span class="badge" style="background:#10b98122; color:#10b981; border:1px solid #10b981;">REAL</span></td>
-                <td>Extension ID <code>0x585250...001</code> | EIP-712 Attestation</td>
-            </tr>
-            <tr>
-                <td><strong>SparkDEX Router V2</strong></td>
-                <td><span class="badge" style="background:#10b98122; color:#10b981; border:1px solid #10b981;">REAL</span></td>
-                <td><a href="https://coston2-explorer.flare.network/address/0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B" target="_blank" style="color:var(--accent-teal);">0x600109D9... ↗</a></td>
-            </tr>
-            <tr>
-                <td><strong>Swap Execution Receipt</strong></td>
-                <td><span class="badge" style="background:#10b98122; color:#10b981; border:1px solid #10b981;">REAL</span></td>
-                <td><a href="https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" target="_blank" style="color:var(--accent-teal);">Tx 0x3fe85c16... ↗</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+.xps-jvc {
+    position: relative;
+    margin-bottom: 30px;
+    color: var(--text-primary);
+}
 
-<!-- 15-STEP JUDGE VERIFICATION STEPS -->
-<div class="card" style="padding: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
-    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">2. 15-Step Independent Verification Checklist</h3>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.88rem;">
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 1. Open SPA Dashboard</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 2. Connect MetaMask (Chain ID 114)</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 3. Read Real FXRP Balance (100k FXRP)</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 4. Inspect Treasury Vault</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 5. Create ECIES Policy Commitment</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 6. Read FTSOv2 XRP/USD Price Feed</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 7. Request Real FCC Evaluation</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 8. Receive EIP-712 ActionResult</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 9. Verify Attestation On-Chain</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 10. Authorize State Machine Transition</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 11. Calculate DEX Minimum Output</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 12. Execute Real FXRP -> USDT0 Swap</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 13. Confirm Block Receipt Status (1)</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 14. Verify Token Custody Movement</div>
-        <div style="padding:10px; background:rgba(0,0,0,0.3); border-radius:8px;">✓ 15. Inspect Privacy Proof & Explorer</div>
+/* ---------- Header ---------- */
+
+.xps-jvc-header {
+    position: relative;
+    padding: 26px 28px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(201, 169, 106, 0.18);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(99, 102, 241, 0.12), transparent 32%),
+        radial-gradient(circle at 10% 100%, rgba(20, 184, 166, 0.08), transparent 34%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(8, 13, 27, 0.96));
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.xps-jvc-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+
+.xps-jvc-header-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.xps-jvc-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 12px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(201,169,106,0.28);
+    border-radius: 999px;
+    background: rgba(201,169,106,0.09);
+    color: var(--gold-bright);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.xps-jvc-eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold-bright);
+    box-shadow: 0 0 12px rgba(201,169,106,0.75);
+    animation: xps-jvc-pulse 2s ease-in-out infinite;
+}
+
+.xps-jvc-title {
+    margin: 0;
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.xps-jvc-title span {
+    background: linear-gradient(
+        90deg,
+        var(--gold-bright),
+        #f6e7b0,
+        #8be9de,
+        #a5b4fc
+    );
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: xps-jvc-gradient 7s linear infinite;
+}
+
+.xps-jvc-subtitle {
+    max-width: 900px;
+    margin: 11px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
+}
+
+/* ---------- Trust Strip ---------- */
+
+.xps-jvc-trust {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.xps-jvc-trust-item {
+    position: relative;
+    padding: 13px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+    background: rgba(15, 23, 42, 0.58);
+    overflow: hidden;
+}
+
+.xps-jvc-trust-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 38%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent-teal), transparent);
+}
+
+.xps-jvc-trust-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.xps-jvc-trust-value {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.xps-jvc-status-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16,185,129,0.65);
+}
+
+/* ---------- Section Card ---------- */
+
+.xps-jvc-card {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 22px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    background:
+        linear-gradient(145deg, rgba(15,23,42,0.82), rgba(8,13,27,0.9));
+    box-shadow:
+        0 16px 45px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+}
+
+.xps-jvc-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 90px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-bright), transparent);
+}
+
+.xps-jvc-section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.xps-jvc-section-title {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin: 0;
+    color: var(--gold-bright);
+    font-size: 1.02rem;
+    font-weight: 800;
+}
+
+.xps-jvc-section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(201,169,106,0.32);
+    border-radius: 9px;
+    background: rgba(201,169,106,0.09);
+    color: var(--gold-bright);
+    font-family: monospace;
+    font-size: 0.72rem;
+}
+
+.xps-jvc-section-description {
+    margin: 4px 0 0 39px;
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+}
+
+/* ---------- Evidence Matrix ---------- */
+
+.xps-jvc-table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(255,255,255,0.045);
+    border-radius: 13px;
+}
+
+.xps-jvc-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+}
+
+.xps-jvc-table th {
+    padding: 12px 15px;
+    background: rgba(255,255,255,0.025);
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.xps-jvc-table td {
+    padding: 15px;
+    border-top: 1px solid rgba(255,255,255,0.045);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    vertical-align: middle;
+}
+
+.xps-jvc-table tbody tr {
+    transition:
+        background 180ms ease,
+        transform 180ms ease;
+}
+
+.xps-jvc-table tbody tr:hover {
+    background: rgba(255,255,255,0.018);
+}
+
+.xps-jvc-component {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-jvc-component-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border: 1px solid rgba(99,102,241,0.18);
+    border-radius: 10px;
+    background: rgba(99,102,241,0.08);
+    color: #a5b4fc;
+    font-size: 0.78rem;
+}
+
+.xps-jvc-component-name {
+    font-weight: 700;
+}
+
+.xps-jvc-component-type {
+    margin-top: 2px;
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.66rem;
+}
+
+.xps-jvc-real {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 9px;
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 999px;
+    background: rgba(16,185,129,0.08);
+    color: #34d399;
+    font-family: monospace;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+.xps-jvc-real-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16,185,129,0.7);
+}
+
+.xps-jvc-evidence {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.xps-jvc-evidence code {
+    padding: 4px 7px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    background: rgba(0,0,0,0.25);
+    color: #cbd5e1;
+    font-family: monospace;
+    font-size: 0.68rem;
+}
+
+.xps-jvc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent-teal);
+    font-family: monospace;
+    font-size: 0.72rem;
+    text-decoration: none;
+    transition: color 160ms ease;
+}
+
+.xps-jvc-link:hover {
+    color: #67e8f9;
+}
+
+/* ---------- Verification Checklist ---------- */
+
+.xps-jvc-checklist {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.xps-jvc-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 58px;
+    padding: 11px 13px;
+    border: 1px solid rgba(255,255,255,0.055);
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,0,0,0.28),
+            rgba(15,23,42,0.42)
+        );
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background 180ms ease;
+}
+
+.xps-jvc-step:hover {
+    transform: translateY(-2px);
+    border-color: rgba(99,102,241,0.25);
+    background: rgba(30,41,59,0.48);
+}
+
+.xps-jvc-step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    flex: 0 0 31px;
+    border: 1px solid rgba(99,102,241,0.22);
+    border-radius: 9px;
+    background: rgba(99,102,241,0.08);
+    color: #a5b4fc;
+    font-family: monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+.xps-jvc-step-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    border: 1px solid rgba(16,185,129,0.35);
+    border-radius: 50%;
+    background: rgba(16,185,129,0.09);
+    color: #34d399;
+    font-size: 0.62rem;
+}
+
+.xps-jvc-step-content {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 0.79rem;
+    line-height: 1.4;
+}
+
+.xps-jvc-step-content strong {
+    color: #e2e8f0;
+}
+
+.xps-jvc-step-meta {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.62rem;
+}
+
+/* ---------- Verification Footer ---------- */
+
+.xps-jvc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 17px;
+    border: 1px solid rgba(20,184,166,0.14);
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            100deg,
+            rgba(20,184,166,0.055),
+            rgba(99,102,241,0.045)
+        );
+}
+
+.xps-jvc-footer-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.xps-jvc-footer-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(20,184,166,0.09);
+    border: 1px solid rgba(20,184,166,0.18);
+    color: #5eead4;
+}
+
+.xps-jvc-footer-title {
+    font-size: 0.79rem;
+    font-weight: 700;
+}
+
+.xps-jvc-footer-subtitle {
+    margin-top: 2px;
+    color: var(--text-secondary);
+    font-family: monospace;
+    font-size: 0.63rem;
+}
+
+.xps-jvc-footer-badge {
+    padding: 6px 10px;
+    border: 1px solid rgba(201,169,106,0.22);
+    border-radius: 999px;
+    background: rgba(201,169,106,0.07);
+    color: var(--gold-bright);
+    font-family: monospace;
+    font-size: 0.64rem;
+    white-space: nowrap;
+}
+
+/* ---------- Animations ---------- */
+
+@keyframes xps-jvc-pulse {
+    0%, 100% {
+        opacity: 0.55;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+}
+
+@keyframes xps-jvc-gradient {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 220% center;
+    }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    .xps-jvc-trust {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .xps-jvc-checklist {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .xps-jvc-header,
+    .xps-jvc-card {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .xps-jvc-title {
+        font-size: 1.55rem;
+    }
+
+    .xps-jvc-trust {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-jvc-section-head {
+        display: block;
+    }
+
+    .xps-jvc-section-description {
+        margin-left: 0;
+        margin-top: 8px;
+    }
+
+    .xps-jvc-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .xps-jvc-eyebrow-dot,
+    .xps-jvc-title span {
+        animation: none;
+    }
+
+    .xps-jvc-step,
+    .xps-jvc-table tbody tr {
+        transition: none;
+    }
+}
+</style>
+
+<div class="xps-jvc">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+    <section class="xps-jvc-header">
+        <div class="xps-jvc-header-inner">
+
+            <div class="xps-jvc-eyebrow">
+                <span class="xps-jvc-eyebrow-dot"></span>
+                Flare Hackathon · Independent Verification
+            </div>
+
+            <h2 class="xps-jvc-title">
+                Hackathon Judge <span>Evaluation Center</span>
+            </h2>
+
+            <p class="xps-jvc-subtitle">
+                Independently verify the XRPShield execution path across
+                Flare Coston2, FTSOv2 data, Confidential Compute authorization,
+                DEX routing, and final on-chain settlement evidence.
+            </p>
+
+        </div>
+    </section>
+
+
+    <!-- =====================================================
+         TRUST / NETWORK STRIP
+         ===================================================== -->
+    <div class="xps-jvc-trust">
+
+        <div class="xps-jvc-trust-item">
+            <span class="xps-jvc-trust-label">Network</span>
+            <div class="xps-jvc-trust-value">
+                <span class="xps-jvc-status-dot"></span>
+                Flare Coston2
+            </div>
+        </div>
+
+        <div class="xps-jvc-trust-item">
+            <span class="xps-jvc-trust-label">Chain ID</span>
+            <div class="xps-jvc-trust-value">
+                114
+            </div>
+        </div>
+
+        <div class="xps-jvc-trust-item">
+            <span class="xps-jvc-trust-label">Evidence Model</span>
+            <div class="xps-jvc-trust-value">
+                On-Chain + RPC
+            </div>
+        </div>
+
+        <div class="xps-jvc-trust-item">
+            <span class="xps-jvc-trust-label">Execution Gate</span>
+            <div class="xps-jvc-trust-value">
+                FCC Authorization
+            </div>
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         01 — INFRASTRUCTURE AUDIT MATRIX
+         ===================================================== -->
+    <section class="xps-jvc-card">
+
+        <div class="xps-jvc-section-head">
+            <div>
+                <h3 class="xps-jvc-section-title">
+                    <span class="xps-jvc-section-number">01</span>
+                    System Real Infrastructure Audit Matrix
+                </h3>
+
+                <p class="xps-jvc-section-description">
+                    Judge-facing evidence map for independently checking deployed
+                    contracts, data sources, FCC configuration, routing, and settlement.
+                </p>
+            </div>
+        </div>
+
+        <div class="xps-jvc-table-wrap">
+            <table class="xps-jvc-table">
+
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>State</th>
+                        <th>Independent Evidence</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <!-- Coston2 Contract -->
+                    <tr>
+                        <td>
+                            <div class="xps-jvc-component">
+                                <div class="xps-jvc-component-icon">01</div>
+                                <div>
+                                    <div class="xps-jvc-component-name">
+                                        Coston2 EVM Contract
+                                    </div>
+                                    <div class="xps-jvc-component-type">
+                                        XRPShieldVault.sol
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="xps-jvc-real">
+                                <span class="xps-jvc-real-dot"></span>
+                                DEPLOYED
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="xps-jvc-evidence">
+                                <a
+                                    class="xps-jvc-link"
+                                    href="https://coston2-explorer.flare.network/address/0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    0xb7902ebd... ↗
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <!-- FTSOv2 -->
+                    <tr>
+                        <td>
+                            <div class="xps-jvc-component">
+                                <div class="xps-jvc-component-icon">02</div>
+                                <div>
+                                    <div class="xps-jvc-component-name">
+                                        Flare FTSOv2 Price Feed
+                                    </div>
+                                    <div class="xps-jvc-component-type">
+                                        XRP / USD oracle data
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="xps-jvc-real">
+                                <span class="xps-jvc-real-dot"></span>
+                                LIVE DATA
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="xps-jvc-evidence">
+                                <code>FTSOv2</code>
+                                <span>Real-time XRP/USD feed</span>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <!-- FCC -->
+                    <tr>
+                        <td>
+                            <div class="xps-jvc-component">
+                                <div class="xps-jvc-component-icon">03</div>
+                                <div>
+                                    <div class="xps-jvc-component-name">
+                                        Flare Confidential Compute
+                                    </div>
+                                    <div class="xps-jvc-component-type">
+                                        XRPShield FCC extension
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="xps-jvc-real">
+                                <span class="xps-jvc-real-dot"></span>
+                                REGISTERED
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="xps-jvc-evidence">
+                                <code>0x585250...001</code>
+                                <span>FCC authorization / ActionResult path</span>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <!-- DEX -->
+                    <tr>
+                        <td>
+                            <div class="xps-jvc-component">
+                                <div class="xps-jvc-component-icon">04</div>
+                                <div>
+                                    <div class="xps-jvc-component-name">
+                                        SparkDEX Router V2
+                                    </div>
+                                    <div class="xps-jvc-component-type">
+                                        FXRP → USDT0 routing
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="xps-jvc-real">
+                                <span class="xps-jvc-real-dot"></span>
+                                DEPLOYED
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="xps-jvc-evidence">
+                                <a
+                                    class="xps-jvc-link"
+                                    href="https://coston2-explorer.flare.network/address/0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    0x600109D9... ↗
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <!-- Swap -->
+                    <tr>
+                        <td>
+                            <div class="xps-jvc-component">
+                                <div class="xps-jvc-component-icon">05</div>
+                                <div>
+                                    <div class="xps-jvc-component-name">
+                                        Swap Execution Receipt
+                                    </div>
+                                    <div class="xps-jvc-component-type">
+                                        FXRP → USDT0 settlement
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="xps-jvc-real">
+                                <span class="xps-jvc-real-dot"></span>
+                                CONFIRMED
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="xps-jvc-evidence">
+                                <a
+                                    class="xps-jvc-link"
+                                    href="https://coston2-explorer.flare.network/tx/0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Tx 0x3fe85c16... ↗
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <!-- =====================================================
+         02 — 15 STEP CHECKLIST
+         ===================================================== -->
+    <section class="xps-jvc-card">
+
+        <div class="xps-jvc-section-head">
+            <div>
+                <h3 class="xps-jvc-section-title">
+                    <span class="xps-jvc-section-number">02</span>
+                    Independent Verification Checklist
+                </h3>
+
+                <p class="xps-jvc-section-description">
+                    Follow the execution lifecycle from wallet connection to
+                    independently verified settlement evidence.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="xps-jvc-checklist">
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">01</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Open SPA Dashboard
+                    <span class="xps-jvc-step-meta">Application entry point</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">02</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Connect MetaMask
+                    <span class="xps-jvc-step-meta">Coston2 · Chain ID 114</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">03</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Read Real FXRP Balance
+                    <span class="xps-jvc-step-meta">Wallet / vault state</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">04</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Inspect Treasury Vault
+                    <span class="xps-jvc-step-meta">On-chain vault state</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">05</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Create Policy Commitment
+                    <span class="xps-jvc-step-meta">Confidential policy path</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">06</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Read FTSOv2 XRP/USD Feed
+                    <span class="xps-jvc-step-meta">Flare oracle data</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">07</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Request FCC Evaluation
+                    <span class="xps-jvc-step-meta">Confidential evaluation request</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">08</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Receive ActionResult
+                    <span class="xps-jvc-step-meta">Signed FCC result</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">09</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Verify Authorization
+                    <span class="xps-jvc-step-meta">Execution gate validation</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">10</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Authorize State Transition
+                    <span class="xps-jvc-step-meta">Policy → execution state</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">11</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Calculate DEX Minimum Output
+                    <span class="xps-jvc-step-meta">Quote + slippage protection</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">12</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Execute FXRP → USDT0
+                    <span class="xps-jvc-step-meta">Real DEX transaction</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">13</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Confirm Block Receipt
+                    <span class="xps-jvc-step-meta">Transaction receipt status</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">14</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Verify Token Custody Movement
+                    <span class="xps-jvc-step-meta">FXRP / USDT0 balance delta</span>
+                </div>
+            </div>
+
+            <div class="xps-jvc-step">
+                <div class="xps-jvc-step-number">15</div>
+                <div class="xps-jvc-step-check">✓</div>
+                <div class="xps-jvc-step-content">
+                    Inspect Privacy Proof & Explorer
+                    <span class="xps-jvc-step-meta">Independent verification endpoint</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =====================================================
+         VERIFICATION FOOTER
+         ===================================================== -->
+    <div class="xps-jvc-footer">
+
+        <div class="xps-jvc-footer-main">
+
+            <div class="xps-jvc-footer-icon">
+                ✓
+            </div>
+
+            <div>
+                <div class="xps-jvc-footer-title">
+                    Evidence is independently inspectable
+                </div>
+
+                <div class="xps-jvc-footer-subtitle">
+                    Coston2 RPC · Explorer receipts · Contract state · FCC authorization path
+                </div>
+            </div>
+
+        </div>
+
+        <div class="xps-jvc-footer-badge">
+            JUDGE VERIFICATION MODE
+        </div>
+
+    </div>
+
 </div>

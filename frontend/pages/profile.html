@@ -1,38 +1,848 @@
-<div style="margin-bottom: 24px;">
-    <h2 style="font-size: 1.8rem; font-weight: 700;">Account Profile & Security</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Identity settings, role authorizations, and connected wallets</p>
-</div>
+<style>
+/* =========================================================
+   XRPShield — Account Profile & Security
+   ========================================================= */
 
-<div class="grid-cards">
-    <div class="card" style="grid-column: span 2;">
-        <h3 style="margin-bottom: 16px;">User Details</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div>
-                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">User ID</span>
-                <code id="prof-id" style="font-size: 0.9rem;">-</code>
-            </div>
-            <div>
-                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">Email</span>
-                <strong id="prof-email" style="font-size: 1rem;">-</strong>
-            </div>
-            <div>
-                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">Role</span>
-                <span class="badge" id="prof-role">ROLE_USER</span>
-            </div>
-            <div>
-                <span style="color: var(--text-secondary); font-size: 0.85rem; display: block;">Linked Wallet</span>
-                <code id="prof-wallet" style="font-size: 0.85rem; color: var(--primary-cyan);">-</code>
-            </div>
+.xps-profile-page {
+    position: relative;
+    isolation: isolate;
+    padding-bottom: 35px;
+}
+
+.xps-profile-page::before {
+    content: "";
+    position: absolute;
+    top: -160px;
+    right: -180px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(0,242,254,0.10),
+        transparent 68%
+    );
+    filter: blur(35px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.xps-profile-header {
+    margin-bottom: 24px;
+}
+
+.xps-profile-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 5px 11px;
+    margin-bottom: 12px;
+
+    border-radius: 999px;
+
+    background: rgba(0,242,254,0.07);
+    border: 1px solid rgba(0,242,254,0.18);
+
+    color: var(--primary-cyan);
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.xps-profile-eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    background: var(--primary-cyan);
+    box-shadow: 0 0 10px rgba(0,242,254,0.8);
+}
+
+.xps-profile-title {
+    margin: 0 0 7px;
+
+    font-size: clamp(1.55rem, 3vw, 1.95rem);
+    line-height: 1.15;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+
+    background: linear-gradient(
+        90deg,
+        #fff,
+        #d8fbff 55%,
+        var(--primary-cyan)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.xps-profile-subtitle {
+    margin: 0;
+
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.xps-profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 20px;
+}
+
+
+/* =========================================================
+   GLASS CARDS
+   ========================================================= */
+
+.xps-profile-card {
+    position: relative;
+    overflow: hidden;
+
+    padding: 24px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,20,34,0.88),
+            rgba(7,12,22,0.82)
+        );
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.20),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.xps-profile-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(0,242,254,0.18);
+
+    box-shadow:
+        0 24px 60px rgba(0,0,0,0.26),
+        0 0 30px rgba(0,242,254,0.035);
+}
+
+
+/* =========================================================
+   USER DETAILS
+   ========================================================= */
+
+.xps-profile-details {
+    grid-row: span 2;
+}
+
+.xps-profile-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.xps-profile-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.xps-profile-icon {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    background: rgba(0,242,254,0.08);
+    border: 1px solid rgba(0,242,254,0.16);
+
+    color: var(--primary-cyan);
+    font-size: 1rem;
+}
+
+.xps-profile-card-heading h3 {
+    margin: 0;
+
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.xps-profile-card-heading span {
+    display: block;
+    margin-top: 2px;
+
+    color: var(--text-muted);
+    font-size: 0.68rem;
+}
+
+
+/* =========================================================
+   PROFILE FIELDS
+   ========================================================= */
+
+.xps-profile-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.xps-profile-field {
+    min-width: 0;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,0.025);
+
+    border: 1px solid rgba(255,255,255,0.05);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.xps-profile-field:hover {
+    background: rgba(255,255,255,0.035);
+    border-color: rgba(0,242,254,0.12);
+}
+
+.xps-profile-field-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-bottom: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.69rem;
+    font-weight: 750;
+
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
+}
+
+.xps-profile-field-value {
+    display: block;
+
+    min-height: 21px;
+
+    color: var(--text-primary);
+
+    font-size: 0.9rem;
+    font-weight: 650;
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.xps-profile-field-value code {
+    color: var(--primary-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+}
+
+
+/* =========================================================
+   ROLE BADGE
+   ========================================================= */
+
+.xps-profile-role {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+
+    padding: 5px 9px !important;
+
+    border-radius: 7px;
+
+    background: rgba(124,92,255,0.09);
+    border: 1px solid rgba(124,92,255,0.18);
+
+    color: #bcaeff;
+
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 0.04em;
+}
+
+
+/* =========================================================
+   SESSION CARD
+   ========================================================= */
+
+.xps-session-card {
+    border-color: rgba(16,185,129,0.16);
+}
+
+.xps-session-card:hover {
+    border-color: rgba(16,185,129,0.30);
+}
+
+.xps-session-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 16px;
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: rgba(16,185,129,0.055);
+    border: 1px solid rgba(16,185,129,0.11);
+}
+
+.xps-session-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--accent-emerald);
+    box-shadow: 0 0 12px rgba(16,185,129,0.8);
+
+    animation: xps-session-pulse 2s infinite;
+}
+
+.xps-session-status-label {
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+}
+
+.xps-session-status-value {
+    margin-top: 2px;
+
+    color: var(--accent-emerald);
+
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.xps-logout-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border-radius: 10px;
+
+    background: rgba(255,94,98,0.07);
+    border: 1px solid rgba(255,94,98,0.20);
+
+    color: var(--accent-flare);
+
+    font-size: 0.78rem;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.xps-logout-btn:hover {
+    background: rgba(255,94,98,0.13);
+    border-color: rgba(255,94,98,0.38);
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SECURITY SUMMARY
+   ========================================================= */
+
+.xps-security-card {
+    min-height: 0;
+}
+
+.xps-security-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.xps-security-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,0.025);
+
+    color: var(--text-secondary);
+
+    font-size: 0.73rem;
+}
+
+.xps-security-check {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 7px;
+
+    background: rgba(16,185,129,0.09);
+    border: 1px solid rgba(16,185,129,0.15);
+
+    color: var(--accent-emerald);
+
+    font-size: 0.68rem;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   FOOTER TRUST STRIP
+   ========================================================= */
+
+.xps-profile-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+
+    margin-top: 18px;
+    padding: 13px 16px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,0.018);
+    border: 1px solid rgba(255,255,255,0.05);
+
+    color: var(--text-muted);
+
+    font-size: 0.68rem;
+}
+
+.xps-profile-trust span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.xps-profile-trust strong {
+    color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes xps-session-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.82);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .xps-profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-profile-details {
+        grid-row: auto;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .xps-profile-card {
+        padding: 18px;
+        border-radius: 15px;
+    }
+
+    .xps-profile-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-profile-card-header {
+        align-items: flex-start;
+    }
+
+    .xps-profile-trust {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .xps-profile-page *,
+    .xps-profile-page *::before,
+    .xps-profile-page *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .xps-profile-card:hover,
+    .xps-logout-btn:hover {
+        transform: none;
+    }
+}
+</style>
+
+
+<div class="xps-profile-page animate-fade-in">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="xps-profile-header">
+
+        <div class="xps-profile-eyebrow">
+            <span class="xps-profile-eyebrow-dot"></span>
+            Identity & Access Control
         </div>
+
+        <h2 class="xps-profile-title">
+            Account Profile & Security
+        </h2>
+
+        <p class="xps-profile-subtitle">
+            Identity settings, role authorizations, connected wallets,
+            and active authentication state.
+        </p>
+
     </div>
-    <div class="card">
-        <h3 style="margin-bottom: 12px;">Active Session</h3>
-        <div style="margin-bottom: 12px;">
-            <span style="color: var(--text-secondary); font-size: 0.85rem;">Token Status</span>
-            <div style="font-weight: 600; color: var(--accent-emerald);">JWT Authenticated</div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <div class="xps-profile-grid">
+
+
+        <!-- =================================================
+             USER DETAILS
+             ================================================= -->
+
+        <div class="xps-profile-card xps-profile-details">
+
+            <div class="xps-profile-card-header">
+
+                <div class="xps-profile-card-heading">
+
+                    <div class="xps-profile-icon">
+                        ◉
+                    </div>
+
+                    <div>
+                        <h3>User Details</h3>
+
+                        <span>
+                            Registered identity information
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="xps-profile-fields">
+
+
+                <!-- User ID -->
+
+                <div class="xps-profile-field">
+
+                    <div class="xps-profile-field-label">
+                        <span>◆</span>
+                        User ID
+                    </div>
+
+                    <span
+                        id="prof-id"
+                        class="xps-profile-field-value"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="xps-profile-field">
+
+                    <div class="xps-profile-field-label">
+                        <span>✉</span>
+                        Email
+                    </div>
+
+                    <strong
+                        id="prof-email"
+                        class="xps-profile-field-value"
+                    >
+                        -
+                    </strong>
+
+                </div>
+
+
+                <!-- Role -->
+
+                <div class="xps-profile-field">
+
+                    <div class="xps-profile-field-label">
+                        <span>◇</span>
+                        Authorization Role
+                    </div>
+
+                    <span
+                        class="badge xps-profile-role"
+                        id="prof-role"
+                    >
+                        ROLE_USER
+                    </span>
+
+                </div>
+
+
+                <!-- Wallet -->
+
+                <div class="xps-profile-field">
+
+                    <div class="xps-profile-field-label">
+                        <span>◈</span>
+                        Linked Wallet
+                    </div>
+
+                    <code
+                        id="prof-wallet"
+                        class="xps-profile-field-value"
+                    >
+                        -
+                    </code>
+
+                </div>
+
+            </div>
+
         </div>
-        <button onclick="window.AuthManager.logout()" style="background: rgba(255, 94, 98, 0.1); color: var(--accent-flare); border: 1px solid rgba(255, 94, 98, 0.3); padding: 8px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">
-            Log Out Session
-        </button>
+
+
+        <!-- =================================================
+             ACTIVE SESSION
+             ================================================= -->
+
+        <div class="xps-profile-card xps-session-card">
+
+            <div class="xps-profile-card-header">
+
+                <div class="xps-profile-card-heading">
+
+                    <div class="xps-profile-icon">
+                        🔐
+                    </div>
+
+                    <div>
+                        <h3>Active Session</h3>
+
+                        <span>
+                            Current authentication state
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="xps-session-status">
+
+                <span class="xps-session-dot"></span>
+
+                <div>
+
+                    <div class="xps-session-status-label">
+                        Token Status
+                    </div>
+
+                    <div class="xps-session-status-value">
+                        JWT Authenticated
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                onclick="window.AuthManager.logout()"
+                class="xps-logout-btn"
+            >
+                <span>↪</span>
+                Log Out Session
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             SECURITY SUMMARY
+             ================================================= -->
+
+        <div class="xps-profile-card xps-security-card">
+
+            <div class="xps-profile-card-header">
+
+                <div class="xps-profile-card-heading">
+
+                    <div class="xps-profile-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <h3>Security Overview</h3>
+
+                        <span>
+                            Current account protection
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="xps-security-items">
+
+                <div class="xps-security-item">
+
+                    <span class="xps-security-check">
+                        ✓
+                    </span>
+
+                    <span>
+                        Authenticated session active
+                    </span>
+
+                </div>
+
+                <div class="xps-security-item">
+
+                    <span class="xps-security-check">
+                        ✓
+                    </span>
+
+                    <span>
+                        Role-based access enabled
+                    </span>
+
+                </div>
+
+                <div class="xps-security-item">
+
+                    <span class="xps-security-check">
+                        ✓
+                    </span>
+
+                    <span>
+                        Wallet identity available
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         TRUST STRIP
+         ===================================================== -->
+
+    <div class="xps-profile-trust">
+
+        <span>
+            <strong>Identity</strong>
+            Application Account
+        </span>
+
+        <span>
+            <strong>Session</strong>
+            JWT Authentication
+        </span>
+
+        <span>
+            <strong>Authorization</strong>
+            Role Based
+        </span>
+
+        <span>
+            <strong>Wallet</strong>
+            Web3 Linked
+        </span>
+
+    </div>
+
 </div>

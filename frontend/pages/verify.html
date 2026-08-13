@@ -1,68 +1,733 @@
-<div style="margin-bottom: 24px;">
-    <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(73,210,143,0.14); color:var(--jade); font-family:monospace; font-size:0.75rem; padding:4px 10px; border-radius:20px; margin-bottom:12px;">
+<style>
+/* =========================================================
+   XRPShield — Independent Zero-Trust Verification Console
+   Drop-in redesign — preserves:
+   #verifyTxHashInput
+   #verificationResultContainer
+   window.runIndependentVerification()
+   ========================================================= */
+
+.xps-proof-wrap {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28px;
+}
+
+.xps-proof-wrap::before {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: -180px;
+    right: -100px;
+    background: radial-gradient(
+        circle,
+        rgba(34, 211, 238, 0.10),
+        transparent 68%
+    );
+    pointer-events: none;
+}
+
+.xps-proof-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    background: rgba(73, 210, 143, 0.10);
+    border: 1px solid rgba(73, 210, 143, 0.24);
+    color: var(--jade, #49d28f);
+    font-family: monospace;
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.xps-proof-eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--jade, #49d28f);
+    box-shadow: 0 0 12px rgba(73, 210, 143, 0.75);
+}
+
+.xps-proof-title {
+    margin: 0;
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    background: linear-gradient(
+        110deg,
+        #ffffff 0%,
+        #dbeafe 42%,
+        #67e8f9 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.xps-proof-subtitle {
+    max-width: 760px;
+    margin: 10px 0 0;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 0.93rem;
+    line-height: 1.65;
+}
+
+/* Network strip */
+
+.xps-proof-network {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.xps-proof-network-item {
+    padding: 12px 14px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(15, 23, 42, 0.48);
+    border-radius: 12px;
+}
+
+.xps-proof-network-label {
+    display: block;
+    margin-bottom: 4px;
+    color: #64748b;
+    font-size: 0.65rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.xps-proof-network-value {
+    color: #dbeafe;
+    font-family: monospace;
+    font-size: 0.78rem;
+}
+
+/* Main verifier */
+
+.xps-proof-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(71, 85, 105, 0.42);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.86),
+            rgba(2, 6, 23, 0.78)
+        );
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.xps-proof-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            120deg,
+            rgba(34, 211, 238, 0.025),
+            transparent 35%,
+            rgba(139, 92, 246, 0.025)
+        );
+}
+
+.xps-proof-card-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.xps-proof-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+}
+
+.xps-proof-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    color: #67e8f9;
+    border: 1px solid rgba(34, 211, 238, 0.20);
+    background: rgba(34, 211, 238, 0.07);
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.06);
+    font-size: 1.05rem;
+}
+
+.xps-proof-heading h3 {
+    margin: 0 0 4px;
+    color: #f8fafc;
+    font-size: 1rem;
+    font-weight: 750;
+}
+
+.xps-proof-heading p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.76rem;
+}
+
+/* Input */
+
+.xps-proof-input-label {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-bottom: 8px;
+    color: #94a3b8;
+    font-family: monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.xps-proof-input-shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 10px;
+}
+
+#verifyTxHashInput {
+    min-width: 0;
+    flex: 1;
+    box-sizing: border-box;
+    padding: 13px 15px;
+    border-radius: 10px;
+    outline: none;
+    border: 1px solid rgba(71, 85, 105, 0.55);
+    background: rgba(2, 6, 23, 0.78);
+    color: #e2e8f0;
+    font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.79rem;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+#verifyTxHashInput:focus {
+    border-color: rgba(34, 211, 238, 0.60);
+    background: rgba(2, 6, 23, 0.94);
+    box-shadow:
+        0 0 0 3px rgba(34, 211, 238, 0.08),
+        0 0 25px rgba(34, 211, 238, 0.05);
+}
+
+#verifyTxHashInput::placeholder {
+    color: #475569;
+}
+
+.xps-proof-action {
+    position: relative;
+    z-index: 1;
+    margin-top: 13px;
+}
+
+.xps-proof-action .btn {
+    border-radius: 10px;
+    padding: 11px 18px !important;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+/* Result */
+
+#verificationResultContainer {
+    position: relative;
+    overflow: hidden;
+    padding: 0 !important;
+    border-radius: 16px;
+    background: rgba(2, 6, 23, 0.72) !important;
+    border: 1px solid rgba(71, 85, 105, 0.35) !important;
+}
+
+.xps-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.28);
+}
+
+.xps-result-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.xps-result-title h3 {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 0.86rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+}
+
+.xps-result-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: #94a3b8;
+    background: rgba(100, 116, 139, 0.09);
+    border: 1px solid rgba(100, 116, 139, 0.18);
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.xps-result-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #64748b;
+}
+
+.xps-result-status.verified {
+    color: #86efac;
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.22);
+}
+
+.xps-result-status.verified::before {
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16,185,129,0.7);
+}
+
+.xps-result-status.failed {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.20);
+}
+
+.xps-result-status.failed::before {
+    background: #ef4444;
+}
+
+.xps-result-body {
+    padding: 20px 22px;
+}
+
+/* Verification matrix */
+
+.xps-verification-table-wrap {
+    overflow-x: auto;
+}
+
+.xps-verification-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 680px;
+}
+
+.xps-verification-table th {
+    padding: 11px 12px;
+    text-align: left;
+    color: #475569;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.25);
+    font-family: monospace;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.xps-verification-table td {
+    padding: 14px 12px;
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.14);
+    font-size: 0.76rem;
+    vertical-align: middle;
+}
+
+.xps-verification-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.xps-verification-table td:first-child {
+    width: 28%;
+    color: #cbd5e1;
+    font-weight: 650;
+}
+
+.xps-verification-table code {
+    padding: 3px 6px;
+    border-radius: 5px;
+    color: #a5f3fc;
+    background: rgba(34, 211, 238, 0.055);
+    font-family: monospace;
+    font-size: 0.68rem;
+}
+
+.xps-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #94a3b8;
+    background: rgba(100,116,139,0.07);
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+}
+
+.xps-check::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #64748b;
+}
+
+.xps-proof-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 22px;
+    color: #475569;
+    border-top: 1px solid rgba(71, 85, 105, 0.20);
+    font-family: monospace;
+    font-size: 0.63rem;
+}
+
+.xps-proof-footer strong {
+    color: #64748b;
+}
+
+@media (max-width: 760px) {
+    .xps-proof-network {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .xps-proof-card {
+        padding: 18px;
+    }
+
+    .xps-proof-input-shell {
+        flex-direction: column;
+    }
+
+    .xps-result-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .xps-proof-network {
+        grid-template-columns: 1fr;
+    }
+
+    .xps-proof-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<div class="xps-proof-wrap">
+
+    <div class="xps-proof-eyebrow">
         INDEPENDENT ZERO-TRUST PROOF VERIFIER
     </div>
-    <h2 style="font-size: 1.8rem; font-weight: 700;">Public Execution Verification Hub</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Paste any Coston2 transaction hash or execution proof JSON to verify settlement directly against EVM RPC</p>
+
+    <h2 class="xps-proof-title">
+        Public Execution Verification Hub
+    </h2>
+
+    <p class="xps-proof-subtitle">
+        Verify transaction receipts and execution evidence directly against
+        the Flare Coston2 EVM RPC. No frontend trust required. No synthetic
+        confirmation state.
+    </p>
+
+    <div class="xps-proof-network">
+
+        <div class="xps-proof-network-item">
+            <span class="xps-proof-network-label">Network</span>
+            <span class="xps-proof-network-value">Flare Coston2</span>
+        </div>
+
+        <div class="xps-proof-network-item">
+            <span class="xps-proof-network-label">Chain ID</span>
+            <span class="xps-proof-network-value">114</span>
+        </div>
+
+        <div class="xps-proof-network-item">
+            <span class="xps-proof-network-label">Verification Source</span>
+            <span class="xps-proof-network-value">EVM RPC</span>
+        </div>
+
+        <div class="xps-proof-network-item">
+            <span class="xps-proof-network-label">Trust Model</span>
+            <span class="xps-proof-network-value">Zero-Trust</span>
+        </div>
+
+    </div>
 </div>
 
-<!-- INPUT CARD -->
-<div class="card" style="padding: 24px; margin-bottom: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
-    <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--gold-bright); margin-bottom: 14px;">Verify On-Chain Transaction Receipt</h3>
-    
-    <div style="margin-bottom: 16px;">
-        <label style="display:block; font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">Coston2 Transaction Hash or Execution Proof JSON:</label>
-        <input type="text" id="verifyTxHashInput" value="0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3" style="width:100%; padding:12px; background:rgba(0,0,0,0.4); border:1px solid var(--border-color); border-radius:8px; color:#fff; font-family:monospace; font-size:0.9rem;" />
+
+<!-- =========================================================
+     INPUT CARD
+     ========================================================= -->
+
+<div class="xps-proof-card">
+
+    <div class="xps-proof-card-header">
+
+        <div class="xps-proof-heading">
+
+            <div class="xps-proof-icon">
+                ⛓
+            </div>
+
+            <div>
+                <h3>Verify On-Chain Execution</h3>
+
+                <p>
+                    Submit a transaction hash or supported execution proof
+                    for independent verification.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="xps-result-status">
+            AWAITING INPUT
+        </div>
+
     </div>
 
-    <button onclick="window.runIndependentVerification()" class="btn btn-primary" style="padding:10px 24px;">
-        🔍 Verify Directly On Coston2 RPC
-    </button>
+
+    <label
+        class="xps-proof-input-label"
+        for="verifyTxHashInput"
+    >
+        Coston2 Transaction Hash / Execution Proof
+    </label>
+
+    <div class="xps-proof-input-shell">
+
+        <input
+            type="text"
+            id="verifyTxHashInput"
+            placeholder="0x..."
+            autocomplete="off"
+            spellcheck="false"
+        />
+
+    </div>
+
+    <div class="xps-proof-action">
+
+        <button
+            onclick="window.runIndependentVerification()"
+            class="btn btn-primary"
+            type="button"
+        >
+            🔍 Verify Directly On Coston2 RPC
+        </button>
+
+    </div>
+
 </div>
 
-<!-- VERIFICATION OUTPUT -->
-<div id="verificationResultContainer" class="card" style="padding: 24px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
-    <h3 style="font-size: 1.1rem; font-weight: 700; color: #10b981; margin-bottom: 14px;">STATUS: VERIFIED ON-CHAIN ✅</h3>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Verification Invariant</th>
-                <th>Check Result</th>
-                <th>RPC Evidence</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Chain ID Verification</strong></td>
-                <td><span style="color:#10b981;">VALID</span></td>
-                <td>Chain ID <code>114</code> (Flare Coston2 Testnet)</td>
-            </tr>
-            <tr>
-                <td><strong>Vault Contract Instance</strong></td>
-                <td><span style="color:#10b981;">VALID</span></td>
-                <td><code>0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9</code></td>
-            </tr>
-            <tr>
-                <td><strong>EIP-712 Attestation Signature</strong></td>
-                <td><span style="color:#10b981;">VALID</span></td>
-                <td>Recovered Signer <code>0x70997970...</code></td>
-            </tr>
-            <tr>
-                <td><strong>Slippage & Output Cap</strong></td>
-                <td><span style="color:#10b981;">VALID</span></td>
-                <td>Output <code>8.4575 USDT0</code> &ge; Min <code>8.415212 USDT0</code></td>
-            </tr>
-            <tr>
-                <td><strong>Block Receipt Confirmation</strong></td>
-                <td><span style="color:#10b981;">VALID</span></td>
-                <td>Block <code>#33973480</code> (Receipt Status <code>1</code>)</td>
-            </tr>
-        </tbody>
-    </table>
+
+<!-- =========================================================
+     VERIFICATION OUTPUT
+     ========================================================= -->
+
+<div
+    id="verificationResultContainer"
+    class="card"
+>
+
+    <div class="xps-result-header">
+
+        <div class="xps-result-title">
+
+            <div class="xps-proof-icon" style="width:34px;height:34px;flex-basis:34px;">
+                ◉
+            </div>
+
+            <h3>
+                RPC Verification Result
+            </h3>
+
+        </div>
+
+        <div class="xps-result-status">
+            NOT VERIFIED
+        </div>
+
+    </div>
+
+    <div class="xps-result-body">
+
+        <div class="xps-verification-table-wrap">
+
+            <table class="xps-verification-table">
+
+                <thead>
+                    <tr>
+                        <th>Verification Invariant</th>
+                        <th>Result</th>
+                        <th>RPC Evidence</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>
+                            <strong>Chain ID Verification</strong>
+                        </td>
+
+                        <td>
+                            <span class="xps-check">
+                                AWAITING
+                            </span>
+                        </td>
+
+                        <td>
+                            Awaiting RPC response
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Vault Contract Instance</strong>
+                        </td>
+
+                        <td>
+                            <span class="xps-check">
+                                AWAITING
+                            </span>
+                        </td>
+
+                        <td>
+                            Contract evidence will be resolved from chain state
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Authorization / Signature Evidence</strong>
+                        </td>
+
+                        <td>
+                            <span class="xps-check">
+                                AWAITING
+                            </span>
+                        </td>
+
+                        <td>
+                            Signature evidence requires a verified execution result
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Settlement Constraints</strong>
+                        </td>
+
+                        <td>
+                            <span class="xps-check">
+                                AWAITING
+                            </span>
+                        </td>
+
+                        <td>
+                            Output and minimum-output values will be populated from verified evidence
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Block Receipt Confirmation</strong>
+                        </td>
+
+                        <td>
+                            <span class="xps-check">
+                                AWAITING
+                            </span>
+                        </td>
+
+                        <td>
+                            Receipt status and block number will be queried directly
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="xps-proof-footer">
+        <span>◈</span>
+        <strong>Independent verification boundary:</strong>
+        displayed evidence must originate from verified Coston2 chain state.
+    </div>
+
 </div>
+
 
 <script>
-window.runIndependentVerification = function() {
-    alert("Querying Flare Coston2 EVM RPC directly... Transaction 0x3fe85c16... VERIFIED GREEN!");
-};
+/*
+ * IMPORTANT:
+ * Keep your existing real implementation of
+ * window.runIndependentVerification()
+ * if it already queries the Coston2 RPC.
+ *
+ * This UI deliberately does NOT fabricate:
+ * - transaction hashes
+ * - receipt status
+ * - block numbers
+ * - signer addresses
+ * - swap amounts
+ * - attestation validity
+ */
 </script>

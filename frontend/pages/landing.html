@@ -1,60 +1,1028 @@
+<style>
+    /* =========================================================
+       XRPShield — Premium Hero Experience
+       ========================================================= */
+
+    .xrp-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 72px 48px 56px;
+        margin-bottom: 32px;
+        border-radius: 28px;
+        isolation: isolate;
+        background:
+            radial-gradient(circle at 50% -20%, rgba(91,140,255,.28), transparent 45%),
+            radial-gradient(circle at 15% 80%, rgba(110,231,249,.10), transparent 35%),
+            radial-gradient(circle at 90% 70%, rgba(139,92,246,.12), transparent 35%),
+            linear-gradient(145deg, rgba(12,21,38,.96), rgba(7,12,24,.98));
+        border: 1px solid rgba(120,170,255,.25);
+        box-shadow:
+            0 30px 100px rgba(0,0,0,.45),
+            inset 0 1px 0 rgba(255,255,255,.07);
+    }
+
+    /* Animated aurora */
+    .xrp-hero::before {
+        content: "";
+        position: absolute;
+        inset: -50%;
+        z-index: -2;
+        background:
+            conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(91,140,255,.10),
+                transparent 20%,
+                rgba(110,231,249,.08),
+                transparent 40%,
+                rgba(139,92,246,.08),
+                transparent 65%
+            );
+        animation: heroAurora 18s linear infinite;
+    }
+
+    .xrp-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+            linear-gradient(
+                115deg,
+                transparent 0%,
+                rgba(255,255,255,.035) 45%,
+                transparent 55%
+            );
+        background-size: 250% 100%;
+        animation: heroShine 7s ease-in-out infinite;
+    }
+
+    @keyframes heroAurora {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes heroShine {
+        0%, 100% {
+            background-position: 150% 0;
+        }
+        50% {
+            background-position: -50% 0;
+        }
+    }
+
+    /* Ambient glow blobs */
+    .ambient {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(70px);
+        pointer-events: none;
+        opacity: .28;
+    }
+
+    .ambient-one {
+        width: 180px;
+        height: 180px;
+        background: #5b8cff;
+        top: 10%;
+        left: 4%;
+        animation: floatOne 8s ease-in-out infinite;
+    }
+
+    .ambient-two {
+        width: 220px;
+        height: 220px;
+        background: #6ee7f9;
+        bottom: -80px;
+        right: 8%;
+        animation: floatTwo 10s ease-in-out infinite;
+    }
+
+    @keyframes floatOne {
+        0%,100% { transform: translate(0,0); }
+        50% { transform: translate(35px,25px); }
+    }
+
+    @keyframes floatTwo {
+        0%,100% { transform: translate(0,0); }
+        50% { transform: translate(-30px,-25px); }
+    }
+
+    /* Grid overlay */
+    .hero-grid {
+        position: absolute;
+        inset: 0;
+        opacity: .055;
+        pointer-events: none;
+        background-image:
+            linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+        background-size: 45px 45px;
+        mask-image: linear-gradient(to bottom, black, transparent);
+    }
+
+    /* Hero content */
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 15px;
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: .72rem;
+        letter-spacing: .12em;
+        color: #9edcff;
+        text-transform: uppercase;
+        background: rgba(91,140,255,.09);
+        border: 1px solid rgba(91,140,255,.28);
+        box-shadow:
+            0 0 25px rgba(91,140,255,.08),
+            inset 0 0 20px rgba(91,140,255,.04);
+        animation: badgePulse 3s ease-in-out infinite;
+    }
+
+    .hero-badge .live-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #6ee7f9;
+        box-shadow: 0 0 12px #6ee7f9;
+        animation: livePulse 1.8s infinite;
+    }
+
+    @keyframes badgePulse {
+        0%,100% {
+            box-shadow: 0 0 25px rgba(91,140,255,.08);
+        }
+        50% {
+            box-shadow: 0 0 35px rgba(91,140,255,.20);
+        }
+    }
+
+    @keyframes livePulse {
+        0%,100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: .4;
+            transform: scale(.7);
+        }
+    }
+
+    .hero-title {
+        margin: 25px auto 20px;
+        max-width: 850px;
+        font-family: var(--font-display);
+        font-size: clamp(2.6rem, 6vw, 5.3rem);
+        font-weight: 900;
+        line-height: 1.02;
+        letter-spacing: -.055em;
+
+        background:
+            linear-gradient(
+                110deg,
+                #ffffff 10%,
+                #b8ddff 38%,
+                #6ee7f9 55%,
+                #ffffff 72%
+            );
+        background-size: 220% auto;
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        animation: titleGradient 7s ease-in-out infinite;
+    }
+
+    @keyframes titleGradient {
+        0%,100% {
+            background-position: 0% center;
+        }
+        50% {
+            background-position: 100% center;
+        }
+    }
+
+    .hero-title .highlight {
+        position: relative;
+        display: inline-block;
+    }
+
+    .hero-title .highlight::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -6px;
+        height: 3px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, transparent, #6ee7f9, transparent);
+        box-shadow: 0 0 15px #6ee7f9;
+        animation: underlineGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes underlineGlow {
+        0%,100% { opacity: .4; transform: scaleX(.65); }
+        50% { opacity: 1; transform: scaleX(1); }
+    }
+
+    .hero-description {
+        max-width: 720px;
+        margin: 0 auto;
+        color: var(--text-secondary);
+        font-size: 1.08rem;
+        line-height: 1.8;
+    }
+
+    .hero-description strong {
+        color: #d9f7ff;
+    }
+
+    /* CTA */
+    .hero-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+    }
+
+    .hero-btn {
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 14px 25px;
+        border-radius: 13px;
+        font-weight: 700;
+        font-size: .93rem;
+        cursor: pointer;
+        transition:
+            transform .3s cubic-bezier(.2,.8,.2,1),
+            box-shadow .3s ease,
+            border-color .3s ease;
+    }
+
+    .hero-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -120%;
+        width: 80%;
+        height: 100%;
+        transform: skewX(-20deg);
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+        );
+        transition: left .6s ease;
+    }
+
+    .hero-btn:hover::before {
+        left: 140%;
+    }
+
+    .hero-btn:hover {
+        transform: translateY(-4px);
+    }
+
+    .hero-btn-primary {
+        color: #06101e;
+        background: linear-gradient(135deg, #8fdcff, #6ee7f9);
+        border: 1px solid rgba(255,255,255,.4);
+        box-shadow:
+            0 10px 35px rgba(110,231,249,.20),
+            inset 0 1px 0 rgba(255,255,255,.6);
+    }
+
+    .hero-btn-primary:hover {
+        box-shadow:
+            0 15px 50px rgba(110,231,249,.35),
+            0 0 30px rgba(110,231,249,.15);
+    }
+
+    .hero-btn-secondary {
+        color: #cbeeff;
+        background: rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.12);
+        backdrop-filter: blur(12px);
+    }
+
+    .hero-btn-secondary:hover {
+        border-color: rgba(110,231,249,.35);
+        background: rgba(110,231,249,.06);
+    }
+
+    /* Trust strip */
+    .trust-strip {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 28px;
+    }
+
+    .trust-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.07);
+        color: var(--text-muted);
+        font-size: .72rem;
+        font-family: var(--font-mono);
+    }
+
+    .trust-item .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    .dot-real {
+        background: #6ee7b7;
+        box-shadow: 0 0 10px rgba(110,231,183,.8);
+    }
+
+    .dot-sim {
+        background: #fbbf24;
+        box-shadow: 0 0 10px rgba(251,191,36,.7);
+    }
+
+    /* =========================================================
+       Workflow
+       ========================================================= */
+
+    .workflow-card {
+        position: relative;
+        overflow: hidden;
+        padding: 44px 34px 40px;
+        margin-bottom: 32px;
+        border-radius: 26px;
+        background:
+            radial-gradient(circle at center, rgba(91,140,255,.08), transparent 50%),
+            rgba(10,17,31,.78);
+        border: 1px solid rgba(255,255,255,.09);
+        box-shadow:
+            0 25px 80px rgba(0,0,0,.30),
+            inset 0 1px 0 rgba(255,255,255,.05);
+        backdrop-filter: blur(18px);
+    }
+
+    .workflow-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+            linear-gradient(
+                120deg,
+                transparent,
+                rgba(110,231,249,.025),
+                transparent
+            );
+        animation: workflowSweep 8s linear infinite;
+    }
+
+    @keyframes workflowSweep {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(100%); }
+    }
+
+    .workflow-header {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+    .workflow-kicker {
+        display: inline-block;
+        margin-bottom: 9px;
+        color: #6ee7f9;
+        font-family: var(--font-mono);
+        font-size: .67rem;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+    }
+
+    .workflow-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.55rem;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .workflow-subtitle {
+        max-width: 650px;
+        margin: 10px auto 0;
+        color: var(--text-muted);
+        font-size: .85rem;
+        line-height: 1.6;
+    }
+
+    .workflow {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+        z-index: 2;
+    }
+
+    /* Animated connection line */
+    .workflow-line {
+        position: absolute;
+        top: 65px;
+        left: 9%;
+        right: 9%;
+        height: 1px;
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(110,231,249,.3),
+                rgba(91,140,255,.6),
+                rgba(110,231,249,.3),
+                transparent
+            );
+        z-index: 0;
+    }
+
+    .workflow-line::after {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -10%;
+        width: 70px;
+        height: 5px;
+        border-radius: 50%;
+        background: #6ee7f9;
+        box-shadow:
+            0 0 12px #6ee7f9,
+            0 0 25px #5b8cff;
+        filter: blur(.5px);
+        animation: energyFlow 3.2s linear infinite;
+    }
+
+    @keyframes energyFlow {
+        from {
+            left: -10%;
+        }
+        to {
+            left: 105%;
+        }
+    }
+
+    .stage {
+        position: relative;
+        z-index: 2;
+        min-height: 235px;
+        padding: 25px 18px 20px;
+        border-radius: 19px;
+        text-align: center;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.055),
+                rgba(255,255,255,.018)
+            );
+        border: 1px solid rgba(255,255,255,.09);
+        backdrop-filter: blur(14px);
+        transition:
+            transform .45s cubic-bezier(.2,.8,.2,1),
+            border-color .35s ease,
+            box-shadow .35s ease,
+            background .35s ease;
+        transform-style: preserve-3d;
+    }
+
+    .stage:hover {
+        transform:
+            translateY(-12px)
+            perspective(800px)
+            rotateX(2deg);
+        border-color: rgba(110,231,249,.32);
+        background:
+            linear-gradient(
+                145deg,
+                rgba(110,231,249,.08),
+                rgba(91,140,255,.025)
+            );
+        box-shadow:
+            0 20px 45px rgba(0,0,0,.35),
+            0 0 35px rgba(91,140,255,.09),
+            inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .stage-number {
+        position: absolute;
+        top: 12px;
+        right: 13px;
+        font-family: var(--font-mono);
+        font-size: .62rem;
+        color: rgba(255,255,255,.28);
+    }
+
+    .stage-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 68px;
+        height: 68px;
+        margin: 0 auto 16px;
+        border-radius: 20px;
+        font-size: 1.8rem;
+        background:
+            radial-gradient(circle at 35% 25%, rgba(255,255,255,.10), transparent 45%),
+            rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.10);
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.08),
+            0 10px 25px rgba(0,0,0,.15);
+        transition: transform .4s ease, box-shadow .4s ease;
+    }
+
+    .stage:hover .stage-icon {
+        transform: translateY(-3px) scale(1.08);
+        box-shadow:
+            0 0 25px rgba(110,231,249,.15),
+            inset 0 1px 0 rgba(255,255,255,.1);
+    }
+
+    .stage h4 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: .91rem;
+        font-weight: 800;
+    }
+
+    .stage p {
+        margin: 9px 0 0;
+        color: var(--text-muted);
+        font-size: .73rem;
+        line-height: 1.55;
+    }
+
+    /* Stage accents */
+    .stage-vault h4 {
+        color: #8fc7ff;
+    }
+
+    .stage-policy h4 {
+        color: #b5a7ff;
+    }
+
+    .stage-fcc {
+        background:
+            radial-gradient(circle at center, rgba(91,140,255,.16), transparent 70%),
+            rgba(30,50,90,.30);
+        border-color: rgba(91,140,255,.38);
+        box-shadow:
+            0 0 45px rgba(91,140,255,.12),
+            inset 0 0 35px rgba(91,140,255,.04);
+    }
+
+    .stage-fcc .stage-icon {
+        border-color: rgba(91,140,255,.35);
+        box-shadow:
+            0 0 25px rgba(91,140,255,.20),
+            inset 0 0 20px rgba(91,140,255,.05);
+        animation: fccPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes fccPulse {
+        0%,100% {
+            box-shadow:
+                0 0 20px rgba(91,140,255,.16),
+                inset 0 0 20px rgba(91,140,255,.04);
+        }
+        50% {
+            box-shadow:
+                0 0 35px rgba(91,140,255,.30),
+                inset 0 0 25px rgba(91,140,255,.08);
+        }
+    }
+
+    .stage-proof h4 {
+        color: #6ee7b7;
+    }
+
+    .stage-execution h4 {
+        color: #c4a7ff;
+    }
+
+    /* Mini status */
+    .stage-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 14px;
+        padding: 5px 8px;
+        border-radius: 999px;
+        font-family: var(--font-mono);
+        font-size: .57rem;
+        letter-spacing: .04em;
+        background: rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.07);
+        color: var(--text-muted);
+    }
+
+    .stage-status .status-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #6ee7b7;
+        box-shadow: 0 0 8px #6ee7b7;
+    }
+
+    /* Bottom trust statement */
+    .workflow-footer {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 28px;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        font-size: .67rem;
+        text-align: center;
+    }
+
+    .workflow-footer span {
+        color: #6ee7f9;
+    }
+
+    /* =========================================================
+       Scroll reveal
+       ========================================================= */
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(25px);
+        animation: revealUp .8s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    .reveal-delay-1 { animation-delay: .1s; }
+    .reveal-delay-2 { animation-delay: .2s; }
+    .reveal-delay-3 { animation-delay: .3s; }
+    .reveal-delay-4 { animation-delay: .4s; }
+
+    @keyframes revealUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* =========================================================
+       Mobile
+       ========================================================= */
+
+    @media (max-width: 900px) {
+        .workflow {
+            grid-template-columns: 1fr;
+        }
+
+        .workflow-line {
+            display: none;
+        }
+
+        .stage {
+            min-height: auto;
+            padding: 25px;
+        }
+
+        .xrp-hero {
+            padding: 55px 24px 45px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .xrp-hero {
+            border-radius: 20px;
+        }
+
+        .hero-title {
+            font-size: 2.55rem;
+        }
+
+        .hero-description {
+            font-size: .92rem;
+        }
+
+        .hero-btn {
+            width: 100%;
+        }
+
+        .trust-strip {
+            flex-direction: column;
+        }
+
+        .workflow-card {
+            padding: 34px 17px;
+        }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            scroll-behavior: auto !important;
+            transition-duration: .01ms !important;
+        }
+    }
+</style>
+
+
 <div class="page">
-    <div class="card" style="padding: 48px; text-align: center; background: radial-gradient(circle at top center, rgba(91,140,255,0.15), rgba(11,18,32,0.85)); border: 1px solid rgba(91,140,255,0.3); margin-bottom: 32px;">
-        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--secondary); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px;">
-            🛡️ FLARE CONFIDENTIAL COMPUTE (FCC) TREASURY PROTECTION
-        </div>
-        <h1 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 800; line-height: 1.15; margin-bottom: 20px; background: linear-gradient(90deg, #FFFFFF, #89CFF0, #6EE7F9); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
-            Protect Your XRP Treasury<br>Without Exposing Your Strategy.
-        </h1>
-        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 680px; margin: 0 auto 32px; line-height: 1.6;">
-            XRPShield executes privacy-preserving risk policies, automated position rebalancing, and treasury protection inside hardware-sealed Flare Confidential Compute (FCC) TEE enclaves — with verified zero on-chain strategy exposure.
-        </p>
 
-        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
-            <button onclick="window.location.hash='#dashboard'" class="btn-primary" style="padding: 14px 32px; font-size: 1rem;">
-                🚀 Launch App & Explore Vaults
-            </button>
-            <button onclick="window.location.hash='#policies'" class="btn-secondary" style="padding: 14px 28px; font-size: 0.95rem;">
-                🛡️ Explore Confidential Policies
-            </button>
-        </div>
-    </div>
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
 
-    <!-- Centerpiece Workflow Diagram: Vault -> Policy -> FCC -> Attestation -> Execution -->
-    <div class="card" style="padding: 36px; margin-bottom: 32px;">
-        <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; text-align: center;">
-            The 5-Stage Zero-Leakage Treasury Workflow
-        </h3>
-        <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; margin-bottom: 32px;">
-            How Flare Confidential Compute enclaves verify risk policies and emit verified execution proofs.
-        </p>
+    <section class="xrp-hero">
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; position: relative;">
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 8px;">🔒</div>
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--secondary);">1. Treasury Vault</h4>
-                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">FXRP & XRP custody sealed with encrypted permissions.</p>
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+        <div class="hero-grid"></div>
+
+        <div class="hero-content">
+
+            <div class="hero-badge reveal">
+                <span class="live-dot"></span>
+                FLARE CONFIDENTIAL COMPUTE
+                <span>•</span>
+                TREASURY PROTECTION
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 8px;">🛡️</div>
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">2. Confidential Policy</h4>
-                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">Natural language intent translated to encrypted parameters.</p>
+
+            <h1 class="hero-title reveal reveal-delay-1">
+                Protect Your XRP Treasury
+                <br>
+                <span class="highlight">Without Exposing Your Strategy.</span>
+            </h1>
+
+            <p class="hero-description reveal reveal-delay-2">
+                XRPShield lets you define
+                <strong>private risk policies</strong>,
+                evaluate them through Flare Confidential Compute,
+                and authorize
+                <strong>verifiable on-chain execution</strong>
+                without publishing your strategy parameters.
+            </p>
+
+            <div class="hero-actions reveal reveal-delay-3">
+
+                <button
+                    onclick="window.location.hash='#dashboard'"
+                    class="hero-btn hero-btn-primary"
+                >
+                    <span>🚀</span>
+                    Launch Protected Vault
+                    <span>→</span>
+                </button>
+
+                <button
+                    onclick="window.location.hash='#policies'"
+                    class="hero-btn hero-btn-secondary"
+                >
+                    <span>🛡️</span>
+                    Explore Confidential Policies
+                </button>
+
             </div>
-            <div style="background: rgba(91,140,255,0.12); border: 1px solid rgba(91,140,255,0.4); padding: 20px; border-radius: 16px; text-align: center; box-shadow: 0 0 25px rgba(91,140,255,0.2);">
-                <div style="font-size: 2rem; margin-bottom: 8px;">⚡</div>
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">3. Flare FCC Enclave</h4>
-                <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 6px;">Hardware TEE evaluates trigger conditions securely.</p>
+
+            <!-- Trust signals -->
+            <div class="trust-strip reveal reveal-delay-4">
+
+                <div class="trust-item">
+                    <span class="dot dot-real"></span>
+                    REAL COSTON2
+                </div>
+
+                <div class="trust-item">
+                    <span class="dot dot-real"></span>
+                    REAL FXRP
+                </div>
+
+                <div class="trust-item">
+                    <span class="dot dot-real"></span>
+                    REAL FTSOv2
+                </div>
+
+                <div class="trust-item">
+                    <span class="dot dot-real"></span>
+                    REAL DEX EXECUTION
+                </div>
+
+                <div class="trust-item">
+                    <span class="dot dot-sim"></span>
+                    SIMULATED TEE
+                </div>
+
             </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 8px;">📜</div>
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--success);">4. Hardware Proof</h4>
-                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">Attestation proof emitted without revealing keys.</p>
-            </div>
-            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px; text-align: center;">
-                <div style="font-size: 2rem; margin-bottom: 8px;">🚀</div>
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--purple);">5. Protected Execution</h4>
-                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">Confirmed on Flare Coston2 Testnet blockchain.</p>
-            </div>
+
         </div>
-    </div>
+    </section>
+
+
+    <!-- =====================================================
+         WORKFLOW
+         ===================================================== -->
+
+    <section class="workflow-card">
+
+        <div class="workflow-header">
+
+            <div class="workflow-kicker">
+                HOW XRPShield WORKS
+            </div>
+
+            <h3 class="workflow-title">
+                From Private Intent → Verifiable Execution
+            </h3>
+
+            <p class="workflow-subtitle">
+                Your strategy stays outside public transaction calldata.
+                Only the cryptographic commitment and verified execution
+                result become part of the public financial record.
+            </p>
+
+        </div>
+
+
+        <div class="workflow">
+
+            <div class="workflow-line"></div>
+
+
+            <!-- Stage 1 -->
+            <article class="stage stage-vault">
+
+                <div class="stage-number">01</div>
+
+                <div class="stage-icon">
+                    🔒
+                </div>
+
+                <h4>
+                    Treasury Vault
+                </h4>
+
+                <p>
+                    Deposit FXRP into a smart-contract controlled
+                    treasury vault with enforced execution boundaries.
+                </p>
+
+                <div class="stage-status">
+                    <span class="status-dot"></span>
+                    ON-CHAIN
+                </div>
+
+            </article>
+
+
+            <!-- Stage 2 -->
+            <article class="stage stage-policy">
+
+                <div class="stage-number">02</div>
+
+                <div class="stage-icon">
+                    🛡️
+                </div>
+
+                <h4>
+                    Private Policy
+                </h4>
+
+                <p>
+                    Define your hedge rules and risk constraints.
+                    The canonical policy becomes a cryptographic commitment.
+                </p>
+
+                <div class="stage-status">
+                    <span class="status-dot"></span>
+                    COMMITTED
+                </div>
+
+            </article>
+
+
+            <!-- Stage 3 -->
+            <article class="stage stage-fcc">
+
+                <div class="stage-number">03</div>
+
+                <div class="stage-icon">
+                    ⚡
+                </div>
+
+                <h4>
+                    Flare FCC
+                </h4>
+
+                <p>
+                    The confidential evaluation layer processes the
+                    policy and produces a signed ActionResult.
+                </p>
+
+                <div class="stage-status">
+                    <span class="status-dot"></span>
+                    SIMULATED TEE
+                </div>
+
+            </article>
+
+
+            <!-- Stage 4 -->
+            <article class="stage stage-proof">
+
+                <div class="stage-number">04</div>
+
+                <div class="stage-icon">
+                    📜
+                </div>
+
+                <h4>
+                    Verified Result
+                </h4>
+
+                <p>
+                    EIP-712 verification binds the decision to the
+                    instruction, policy commitment, nonce and deadline.
+                </p>
+
+                <div class="stage-status">
+                    <span class="status-dot"></span>
+                    VERIFIED
+                </div>
+
+            </article>
+
+
+            <!-- Stage 5 -->
+            <article class="stage stage-execution">
+
+                <div class="stage-number">05</div>
+
+                <div class="stage-icon">
+                    🚀
+                </div>
+
+                <h4>
+                    Protected Execution
+                </h4>
+
+                <p>
+                    Only an authorized decision can trigger the real
+                    FXRP → USDT0 settlement on Coston2.
+                </p>
+
+                <div class="stage-status">
+                    <span class="status-dot"></span>
+                    REAL TX
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="workflow-footer">
+            <span>●</span>
+            PRIVATE POLICY
+            <span>→</span>
+            VERIFIED DECISION
+            <span>→</span>
+            REAL ON-CHAIN SETTLEMENT
+        </div>
+
+    </section>
+
 </div>

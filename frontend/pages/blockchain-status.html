@@ -1,75 +1,2347 @@
-<div style="margin-bottom: 24px;">
-    <h2 style="font-size: 1.8rem; font-weight: 700;">Flare Network Infrastructure Status</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">Real-time Web3 RPC connection, gas fees, block height, and contract deployment registry</p>
-</div>
+<!-- ═══════════════════════════════════════════════════════════════
+     FLARE NETWORK INFRASTRUCTURE STATUS
+════════════════════════════════════════════════════════════════ -->
 
-<div class="grid-cards">
-    <div class="card">
-        <div class="card-title">Target Blockchain Network</div>
-        <div class="card-value" style="font-size: 1.4rem;">Flare Coston2</div>
-        <div class="card-subtext">Chain ID: 114 (C-Chain)</div>
-    </div>
-    <div class="card">
-        <div class="card-title">RPC Node Connection</div>
-        <div class="card-value" style="color: var(--accent-emerald);">ONLINE</div>
-        <div class="card-subtext">https://coston2-api.flare.network</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Latest Block Height</div>
-        <div class="card-value" id="bc-block-num">#18,492,310</div>
-        <div class="card-subtext">Block Time: ~1.0s</div>
-    </div>
-    <div class="card">
-        <div class="card-title">Gas Price</div>
-        <div class="card-value" id="bc-gas-price">22.5 Gwei</div>
-        <div class="card-subtext">Standard EVM Gas</div>
-    </div>
-</div>
+<section class="flare-infrastructure">
 
-<div class="table-container" style="margin-bottom: 32px;">
-    <div style="padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1.1rem;">Deployed Production Smart Contracts</h3>
-        <span class="badge">Solidity 0.8.24</span>
+    <!-- Header -->
+    <div class="flare-infra-header">
+
+        <div class="flare-infra-heading">
+
+            <div class="flare-eyebrow">
+                <span class="flare-live-dot"></span>
+                FLARE NETWORK TELEMETRY
+            </div>
+
+            <h2>
+                Flare Network
+                <span>Infrastructure Status</span>
+            </h2>
+
+            <p>
+                Real-time Web3 infrastructure telemetry covering RPC
+                connectivity, block production, gas conditions, and
+                deployed smart-contract health.
+            </p>
+
+        </div>
+
+
+        <div class="network-live-badge">
+
+            <span class="network-pulse"></span>
+
+            <div>
+                <strong>NETWORK ONLINE</strong>
+                <small id="flare-last-updated">
+                    Awaiting RPC telemetry...
+                </small>
+            </div>
+
+        </div>
+
     </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Contract Name</th>
-                <th>Contract Address</th>
-                <th>Role & Purpose</th>
-                <th>Status</th>
-                <th>Deployed Network</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>VaultManager</strong></td>
-                <td><code>0x5bb8082987515f40398fb9893d90616b47c04208</code></td>
-                <td>Core Vault Registry & Lifecycle Management</td>
-                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
-                <td>Flare Coston2 / Local</td>
-            </tr>
-            <tr>
-                <td><strong>AccessManager</strong></td>
-                <td><code>0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512</code></td>
-                <td>Role-Based Access Control (RBAC)</td>
-                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
-                <td>Flare Coston2 / Local</td>
-            </tr>
-            <tr>
-                <td><strong>TreasuryStorage</strong></td>
-                <td><code>0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0</code></td>
-                <td>Storage Decoupling & Vault Records</td>
-                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
-                <td>Flare Coston2 / Local</td>
-            </tr>
-            <tr>
-                <td><strong>XRPShieldHealth</strong></td>
-                <td><code>0xCf7Ed3AccA5a467e9e7545721574494532785432</code></td>
-                <td>Network Verification Contract</td>
-                <td><span style="color: var(--accent-emerald);">ACTIVE</span></td>
-                <td>Flare Coston2 / Local</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         NETWORK TELEMETRY
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="flare-telemetry-grid">
+
+
+        <!-- Network -->
+        <div class="flare-telemetry-card network-card">
+
+            <div class="telemetry-card-top">
+
+                <span class="telemetry-icon network-icon">
+                    ◈
+                </span>
+
+                <span class="telemetry-status verified">
+                    VERIFIED
+                </span>
+
+            </div>
+
+            <div class="telemetry-label">
+                TARGET BLOCKCHAIN
+            </div>
+
+            <div class="telemetry-value">
+                Flare Coston2
+            </div>
+
+            <div class="telemetry-sub">
+                <span class="chain-dot"></span>
+                Chain ID <strong>114</strong>
+                <span class="separator">•</span>
+                C-Chain
+            </div>
+
+            <div class="telemetry-decoration">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+        </div>
+
+
+        <!-- RPC -->
+        <div class="flare-telemetry-card rpc-card">
+
+            <div class="telemetry-card-top">
+
+                <span class="telemetry-icon rpc-icon">
+                    ⌁
+                </span>
+
+                <span
+                    class="telemetry-status online"
+                    id="rpc-status-badge"
+                >
+                    ONLINE
+                </span>
+
+            </div>
+
+            <div class="telemetry-label">
+                RPC NODE CONNECTION
+            </div>
+
+            <div
+                class="telemetry-value rpc-value"
+                id="flare-rpc-status"
+            >
+                ONLINE
+            </div>
+
+            <div class="rpc-endpoint">
+                <span class="endpoint-dot"></span>
+
+                <code>
+                    coston2-api.flare.network
+                </code>
+            </div>
+
+            <div class="rpc-latency">
+                <span>RPC HEALTH</span>
+                <strong id="flare-rpc-latency">—</strong>
+            </div>
+
+        </div>
+
+
+        <!-- Block -->
+        <div class="flare-telemetry-card block-card">
+
+            <div class="telemetry-card-top">
+
+                <span class="telemetry-icon block-icon">
+                    ◆
+                </span>
+
+                <span class="telemetry-status live">
+                    LIVE
+                </span>
+
+            </div>
+
+            <div class="telemetry-label">
+                LATEST BLOCK HEIGHT
+            </div>
+
+            <div
+                class="telemetry-value mono"
+                id="bc-block-num"
+            >
+                —
+            </div>
+
+            <div class="telemetry-sub">
+                <span class="chain-dot"></span>
+                Block production
+                <strong>~1.0s</strong>
+            </div>
+
+            <div class="block-stream">
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Gas -->
+        <div class="flare-telemetry-card gas-card">
+
+            <div class="telemetry-card-top">
+
+                <span class="telemetry-icon gas-icon">
+                    ⛽
+                </span>
+
+                <span class="telemetry-status stable">
+                    STABLE
+                </span>
+
+            </div>
+
+            <div class="telemetry-label">
+                CURRENT GAS PRICE
+            </div>
+
+            <div
+                class="telemetry-value mono"
+                id="bc-gas-price"
+            >
+                —
+            </div>
+
+            <div class="telemetry-sub">
+                Standard EVM Gas
+            </div>
+
+            <div class="gas-meter">
+
+                <span class="gas-meter-fill"></span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         INFRASTRUCTURE SIGNAL BAR
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="flare-signal-bar">
+
+        <div class="signal-left">
+
+            <div class="signal-orb">
+                <span></span>
+            </div>
+
+            <div>
+
+                <strong>
+                    Coston2 Infrastructure Layer
+                </strong>
+
+                <span>
+                    RPC → EVM → Contracts → Execution
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="signal-flow">
+
+            <span class="flow-node active">
+                RPC
+            </span>
+
+            <i></i>
+
+            <span class="flow-node active">
+                BLOCK
+            </span>
+
+            <i></i>
+
+            <span class="flow-node active">
+                CONTRACTS
+            </span>
+
+            <i></i>
+
+            <span class="flow-node active">
+                EXECUTION
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CONTRACT REGISTRY
+    ═══════════════════════════════════════════════════════════ -->
+
+    <div class="flare-contract-panel">
+
+        <div class="contract-panel-header">
+
+            <div>
+
+                <div class="contract-eyebrow">
+                    DEPLOYMENT REGISTRY
+                </div>
+
+                <h3>
+                    Deployed Smart Contracts
+                </h3>
+
+                <p>
+                    Production contract addresses and their
+                    infrastructure roles on the target network.
+                </p>
+
+            </div>
+
+
+            <div class="contract-header-actions">
+
+                <span class="solidity-badge">
+                    <span></span>
+                    Solidity 0.8.24
+                </span>
+
+                <span class="contracts-live">
+                    <i></i>
+                    4 CONTRACTS
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Contract table -->
+        <div class="contract-table-wrapper">
+
+            <table class="flare-contract-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            CONTRACT
+                        </th>
+
+                        <th>
+                            ADDRESS
+                        </th>
+
+                        <th>
+                            ROLE & PURPOSE
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                        <th>
+                            NETWORK
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+
+                            <div class="contract-name">
+
+                                <span class="contract-symbol">
+                                    V
+                                </span>
+
+                                <div>
+                                    <strong>
+                                        VaultManager
+                                    </strong>
+
+                                    <small>
+                                        CORE REGISTRY
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="address-cell">
+
+                                <code>
+                                    0x5bb8082987515f40398fb9893d90616b47c04208
+                                </code>
+
+                                <button
+                                    class="copy-address"
+                                    onclick="copyContractAddress('0x5bb8082987515f40398fb9893d90616b47c04208', this)"
+                                    title="Copy address"
+                                >
+                                    ⧉
+                                </button>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="role-text">
+                                Core Vault Registry & Lifecycle Management
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="contract-status">
+                                <i></i>
+                                ACTIVE
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="network-tag">
+                                COSTON2
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+
+                            <div class="contract-name">
+
+                                <span class="contract-symbol">
+                                    A
+                                </span>
+
+                                <div>
+                                    <strong>
+                                        AccessManager
+                                    </strong>
+
+                                    <small>
+                                        SECURITY
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="address-cell">
+
+                                <code>
+                                    0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+                                </code>
+
+                                <button
+                                    class="copy-address"
+                                    onclick="copyContractAddress('0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', this)"
+                                    title="Copy address"
+                                >
+                                    ⧉
+                                </button>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="role-text">
+                                Role-Based Access Control (RBAC)
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="contract-status">
+                                <i></i>
+                                ACTIVE
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="network-tag">
+                                COSTON2
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+
+                            <div class="contract-name">
+
+                                <span class="contract-symbol">
+                                    T
+                                </span>
+
+                                <div>
+                                    <strong>
+                                        TreasuryStorage
+                                    </strong>
+
+                                    <small>
+                                        STORAGE
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="address-cell">
+
+                                <code>
+                                    0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+                                </code>
+
+                                <button
+                                    class="copy-address"
+                                    onclick="copyContractAddress('0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', this)"
+                                    title="Copy address"
+                                >
+                                    ⧉
+                                </button>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="role-text">
+                                Storage Decoupling & Vault Records
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="contract-status">
+                                <i></i>
+                                ACTIVE
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="network-tag">
+                                COSTON2
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+
+                            <div class="contract-name">
+
+                                <span class="contract-symbol">
+                                    X
+                                </span>
+
+                                <div>
+                                    <strong>
+                                        XRPShieldHealth
+                                    </strong>
+
+                                    <small>
+                                        VERIFICATION
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="address-cell">
+
+                                <code>
+                                    0xCf7Ed3AccA5a467e9e7545721574494532785432
+                                </code>
+
+                                <button
+                                    class="copy-address"
+                                    onclick="copyContractAddress('0xCf7Ed3AccA5a467e9e7545721574494532785432', this)"
+                                    title="Copy address"
+                                >
+                                    ⧉
+                                </button>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="role-text">
+                                Network Verification Contract
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="contract-status">
+                                <i></i>
+                                ACTIVE
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="network-tag">
+                                COSTON2
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Registry footer -->
+
+        <div class="contract-panel-footer">
+
+            <div class="registry-verification">
+
+                <span class="registry-check">
+                    ✓
+                </span>
+
+                <div>
+                    <strong>
+                        Contract Registry Operational
+                    </strong>
+
+                    <small>
+                        Addresses configured for the active Coston2 deployment
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="registry-meta">
+
+                <span>
+                    NETWORK
+                    <strong>114</strong>
+                </span>
+
+                <span>
+                    ENVIRONMENT
+                    <strong>TESTNET</strong>
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════
+   FLARE INFRASTRUCTURE
+════════════════════════════════════════════════════════════════ */
+
+.flare-infrastructure {
+
+    position: relative;
+
+    margin: 42px 0;
+
+    padding: 34px;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    background:
+        radial-gradient(
+            circle at 8% 0%,
+            rgba(99,102,241,0.13),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 92% 30%,
+            rgba(14,165,233,0.09),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.94),
+            rgba(2,6,23,0.94)
+        );
+
+    border: 1px solid rgba(148,163,184,0.13);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+
+    backdrop-filter: blur(24px);
+}
+
+
+.flare-infrastructure::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(148,163,184,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(148,163,184,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 34px 34px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent 90%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════════════════ */
+
+.flare-infra-header {
+
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 28px;
+}
+
+
+.flare-eyebrow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 11px;
+
+    color: #94a3b8;
+
+    font-size: 0.68rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.15em;
+}
+
+
+.flare-live-dot {
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 9px rgba(34,197,94,0.9),
+        0 0 20px rgba(34,197,94,0.3);
+
+    animation: flarePulse 1.8s infinite;
+}
+
+
+.flare-infra-heading h2 {
+
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: clamp(1.8rem, 3vw, 2.45rem);
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -0.045em;
+}
+
+
+.flare-infra-heading h2 span {
+
+    background:
+        linear-gradient(
+            105deg,
+            #818cf8,
+            #38bdf8,
+            #a78bfa
+        );
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+.flare-infra-heading p {
+
+    max-width: 780px;
+
+    margin: 12px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 0.91rem;
+
+    line-height: 1.7;
+}
+
+
+/* Network status */
+
+.network-live-badge {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 15px;
+
+    white-space: nowrap;
+
+    border-radius: 14px;
+
+    background: rgba(15,23,42,0.72);
+
+    border: 1px solid rgba(34,197,94,0.14);
+}
+
+
+.network-pulse {
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 10px rgba(34,197,94,0.8);
+
+    animation: flarePulse 1.7s infinite;
+}
+
+
+.network-live-badge strong {
+
+    display: block;
+
+    color: #bbf7d0;
+
+    font-size: 0.66rem;
+
+    letter-spacing: 0.08em;
+}
+
+
+.network-live-badge small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 0.65rem;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TELEMETRY GRID
+══════════════════════════════════════════════════════════════ */
+
+.flare-telemetry-grid {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 13px;
+
+    margin-bottom: 16px;
+}
+
+
+.flare-telemetry-card {
+
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 19px;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30,41,59,0.64),
+            rgba(15,23,42,0.48)
+        );
+
+    border: 1px solid rgba(148,163,184,0.10);
+
+    transition:
+        transform 0.28s ease,
+        border-color 0.28s ease,
+        box-shadow 0.28s ease;
+}
+
+
+.flare-telemetry-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: rgba(129,140,248,0.24);
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,0.22),
+        0 0 35px rgba(99,102,241,0.06);
+}
+
+
+.telemetry-card-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+
+.telemetry-icon {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 11px;
+
+    font-size: 1rem;
+
+    background: rgba(99,102,241,0.08);
+
+    border: 1px solid rgba(129,140,248,0.12);
+}
+
+
+.network-icon {
+    color: #a5b4fc;
+}
+
+.rpc-icon {
+    color: #67e8f9;
+}
+
+.block-icon {
+    color: #c4b5fd;
+}
+
+.gas-icon {
+    color: #fcd34d;
+}
+
+
+.telemetry-status {
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    font-size: 0.55rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.08em;
+}
+
+
+.telemetry-status.verified {
+
+    color: #a5b4fc;
+
+    background: rgba(129,140,248,0.07);
+
+    border: 1px solid rgba(129,140,248,0.12);
+}
+
+
+.telemetry-status.online,
+.telemetry-status.live {
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.06);
+
+    border: 1px solid rgba(34,197,94,0.11);
+}
+
+
+.telemetry-status.stable {
+
+    color: #fde68a;
+
+    background: rgba(250,204,21,0.06);
+
+    border: 1px solid rgba(250,204,21,0.10);
+}
+
+
+.telemetry-label {
+
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 0.60rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.12em;
+}
+
+
+.telemetry-value {
+
+    color: #f1f5f9;
+
+    font-size: 1.25rem;
+
+    font-weight: 800;
+
+    letter-spacing: -0.025em;
+}
+
+
+.telemetry-value.mono {
+
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    font-size: 1.18rem;
+
+    color: #e0e7ff;
+}
+
+
+.telemetry-sub {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 8px;
+
+    color: #64748b;
+
+    font-size: 0.68rem;
+}
+
+
+.telemetry-sub strong {
+
+    color: #94a3b8;
+}
+
+
+.chain-dot,
+.endpoint-dot {
+
+    width: 5px;
+    height: 5px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 7px rgba(34,197,94,0.7);
+}
+
+
+.separator {
+    color: #334155;
+}
+
+
+/* RPC */
+
+.rpc-value {
+
+    color: #86efac !important;
+
+    letter-spacing: 0.02em;
+}
+
+
+.rpc-endpoint {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 9px;
+
+    padding: 7px 8px;
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    border-radius: 7px;
+
+    background: rgba(2,6,23,0.42);
+
+    border: 1px solid rgba(148,163,184,0.06);
+}
+
+
+.rpc-endpoint code {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #64748b;
+
+    font-size: 0.58rem;
+}
+
+
+.rpc-latency {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 13px;
+
+    color: #475569;
+
+    font-size: 0.58rem;
+
+    font-weight: 700;
+}
+
+
+.rpc-latency strong {
+    color: #94a3b8;
+}
+
+
+/* Block stream */
+
+.block-stream {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 4px;
+
+    height: 24px;
+
+    margin-top: 13px;
+}
+
+
+.block-stream span {
+
+    width: 7px;
+
+    border-radius: 2px;
+
+    background: linear-gradient(
+        to top,
+        rgba(129,140,248,0.15),
+        rgba(129,140,248,0.7)
+    );
+
+    animation: blockBars 1.5s ease-in-out infinite;
+}
+
+
+.block-stream span:nth-child(1) {
+    height: 35%;
+}
+
+.block-stream span:nth-child(2) {
+    height: 55%;
+    animation-delay: .1s;
+}
+
+.block-stream span:nth-child(3) {
+    height: 40%;
+    animation-delay: .2s;
+}
+
+.block-stream span:nth-child(4) {
+    height: 80%;
+    animation-delay: .3s;
+}
+
+.block-stream span:nth-child(5) {
+    height: 60%;
+    animation-delay: .4s;
+}
+
+.block-stream span:nth-child(6) {
+    height: 90%;
+    animation-delay: .5s;
+}
+
+.block-stream span:nth-child(7) {
+    height: 65%;
+    animation-delay: .6s;
+}
+
+
+/* Gas meter */
+
+.gas-meter {
+
+    height: 4px;
+
+    overflow: hidden;
+
+    margin-top: 19px;
+
+    border-radius: 99px;
+
+    background: rgba(148,163,184,0.08);
+}
+
+
+.gas-meter-fill {
+
+    display: block;
+
+    width: 38%;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f59e0b,
+            #facc15
+        );
+
+    box-shadow:
+        0 0 12px rgba(250,204,21,0.25);
+}
+
+
+/* Network decorative elements */
+
+.telemetry-decoration {
+
+    position: absolute;
+
+    right: -20px;
+    bottom: -30px;
+
+    width: 100px;
+    height: 100px;
+
+    opacity: 0.35;
+}
+
+
+.telemetry-decoration span {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(129,140,248,0.12);
+}
+
+
+.telemetry-decoration span:nth-child(1) {
+    inset: 10px;
+}
+
+.telemetry-decoration span:nth-child(2) {
+    inset: 25px;
+}
+
+.telemetry-decoration span:nth-child(3) {
+    inset: 40px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SIGNAL BAR
+══════════════════════════════════════════════════════════════ */
+
+.flare-signal-bar {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 14px 17px;
+
+    margin-bottom: 22px;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(99,102,241,0.055),
+            rgba(14,165,233,0.035)
+        );
+
+    border: 1px solid rgba(129,140,248,0.09);
+}
+
+
+.signal-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.signal-orb {
+
+    position: relative;
+
+    width: 28px;
+    height: 28px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: rgba(99,102,241,0.08);
+
+    border: 1px solid rgba(129,140,248,0.12);
+}
+
+
+.signal-orb span {
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #818cf8;
+
+    box-shadow:
+        0 0 10px rgba(129,140,248,0.8);
+}
+
+
+.signal-left strong {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 0.70rem;
+}
+
+
+.signal-left span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #64748b;
+
+    font-size: 0.62rem;
+}
+
+
+.signal-flow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.flow-node {
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    color: #64748b;
+
+    background: rgba(148,163,184,0.035);
+
+    border: 1px solid rgba(148,163,184,0.07);
+
+    font-size: 0.53rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.06em;
+}
+
+
+.flow-node.active {
+
+    color: #a5b4fc;
+
+    border-color: rgba(129,140,248,0.13);
+
+    background: rgba(99,102,241,0.05);
+}
+
+
+.signal-flow i {
+
+    width: 18px;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(129,140,248,0.4),
+            transparent
+        );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTRACT PANEL
+══════════════════════════════════════════════════════════════ */
+
+.flare-contract-panel {
+
+    position: relative;
+
+    z-index: 1;
+
+    overflow: hidden;
+
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.84),
+            rgba(2,6,23,0.82)
+        );
+
+    border: 1px solid rgba(148,163,184,0.10);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.18);
+}
+
+
+.contract-panel-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    padding: 22px 22px 19px;
+
+    border-bottom: 1px solid rgba(148,163,184,0.08);
+}
+
+
+.contract-eyebrow {
+
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 0.59rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.13em;
+}
+
+
+.contract-panel-header h3 {
+
+    margin: 0;
+
+    color: #e2e8f0;
+
+    font-size: 1.05rem;
+
+    font-weight: 750;
+}
+
+
+.contract-panel-header p {
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 0.67rem;
+}
+
+
+.contract-header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.solidity-badge,
+.contracts-live {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 9px;
+
+    border-radius: 7px;
+
+    font-size: 0.56rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.05em;
+}
+
+
+.solidity-badge {
+
+    color: #a5b4fc;
+
+    background: rgba(129,140,248,0.06);
+
+    border: 1px solid rgba(129,140,248,0.11);
+}
+
+
+.solidity-badge span {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #818cf8;
+}
+
+
+.contracts-live {
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.05);
+
+    border: 1px solid rgba(34,197,94,0.09);
+}
+
+
+.contracts-live i {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 7px rgba(34,197,94,0.7);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLE
+══════════════════════════════════════════════════════════════ */
+
+.contract-table-wrapper {
+
+    overflow-x: auto;
+}
+
+
+.flare-contract-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 950px;
+}
+
+
+.flare-contract-table th {
+
+    padding: 12px 20px;
+
+    text-align: left;
+
+    color: #475569;
+
+    background: rgba(2,6,23,0.38);
+
+    border-bottom: 1px solid rgba(148,163,184,0.07);
+
+    font-size: 0.56rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.10em;
+}
+
+
+.flare-contract-table td {
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid rgba(148,163,184,0.055);
+
+    vertical-align: middle;
+}
+
+
+.flare-contract-table tbody tr {
+
+    transition:
+        background 0.2s ease;
+}
+
+
+.flare-contract-table tbody tr:hover {
+
+    background: rgba(99,102,241,0.025);
+}
+
+
+.flare-contract-table tbody tr:last-child td {
+
+    border-bottom: none;
+}
+
+
+/* Contract name */
+
+.contract-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 150px;
+}
+
+
+.contract-symbol {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 31px;
+    height: 31px;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    color: #a5b4fc;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,102,241,0.14),
+            rgba(56,189,248,0.05)
+        );
+
+    border: 1px solid rgba(129,140,248,0.12);
+
+    font-size: 0.68rem;
+
+    font-weight: 850;
+}
+
+
+.contract-name strong {
+
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 0.72rem;
+}
+
+
+.contract-name small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #475569;
+
+    font-size: 0.50rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+
+/* Address */
+
+.address-cell {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.address-cell code {
+
+    color: #818cf8;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        monospace;
+
+    font-size: 0.59rem;
+}
+
+
+.copy-address {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 25px;
+    height: 25px;
+
+    flex-shrink: 0;
+
+    border-radius: 6px;
+
+    color: #64748b;
+
+    background: rgba(148,163,184,0.035);
+
+    border: 1px solid rgba(148,163,184,0.07);
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.copy-address:hover {
+
+    color: #c4b5fd;
+
+    background: rgba(129,140,248,0.08);
+
+    transform: translateY(-1px);
+}
+
+
+/* Role */
+
+.role-text {
+
+    display: block;
+
+    max-width: 260px;
+
+    color: #64748b;
+
+    font-size: 0.64rem;
+
+    line-height: 1.5;
+}
+
+
+/* Status */
+
+.contract-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 5px 8px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.045);
+
+    border: 1px solid rgba(34,197,94,0.08);
+
+    border-radius: 7px;
+
+    font-size: 0.55rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.06em;
+}
+
+
+.contract-status i {
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 7px rgba(34,197,94,0.7);
+}
+
+
+/* Network */
+
+.network-tag {
+
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    color: #a5b4fc;
+
+    background: rgba(99,102,241,0.05);
+
+    border: 1px solid rgba(129,140,248,0.09);
+
+    border-radius: 6px;
+
+    font-size: 0.52rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.07em;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════════ */
+
+.contract-panel-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 15px 20px;
+
+    border-top: 1px solid rgba(148,163,184,0.07);
+
+    background: rgba(2,6,23,0.25);
+}
+
+
+.registry-verification {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+.registry-check {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 8px;
+
+    color: #86efac;
+
+    background: rgba(34,197,94,0.07);
+
+    border: 1px solid rgba(34,197,94,0.10);
+}
+
+
+.registry-verification strong {
+
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 0.64rem;
+}
+
+
+.registry-verification small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #475569;
+
+    font-size: 0.57rem;
+}
+
+
+.registry-meta {
+
+    display: flex;
+
+    gap: 18px;
+}
+
+
+.registry-meta span {
+
+    color: #475569;
+
+    font-size: 0.53rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.07em;
+}
+
+
+.registry-meta strong {
+
+    margin-left: 5px;
+
+    color: #94a3b8;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════════════════ */
+
+@keyframes flarePulse {
+
+    0%,100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .55;
+        transform: scale(.82);
+    }
+}
+
+
+@keyframes blockBars {
+
+    0%,100% {
+        opacity: .45;
+        transform: scaleY(.7);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1050px) {
+
+    .flare-telemetry-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0,1fr));
+    }
+
+    .signal-flow {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .flare-infrastructure {
+
+        padding: 22px 16px;
+
+        border-radius: 22px;
+    }
+
+
+    .flare-infra-header {
+
+        flex-direction: column;
+    }
+
+
+    .network-live-badge {
+
+        width: fit-content;
+    }
+
+
+    .flare-telemetry-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .flare-signal-bar {
+
+        align-items: flex-start;
+    }
+
+
+    .contract-panel-header {
+
+        flex-direction: column;
+    }
+
+
+    .contract-header-actions {
+
+        width: 100%;
+    }
+
+
+    .contract-panel-footer {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: 0.01ms !important;
+    }
+
+}
+
+</style>
+
+
+<script>
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTRACT ADDRESS COPY
+════════════════════════════════════════════════════════════════ */
+
+function copyContractAddress(address, button) {
+
+    navigator.clipboard.writeText(address)
+        .then(() => {
+
+            const original = button.innerHTML;
+
+            button.innerHTML = "✓";
+
+            button.style.color = "#86efac";
+
+            setTimeout(() => {
+
+                button.innerHTML = original;
+
+                button.style.color = "";
+
+            }, 1200);
+
+        })
+        .catch(() => {
+
+            console.warn(
+                "Unable to copy contract address."
+            );
+
+        });
+
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RPC TELEMETRY HOOK
+════════════════════════════════════════════════════════════════ */
+
+/*
+   Keep your existing real RPC logic.
+
+   Example:
+
+   document.getElementById("bc-block-num").textContent =
+       "#" + blockNumber;
+
+   document.getElementById("bc-gas-price").textContent =
+       gasPrice + " Gwei";
+
+   document.getElementById("flare-rpc-latency").textContent =
+       latency + " ms";
+
+   Do NOT populate these values with fake/demo values.
+*/
+
+
+function updateFlareTelemetry(blockNumber, gasPrice, latency) {
+
+    if (blockNumber !== undefined) {
+
+        const blockEl =
+            document.getElementById("bc-block-num");
+
+        if (blockEl) {
+
+            blockEl.textContent =
+                "#" + Number(blockNumber).toLocaleString();
+
+        }
+
+    }
+
+
+    if (gasPrice !== undefined) {
+
+        const gasEl =
+            document.getElementById("bc-gas-price");
+
+        if (gasEl) {
+
+            gasEl.textContent =
+                gasPrice + " Gwei";
+
+        }
+
+    }
+
+
+    if (latency !== undefined) {
+
+        const latencyEl =
+            document.getElementById("flare-rpc-latency");
+
+        if (latencyEl) {
+
+            latencyEl.textContent =
+                latency + " ms";
+
+        }
+
+    }
+
+
+    const updated =
+        document.getElementById("flare-last-updated");
+
+    if (updated) {
+
+        updated.textContent =
+            "Telemetry updated just now";
+
+    }
+
+}
+
+</script>

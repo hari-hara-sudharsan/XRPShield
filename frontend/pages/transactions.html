@@ -1,78 +1,1156 @@
-<div style="margin-bottom: 24px;">
-    <h2 style="font-size: 1.8rem; font-weight: 700;">Attestation Log & Transaction History</h2>
-    <p style="color: var(--text-secondary); font-size: 0.95rem;">On-chain cryptographically verified ledger execution logs reconstructed directly from Flare Coston2 RPC</p>
-</div>
+<style>
+/* =========================================================
+   XRPShield — Attestation Log & Transaction History
+   On-chain forensic verification console
+   ========================================================= */
 
-<div class="card" style="margin-bottom: 24px; padding: 20px; background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-color);">
-    <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 12px;">Verify On-Chain Transaction Hash</h3>
-    <div style="display: flex; gap: 12px;">
-        <input type="text" id="verifyTxInput" placeholder="Enter Coston2 Tx Hash (0x3fe85c16...)" style="flex: 1; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-family: monospace;">
-        <button id="verifyTxBtn" class="btn btn-primary" style="padding: 10px 20px;">Verify On-Chain</button>
+.xps-tx-page {
+    position: relative;
+    isolation: isolate;
+    padding-bottom: 36px;
+}
+
+.xps-tx-page::before {
+    content: "";
+
+    position: absolute;
+    top: -180px;
+    right: -180px;
+
+    width: 520px;
+    height: 520px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(0,242,254,0.09),
+        transparent 68%
+    );
+
+    filter: blur(40px);
+
+    pointer-events: none;
+    z-index: -2;
+}
+
+.xps-tx-page::after {
+    content: "";
+
+    position: absolute;
+    left: -240px;
+    bottom: -260px;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(124,92,255,0.08),
+        transparent 70%
+    );
+
+    filter: blur(42px);
+
+    pointer-events: none;
+    z-index: -2;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.xps-tx-header {
+    margin-bottom: 22px;
+}
+
+.xps-tx-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 6px 11px;
+
+    margin-bottom: 12px;
+
+    border-radius: 999px;
+
+    background: rgba(0,242,254,0.06);
+
+    border: 1px solid rgba(0,242,254,0.14);
+
+    color: var(--primary-cyan);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.64rem;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+}
+
+.xps-tx-live-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--primary-cyan);
+
+    box-shadow:
+        0 0 8px rgba(0,242,254,0.8);
+
+    animation: xps-tx-pulse 1.8s infinite;
+}
+
+.xps-tx-title {
+    margin: 0 0 8px;
+
+    font-size: clamp(1.55rem, 3vw, 2rem);
+    line-height: 1.12;
+
+    font-weight: 850;
+
+    letter-spacing: -0.035em;
+
+    background: linear-gradient(
+        90deg,
+        #ffffff 15%,
+        #d8fbff 55%,
+        var(--primary-cyan)
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.xps-tx-subtitle {
+    max-width: 900px;
+
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 0.88rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   NETWORK STRIP
+   ========================================================= */
+
+.xps-tx-network-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+    padding: 11px 14px;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,242,254,0.035),
+            rgba(255,255,255,0.018)
+        );
+
+    border: 1px solid rgba(255,255,255,0.055);
+}
+
+.xps-tx-network-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.68rem;
+}
+
+.xps-tx-network-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #34d399;
+
+    box-shadow:
+        0 0 9px rgba(52,211,153,0.7);
+}
+
+.xps-tx-network-name {
+    color: var(--text-primary);
+    font-weight: 800;
+}
+
+.xps-tx-network-right {
+    color: var(--text-muted);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.58rem;
+}
+
+
+/* =========================================================
+   VERIFICATION PANEL
+   ========================================================= */
+
+.xps-tx-verifier {
+    position: relative;
+
+    overflow: hidden;
+
+    margin-bottom: 22px;
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,24,41,0.92),
+            rgba(7,13,24,0.88)
+        );
+
+    border: 1px solid rgba(0,242,254,0.12);
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,0.20),
+        inset 0 1px 0 rgba(255,255,255,0.025);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.xps-tx-verifier::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--primary-cyan),
+        #7c5cff,
+        transparent
+    );
+
+    opacity: 0.65;
+}
+
+.xps-tx-verifier-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+.xps-tx-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 0;
+
+    font-size: 0.98rem;
+    font-weight: 820;
+}
+
+.xps-tx-section-icon {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 9px;
+
+    background: rgba(0,242,254,0.07);
+
+    border: 1px solid rgba(0,242,254,0.14);
+
+    color: var(--primary-cyan);
+
+    font-size: 0.75rem;
+}
+
+.xps-tx-section-description {
+    margin: 5px 0 0 44px;
+
+    color: var(--text-muted);
+
+    font-size: 0.65rem;
+}
+
+.xps-tx-source-badge {
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background: rgba(16,185,129,0.06);
+
+    border: 1px solid rgba(16,185,129,0.12);
+
+    color: #34d399;
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.57rem;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.xps-tx-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.xps-tx-input-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.xps-tx-input-prefix {
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: var(--primary-cyan);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.72rem;
+
+    pointer-events: none;
+}
+
+#verifyTxInput {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 13px 14px 13px 35px;
+
+    border-radius: 10px;
+
+    background: rgba(0,0,0,0.30);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    color: var(--text-primary);
+
+    outline: none;
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.72rem;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+#verifyTxInput::placeholder {
+    color: rgba(255,255,255,0.25);
+}
+
+#verifyTxInput:focus {
+    background: rgba(0,242,254,0.025);
+
+    border-color: rgba(0,242,254,0.42);
+
+    box-shadow:
+        0 0 0 3px rgba(0,242,254,0.05),
+        0 0 20px rgba(0,242,254,0.035);
+}
+
+#verifyTxBtn {
+    flex-shrink: 0;
+
+    min-width: 145px;
+
+    border-radius: 10px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,0.18);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#verifyTxBtn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,0.24);
+}
+
+#verifyTxBtn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   VERIFIER OUTPUT
+   ========================================================= */
+
+#verifierOutput {
+    margin-top: 14px;
+}
+
+.xps-tx-query-state {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 11px 13px;
+
+    border-radius: 9px;
+
+    background: rgba(0,242,254,0.035);
+
+    border: 1px solid rgba(0,242,254,0.08);
+
+    color: var(--text-secondary);
+
+    font-size: 0.68rem;
+}
+
+.xps-tx-query-spinner {
+    width: 13px;
+    height: 13px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(0,242,254,0.15);
+    border-top-color: var(--primary-cyan);
+
+    animation: xps-tx-spin 0.8s linear infinite;
+}
+
+
+/* =========================================================
+   LEDGER SECTION
+   ========================================================= */
+
+.xps-tx-ledger {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14,22,38,0.88),
+            rgba(7,12,22,0.84)
+        );
+
+    border: 1px solid rgba(255,255,255,0.06);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.18);
+}
+
+.xps-tx-ledger-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.xps-tx-ledger-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 0;
+
+    font-size: 0.98rem;
+    font-weight: 820;
+}
+
+.xps-tx-ledger-title-icon {
+    color: var(--primary-cyan);
+}
+
+.xps-tx-ledger-badge {
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: rgba(255,255,255,0.025);
+
+    border: 1px solid rgba(255,255,255,0.05);
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.55rem;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.xps-tx-table-wrap {
+    overflow-x: auto;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(255,255,255,0.055);
+}
+
+.xps-tx-table {
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: collapse;
+}
+
+.xps-tx-table th {
+    padding: 12px 13px;
+
+    background: rgba(255,255,255,0.025);
+
+    color: var(--text-muted);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.58rem;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.055em;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.xps-tx-table td {
+    padding: 13px;
+
+    color: var(--text-secondary);
+
+    font-size: 0.68rem;
+
+    border-bottom: 1px solid rgba(255,255,255,0.045);
+
+    vertical-align: middle;
+}
+
+.xps-tx-table tbody tr {
+    transition:
+        background 0.2s ease;
+}
+
+.xps-tx-table tbody tr:hover {
+    background: rgba(0,242,254,0.018);
+}
+
+.xps-tx-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.xps-tx-hash {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--primary-cyan);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.63rem;
+}
+
+.xps-tx-type {
+    color: var(--text-primary);
+
+    font-weight: 700;
+}
+
+.xps-tx-proof {
+    color: #a5b4fc;
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.6rem;
+}
+
+.xps-tx-block {
+    color: var(--text-primary);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.62rem;
+}
+
+.xps-tx-age {
+    color: var(--text-muted);
+}
+
+.xps-tx-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    color: #34d399;
+
+    background: rgba(16,185,129,0.06);
+
+    border: 1px solid rgba(16,185,129,0.12);
+
+    font-family: var(--font-mono, monospace);
+    font-size: 0.55rem;
+    font-weight: 800;
+}
+
+.xps-tx-status-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #10b981;
+
+    box-shadow:
+        0 0 7px rgba(16,185,129,0.6);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.xps-tx-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 15px;
+    padding: 11px 13px;
+
+    border-radius: 10px;
+
+    background: rgba(0,242,254,0.022);
+
+    border: 1px solid rgba(0,242,254,0.065);
+
+    color: var(--text-muted);
+
+    font-size: 0.61rem;
+}
+
+.xps-tx-footer strong {
+    color: var(--text-secondary);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes xps-tx-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes xps-tx-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .xps-tx-input-row {
+        flex-direction: column;
+    }
+
+    #verifyTxBtn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .xps-tx-network-strip {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .xps-tx-verifier,
+    .xps-tx-ledger {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .xps-tx-verifier-header {
+        flex-direction: column;
+    }
+
+    .xps-tx-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .xps-tx-page *,
+    .xps-tx-page *::before,
+    .xps-tx-page *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+</style>
+
+
+<div class="xps-tx-page animate-fade-in">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="xps-tx-header">
+
+        <div class="xps-tx-eyebrow">
+
+            <span class="xps-tx-live-dot"></span>
+
+            ON-CHAIN FORENSICS · RPC VERIFICATION
+
+        </div>
+
+        <h2 class="xps-tx-title">
+            Attestation Log & Transaction History
+        </h2>
+
+        <p class="xps-tx-subtitle">
+            Cryptographically verifiable execution evidence reconstructed
+            from Flare Coston2 blockchain state and transaction receipts.
+        </p>
+
     </div>
-    <div id="verifierOutput"></div>
+
+
+    <!-- =====================================================
+         NETWORK STRIP
+         ===================================================== -->
+
+    <div class="xps-tx-network-strip">
+
+        <div class="xps-tx-network-left">
+
+            <span class="xps-tx-network-dot"></span>
+
+            <span class="xps-tx-network-name">
+                Flare Coston2
+            </span>
+
+            <span>
+                · Chain ID 114
+            </span>
+
+        </div>
+
+        <div class="xps-tx-network-right">
+            RPC → EVM STATE → RECEIPT
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TRANSACTION VERIFIER
+         ===================================================== -->
+
+    <section class="xps-tx-verifier">
+
+        <div class="xps-tx-verifier-header">
+
+            <div>
+
+                <h3 class="xps-tx-section-title">
+
+                    <span class="xps-tx-section-icon">
+                        ◈
+                    </span>
+
+                    Verify On-Chain Transaction Hash
+
+                </h3>
+
+                <p class="xps-tx-section-description">
+                    Enter a transaction hash and independently query
+                    the Coston2 RPC for its receipt and execution evidence.
+                </p>
+
+            </div>
+
+            <span class="xps-tx-source-badge">
+                RPC SOURCE OF TRUTH
+            </span>
+
+        </div>
+
+
+        <div class="xps-tx-input-row">
+
+            <div class="xps-tx-input-wrap">
+
+                <span class="xps-tx-input-prefix">
+                    0x
+                </span>
+
+                <input
+                    type="text"
+                    id="verifyTxInput"
+                    placeholder="Enter Coston2 transaction hash…"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+            </div>
+
+            <button
+                id="verifyTxBtn"
+                class="btn btn-primary"
+                type="button"
+            >
+                Verify On-Chain
+            </button>
+
+        </div>
+
+
+        <div id="verifierOutput"></div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TRANSACTION LEDGER
+         ===================================================== -->
+
+    <section class="xps-tx-ledger">
+
+        <div class="xps-tx-ledger-header">
+
+            <h3 class="xps-tx-ledger-title">
+
+                <span class="xps-tx-ledger-title-icon">
+                    ◇
+                </span>
+
+                Verified Execution Ledger
+
+            </h3>
+
+            <span class="xps-tx-ledger-badge">
+                Coston2 RPC Evidence
+            </span>
+
+        </div>
+
+
+        <div class="xps-tx-table-wrap">
+
+            <table class="xps-tx-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Tx Hash
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Enclave / FCC Proof
+                        </th>
+
+                        <th>
+                            Block
+                        </th>
+
+                        <th>
+                            Age
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!--
+                    IMPORTANT:
+                    Populate this tbody from your real transaction
+                    history component.
+
+                    Do not hardcode transaction evidence here.
+                -->
+
+                <tbody id="attestation-log-body">
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div style="
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                gap:9px;
+                                padding:28px 15px;
+                                color:var(--text-muted);
+                                font-size:0.68rem;
+                            ">
+
+                                <span>
+                                    ◌
+                                </span>
+
+                                Loading verified transaction history…
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="xps-tx-footer">
+
+            <span>
+                <strong>Verification model:</strong>
+                transaction receipts and blockchain state are treated
+                as the authoritative execution evidence.
+            </span>
+
+            <span>
+                No synthetic fallback evidence
+            </span>
+
+        </div>
+
+    </section>
+
 </div>
 
-<div class="table-container">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Tx Hash</th>
-                <th>Type</th>
-                <th>Enclave Attestation Proof</th>
-                <th>Block Number</th>
-                <th>Age</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>0x3fe8...7cb3</code></td>
-                <td>Real FXRP → USDT0 DEX Swap</td>
-                <td><code>0x5852...0001</code></td>
-                <td>33,973,480</td>
-                <td>Just now</td>
-                <td><span style="color: var(--accent-emerald);">CONFIRMED_SUCCESS</span></td>
-            </tr>
-            <tr>
-                <td><code>0x1c8b...0c2e</code></td>
-                <td>Policy Attestation Verification</td>
-                <td><code>0x71ab...f902</code></td>
-                <td>33,972,012</td>
-                <td>12 mins ago</td>
-                <td><span style="color: var(--accent-emerald);">CONFIRMED_SUCCESS</span></td>
-            </tr>
-            <tr>
-                <td><code>0x3b1c...99e2</code></td>
-                <td>Treasury Risk Rebalance</td>
-                <td><code>0xe43f...8811</code></td>
-                <td>33,971,840</td>
-                <td>45 mins ago</td>
-                <td><span style="color: var(--accent-emerald);">CONFIRMED_SUCCESS</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
 <script>
-document.getElementById('verifyTxBtn')?.addEventListener('click', async () => {
-    const input = document.getElementById('verifyTxInput').value.trim();
-    const outputDiv = document.getElementById('verifierOutput');
-    if (!input) {
-        outputDiv.innerHTML = '<p style="color:#ef4444; margin-top:10px;">Please enter a transaction hash.</p>';
-        return;
+document.getElementById('verifyTxBtn')?.addEventListener(
+    'click',
+    async () => {
+
+        const input =
+            document
+                .getElementById('verifyTxInput')
+                ?.value
+                .trim();
+
+        const outputDiv =
+            document.getElementById('verifierOutput');
+
+        if (!outputDiv) return;
+
+
+        /* ---------------------------------------------
+           Validate input
+           --------------------------------------------- */
+
+        if (!input) {
+
+            outputDiv.innerHTML = `
+                <div style="
+                    margin-top:12px;
+                    padding:11px 13px;
+                    border-radius:9px;
+                    background:rgba(239,68,68,0.055);
+                    border:1px solid rgba(239,68,68,0.12);
+                    color:#f87171;
+                    font-size:0.68rem;
+                ">
+                    Please enter a transaction hash.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* ---------------------------------------------
+           Basic transaction hash validation
+           --------------------------------------------- */
+
+        if (!/^0x[a-fA-F0-9]{64}$/.test(input)) {
+
+            outputDiv.innerHTML = `
+                <div style="
+                    margin-top:12px;
+                    padding:11px 13px;
+                    border-radius:9px;
+                    background:rgba(239,68,68,0.055);
+                    border:1px solid rgba(239,68,68,0.12);
+                    color:#f87171;
+                    font-size:0.68rem;
+                ">
+                    Invalid transaction hash.
+                    Expected a 32-byte hexadecimal hash.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* ---------------------------------------------
+           Real RPC verification
+           --------------------------------------------- */
+
+        outputDiv.innerHTML = `
+            <div class="xps-tx-query-state">
+
+                <span class="xps-tx-query-spinner"></span>
+
+                Querying Flare Coston2 RPC and validating
+                transaction evidence…
+
+            </div>
+        `;
+
+
+        try {
+
+            const data =
+                await window.TransactionVerifier.verifyHash(input);
+
+
+            /*
+             * IMPORTANT:
+             *
+             * Never construct a "confirmed" transaction
+             * locally when verification returns null.
+             */
+
+            if (!data) {
+
+                outputDiv.innerHTML = `
+                    <div style="
+                        padding:12px 14px;
+                        border-radius:9px;
+                        background:rgba(239,68,68,0.055);
+                        border:1px solid rgba(239,68,68,0.12);
+                        color:#f87171;
+                        font-size:0.68rem;
+                        line-height:1.5;
+                    ">
+                        No verified transaction evidence was returned
+                        for this hash. The blockchain query did not
+                        produce a valid proof payload.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               Render verified result
+               ----------------------------------------- */
+
+            outputDiv.innerHTML =
+                window.TransactionVerifier
+                    .renderVerificationCard(data);
+
+        } catch (error) {
+
+            console.error(
+                'Transaction verification failed:',
+                error
+            );
+
+            outputDiv.innerHTML = `
+                <div style="
+                    padding:12px 14px;
+                    border-radius:9px;
+                    background:rgba(239,68,68,0.055);
+                    border:1px solid rgba(239,68,68,0.12);
+                    color:#f87171;
+                    font-size:0.68rem;
+                    line-height:1.5;
+                ">
+                    Transaction verification failed.
+                    No fallback evidence has been displayed.
+                </div>
+            `;
+        }
+
     }
-    outputDiv.innerHTML = '<p style="color:var(--text-secondary); margin-top:10px;">Querying Flare Coston2 RPC...</p>';
-    const data = await window.TransactionVerifier.verifyHash(input);
-    outputDiv.innerHTML = window.TransactionVerifier.renderVerificationCard(data || {
-        transactionHash: input,
-        onChainStatus: "CONFIRMED_SUCCESS",
-        blockNumber: 33973480,
-        vaultId: "0xb7902ebdce1d31ddcef6e7f789c1a5611186e8a9",
-        policyCommitment: "0x8f3c71a9e29a3b610c4f8d5b1c7e9a8f2e4c1b0d3a5e7f9c2b4a6d8e0f2c4a6b",
-        amountFXRP: "10.00",
-        amountUSDT0: "8.4575",
-        router: "0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B",
-        verificationStatus: "VERIFIED_ON_CHAIN"
-    });
-});
+);
 </script>
