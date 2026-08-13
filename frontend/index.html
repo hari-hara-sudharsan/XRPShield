@@ -945,6 +945,63 @@
 
 
     /* =========================================================
+       GORGEOUS TRANSIENT HOVER EFFECTS & MICRO-ANIMATIONS
+       ========================================================= */
+
+    .treasury-metric,
+    .xps-kpi-card,
+    .feature-card,
+    .workflow-card,
+    .stage,
+    .card,
+    .notif-row,
+    .icon-btn,
+    .btn-primary,
+    .btn-secondary,
+    .xps-action-btn {
+      transition:
+        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease,
+        background 0.28s ease !important;
+    }
+
+    .treasury-metric:hover,
+    .xps-kpi-card:hover,
+    .feature-card:hover,
+    .workflow-card:hover,
+    .card:hover {
+      transform: translateY(-3px) scale(1.006);
+      border-color: rgba(98, 217, 238, 0.38) !important;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.42),
+        0 0 25px rgba(98, 217, 238, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .btn-primary:hover,
+    .xps-action-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow:
+        0 8px 24px rgba(98, 217, 238, 0.35),
+        0 0 18px rgba(98, 217, 238, 0.2) !important;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px) scale(1.02);
+      background: rgba(98, 217, 238, 0.12) !important;
+      border-color: rgba(98, 217, 238, 0.4) !important;
+      box-shadow: 0 6px 20px rgba(98, 217, 238, 0.15) !important;
+    }
+
+    button:active,
+    .btn-primary:active,
+    .btn-secondary:active,
+    .xps-action-btn:active {
+      transform: translateY(0) scale(0.97) !important;
+    }
+
+    /* =========================================================
        GLOBAL STATES
        ========================================================= */
 
@@ -1660,7 +1717,7 @@
 
   <script
     type="module"
-    src="./js/app.js?v=5"
+    src="./js/app.js?v=6"
   ></script>
 
 </body>

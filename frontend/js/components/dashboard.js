@@ -3,8 +3,6 @@ import { WalletManager } from '../utils/wallet.js';
 import { renderFtsoPriceWidget } from './ftso-market.js';
 
 export async function initDashboard() {
-    renderFtsoPriceWidget('ftso-xrp-widget');
-
     const vaultsVal = document.getElementById('dash-active-vaults');
     const policiesVal = document.getElementById('dash-active-policies');
     const volumeVal = document.getElementById('dash-protected-volume');
@@ -12,7 +10,7 @@ export async function initDashboard() {
     const walletAddrEl = document.getElementById('dash-connected-address');
     const activityBody = document.getElementById('dash-recent-activity');
 
-    // Function to update wallet element display
+    // 1. Sync wallet address
     const syncWalletAddress = async () => {
         let address = WalletManager.getConnectedAddress();
         if (!address && typeof window.ethereum !== 'undefined') {
@@ -29,7 +27,7 @@ export async function initDashboard() {
         const el = document.getElementById('dash-connected-address');
         if (el) {
             el.innerText = address ? (address.substring(0, 6) + '...' + address.substring(address.length - 4)) : 'Not Connected';
-            el.style.color = address ? 'var(--secondary)' : 'var(--text-muted)';
+            el.style.color = address ? 'var(--xps-cyan, #62d9ee)' : 'var(--xps-text-3, #5f6778)';
         }
     };
 
@@ -40,7 +38,7 @@ export async function initDashboard() {
     }
     window.addEventListener('xrpshield:walletChanged', syncWalletAddress);
 
-    // Calculate active vaults and policies from localStorage
+    // 2. Populate Metrics IMMEDIATELY from localStorage / defaults
     let userVaults = [];
     try {
         const rawV = localStorage.getItem('xrpshield_user_vaults');
@@ -56,11 +54,15 @@ export async function initDashboard() {
     const activeVaultsCount = Math.max(3, userVaults.length + 3);
     const activePoliciesCount = Math.max(3, userPolicies.length + 3);
 
+    const savedTreasury = localStorage.getItem('xrpshield_active_treasury');
+    const initialVol = savedTreasury ? Number(savedTreasury) : 150000;
+
     if (vaultsVal) vaultsVal.innerText = activeVaultsCount;
     if (policiesVal) policiesVal.innerText = activePoliciesCount;
+    if (volumeVal) volumeVal.innerText = `${initialVol.toLocaleString()} FXRP`;
     if (fccVal) fccVal.innerHTML = '<i></i> SEALED & ATTESTED';
 
-    // Populate Platform Infrastructure Telemetry immediately
+    // 3. Populate Telemetry IMMEDIATELY
     const rpcHealth = document.getElementById('dash-rpc-health');
     const rpcLatency = document.getElementById('dash-rpc-latency');
     const teeHealth = document.getElementById('dash-tee-health');
@@ -80,7 +82,7 @@ export async function initDashboard() {
         overallHealth.style.color = 'var(--accent-emerald, #10B981)';
     }
 
-    // Render immediate activity feed so UI never hangs on "Fetching..."
+    // 4. Render Activity Feed IMMEDIATELY
     let customDecisions = [];
     try {
         const raw = localStorage.getItem('xrpshield_user_decisions');
@@ -114,13 +116,14 @@ export async function initDashboard() {
     const initialFeed = [...customDecisions, ...defaultDecisions];
     renderActivityFeed(activityBody, initialFeed);
 
-    // Update treasury volume dynamically from custom & default vaults
-    const savedTreasury = localStorage.getItem('xrpshield_active_treasury');
-    if (volumeVal) {
-        const totalVol = savedTreasury ? Number(savedTreasury) : 50000;
-        volumeVal.innerText = `${totalVol.toLocaleString()} FXRP`;
+    // 5. Render FTSOv2 price widget safely
+    try {
+        renderFtsoPriceWidget('ftso-xrp-widget');
+    } catch (e) {
+        console.warn('FTSOv2 widget render notice:', e);
     }
 
+    // 6. Fetch live stats from backend API asynchronously
     try {
         const [vaultsRes, policiesRes, decisionsRes] = await Promise.allSettled([
             ApiClient.get('/vaults'),
@@ -141,7 +144,7 @@ export async function initDashboard() {
             return true;
         });
 
-        let totalReserveFXRP = savedTreasury ? Number(savedTreasury) : 50000;
+        let totalReserveFXRP = savedTreasury ? Number(savedTreasury) : initialVol;
         if (vaults.length > 0) {
             totalReserveFXRP = vaults.reduce((acc, v) => acc + Number(v.balance || 0), 0);
         }
@@ -162,18 +165,18 @@ function renderActivityFeed(container, decisions) {
     if (!container || !decisions || decisions.length === 0) return;
 
     container.innerHTML = decisions.slice(0, 6).map(d => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; border-bottom: 1px solid var(--border-color); transition: background 0.15s;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.2s ease;" class="xps-feed-item">
             <div>
-                <div style="font-size: 0.9rem; font-weight: 700; color: var(--primary-cyan, #00F2FE);">${escapeHtml(d.decisionType)}</div>
-                <div style="font-size: 0.78rem; color: var(--text-secondary); font-family: var(--font-mono, monospace); margin-top: 2px;">${escapeHtml(d.vaultName || 'Primary FXRP Treasury Vault')} · Attestation: <code>${escapeHtml(d.attestationId || 'FCC-ATT-992184')}</code></div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: var(--xps-cyan, #62d9ee);">${escapeHtml(d.decisionType)}</div>
+                <div style="font-size: 0.78rem; color: var(--xps-text-2, #9ca3b2); font-family: var(--xps-mono); margin-top: 2px;">${escapeHtml(d.vaultName || 'Primary FXRP Treasury Vault')} · Attestation: <code>${escapeHtml(d.attestationId || 'FCC-ATT-992184')}</code></div>
             </div>
             <div style="text-align: right;">
-                <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald, #10B981); font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">${escapeHtml(d.status || 'APPROVED')}</span>
-                <div style="font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono, monospace);">${new Date(d.createdAt || Date.now()).toLocaleTimeString()}</div>
+                <span class="badge" style="background: rgba(16,185,129,0.15); color: var(--xps-green, #49d28f); font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">${escapeHtml(d.status || 'APPROVED')}</span>
+                <div style="font-size: 0.73rem; color: var(--xps-text-3, #5f6778); margin-top: 4px; font-family: var(--xps-mono);">${new Date(d.createdAt || Date.now()).toLocaleTimeString()}</div>
             </div>
         </div>
+    `).join('');
 }
-
 
 function escapeHtml(text) {
     if (!text) return '';
