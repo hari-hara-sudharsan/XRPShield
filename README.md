@@ -263,6 +263,108 @@ blockchain evidence.
                            ▼
                       DEX EXECUTION
 ```
+
+## Coston2 Smart Contracts
+
+## Verified Coston2 Smart Contracts
+
+| Component | Address | Status | Responsibility |
+| --- | --- | --- | --- |
+| **XRPShield Vault** | [`0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC`](https://coston2-explorer.flare.network/address/0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC) | ✅ Active | Treasury custody, policy binding, authorization |
+| **FCC Extension Adapter** | [`0xBD89D5276B6c0850284D7CFF08eF8F894eB26d2A`](https://coston2-explorer.flare.network/address/0xBD89D5276B6c0850284D7CFF08eF8F894eB26d2A) | ✅ Active | ActionResult verification and FCC authorization |
+| **Hedge Executor** | [`0x0d3eDb16aEb646C0A6EDC4e36D7b1e4C465e900a`](https://coston2-explorer.flare.network/address/0x0d3eDb16aEb646C0A6EDC4e36D7b1e4C465e900a) | ✅ Active | Protected hedge execution |
+| **TeeExtensionRegistry** | [`0x8A791620dd6260079BF849Dc5567aDC3F2FdC318`](https://coston2-explorer.flare.network/address/0x8A791620dd6260079BF849Dc5567aDC3F2FdC318) | ✅ Flare infrastructure | FCC extension registry |
+| **FTSOv2 Price Oracle** | [`0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d`](https://coston2-explorer.flare.network/address/0xC4e9c78EA53db782E28f28Fdf80BaF59336B304d) | ✅ Flare infrastructure | XRP/USD market data |
+| **Flare Contract Registry** | [`0xaD6740B4F817109E96238bA722880b91e92dEec9`](https://coston2-explorer.flare.network/address/0xaD6740B4F817109E96238bA722880b91e92dEec9) | ✅ Flare infrastructure | Flare contract discovery |
+| **FXRP** | [`0x0fB4340432e56c014fa96D0A745f45598651a029`](https://coston2-explorer.flare.network/address/0x0fB4340432e56c014fa96D0A745f45598651a029) | ✅ Flare infrastructure | Treasury asset |
+| **USDT0** | [`0x12b1C38722bCa4058bFAACf9A9ef9A7F6eeFbe06`](https://coston2-explorer.flare.network/address/0x12b1C38722bCa4058bFAACf9A9ef9A7F6eeFbe06) | ✅ Flare infrastructure | Hedge settlement asset |
+| **SparkDEX Router** | [`0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B`](https://coston2-explorer.flare.network/address/0x600109D9cDe3267E1408892f39C27DBdf8dd6B4B) | ✅ Flare infrastructure | FXRP → USDT0 execution |
+
+### Explorer
+
+All addresses should be inspected directly on the Coston2 explorer.
+
+[**Coston2 Explorer**](https://coston2-explorer.flare.network/?utm_source=chatgpt.com)
+
+For the final README, each address above links directly to its corresponding explorer address page.
+
+
+# Golden Flow Transaction
+
+## Primary Execution Transaction
+
+```text
+Transaction:
+0x3fe85c1668067f91274cab7b46800bd59fe11375eacb1abfe9b5a4e778447cb3
+
+```
+
+Block: 33,973,480
+
+Status: SUCCESS (1)
+
+Network: Flare Coston2
+
+Chain ID: 114
+
+Transaction Verification
+
+The transaction is the primary permanent evidence for the XRPShield Golden Flow.
+
+## EIP-712 ActionResult Proof
+
+The ActionResult is the cryptographic authorization object connecting the confidential decision layer with the smart-contract execution layer.
+
+### Domain
+
+Name:
+XRPShield FCC Extension
+
+Version:
+1
+
+Chain ID:
+114
+
+Verifying Contract:
+0x8A791620dd6260079BF849Dc5567aDC3F2FdC318
+
+## Cryptographic Verification
+
+The system verifies:
+``` text
+ActionResult
+
+     │
+     ▼
+EIP-712 Typed Data
+
+     │
+     ▼
+Domain Separation
+
+     │
+     ▼
+Digest
+
+     │
+     ▼
+ECDSA Signature
+
+     │
+     ▼
+ecrecover()
+
+     │
+     ▼
+Recovered Signer
+
+     │
+     ▼
+Authorized Signer
+
+```
+ 
 ## End - End Architecture
 
 ``` text
